@@ -1,31 +1,70 @@
-# 🌍 Zyra
+# Getting Started with Create React App
 
-**Zyra** is a blockchain-powered crowdfunding platform designed to solve one of Africa’s biggest challenges in the crowdfunding space — **fraud and lack of donor trust**.  
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Think of Zyra as the **Web3 alternative to GoFundMe**, starting with Nigeria and gradually expanding to a global scale.  
+## Available Scripts
 
----
+In the project directory, you can run:
 
-## ✨ Key Features
-- ✅ **Verified Beneficiaries** — ensure authenticity of campaigns  
-- ✅ **On-Chain Transparency** — donors can track funds in real-time  
-- ✅ **Scalable Trust Systems** — making giving safer and more secure  
+### `npm start`
 
----
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-## 🚀 Roadmap
-1. **MVP** — beneficiary verification + transparent donation tracking  
-2. **Pilot Launch** — Nigeria-focused rollout  
-3. **Expansion** — scaling across Africa  
-4. **Global Scale** — making Zyra a trusted global crowdfunding alternative  
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
----
+### `npm test`
 
-## 📜 License
-This project is currently **proprietary**.  
-All rights reserved © 2025 Zyra.  
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
----
+### `npm run build`
 
-## 🌐 About
-Zyra is building trust in crowdfunding through **blockchain technology**, ensuring that every donation makes the intended impact.
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
