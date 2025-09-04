@@ -28,7 +28,7 @@ Frontend: React / Next.js
 
 Smart Contracts: Solidity, Hardhat
 
-Blockchain: Ethereum / Polygon (initial deployment)
+Blockchain: Base (initial deployment)
 
 Backend: Node.js, Express
 
