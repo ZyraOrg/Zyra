@@ -1,25 +1,19 @@
-import logo from './logo.svg';
 import './App.css';
 
+// In App.js
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  
+    <div className="App" style={{ 
+        textAlign: "center", 
+        color: "#0B3D91", // Blue for trust
+        backgroundColor: "rgba(0,255,0,0.1)" // light green for growth
+      }}>
+      <h1 style={{ fontSize: "4rem", fontWeight: "bold" }}>Zryra🧠</h1>
+      <p>Theme: Transparency + Hope + Trust</p>
     </div>
   );
 }
+
 
 export default App;
