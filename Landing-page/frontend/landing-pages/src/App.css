@@ -1,0 +1,88 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+body{
+  background-color: #00051B;
+}
+
+
+.navbar {
+  width: 340px;
+  height: 25px;
+  position: absolute;
+  top: 41px;
+  left: 511px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #F3F0F0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Hero Heading */
+.hero-heading {
+  width: 571px;
+  height: 320px;
+  position: absolute;
+  top: 230px;
+  left: 64px;
+
+  font-family: "Roboto", sans-serif;
+  font-weight: 800;
+  font-style: normal; /* extrabold handled by weight */
+  font-size: 60px;
+  line-height: 100%;
+  letter-spacing: 0;
+
+  white-space: nowrap;
+  text-align: left;
+}
+
+.hero-heading span {
+  font-family: "Roboto", sans-serif;
+  font-weight: 800;
+  font-size: 60px;
+  line-height: 100%;
+  letter-spacing: 0;
+  color: #91F2F9; /* optional: keep same color */
+}
+
+.hero-subheading{
+  width: 571px;
+  height: 96px;
+  position: absolute;
+  top: 570px;
+  left: 64px;
+
+  font-family: "Roboto";
+  font-weight: 500;
+  font-style: normal; /* medium handled by weight */
+  font-size: 20px;
+  line-height: 160%;
+  letter-spacing: 0;
+
+  text-align: left;
+  color: #FFFFFF;
+}
+
+.hero-subheading {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+  font-style: semi-bold;
+  line-height: 100%;
+  letter-spacing: 0%;
+  size: 17px;
+  top: 510px;
+  left: 66px;
+  
+}
