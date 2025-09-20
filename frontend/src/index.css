@@ -1,3 +1,156 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* App Container */
+body {
+  /* background-color: #00051B; */
+  background: linear-gradient(140deg, #00051B 50%, #081b6e 100%);
+}
+
+/* Navbar Styles */
+.navbar {
+  width: 340px;
+  height: 25px;
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+}
+
+.navbar a {
+  color: #F3F0F0;
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.navbar-link {
+  color: white;
+  text-decoration: none;
+  transition: color 1s ease;
+}
+
+.navbar a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #CCCFCF;
+  transition: width 0.4s ease;
+}
+
+.navbar a:hover::after {
+  width: 100%;
+}
+/* Hero Section */
+
+.hero-h1{
+ width: 571px;
+ height: 320px;
+ top: 230px;
+ left: 64px;
+ text-align: left;
+ font-family: "Roboto", sans-serif;
+ font-weight: 700;
+ font-style: extra-bold;
+ line-height: 130%;
+ position: absolute;
+ letter-spacing: 0%;
+ color: white;
+ size: 70px;
+ font-size: 3.5em;
+}
+
+.hero-p{
+  position: absolute;
+  width: 476px;
+  height: 44px;
+  top: 544px;
+  left: 66px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
+  font-style: semi-bold;
+  line-height: 130%;
+  letter-spacing: 0%;
+  color: #FFFFFF;
+  size: 17px;
+}
+
+.hero-span{
+  color: #91F2F9;
+}
+
+/* Button Styles */
+.button-1 {
+  position: absolute;
+  width: 227px;
+  height: 58px;
+  left: 66px;
+  top: 630px;
+  background: linear-gradient(135deg, #0A36F7 0%, #91F2F9 100%);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(145, 242, 249, 0.6);
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  line-height: 130%;
+  text-align: center;
+  letter-spacing: 0%;
+  color: #000000;
+  font-size: 1.25em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button-1:hover {
+  box-shadow: 0 0 30px rgba(145, 242, 249, 0.8);
+  transform: translateY(-2px);
+}
+
+.button-2 {
+  position: absolute;
+  width: 227px;
+  height: 58px;
+  left: 340px;
+  top: 630px;
+  border: 3px solid #91F2F9;
+  border-radius: 10px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  line-height: 130%;
+  text-align: center;
+  letter-spacing: 0%;
+  color: #91F2F9;
+  font-size: 1.25em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button-1:hover {
+  box-shadow: 0 0 30px rgba(145, 242, 249, 0.8);
+  transform: translateY(-2px);
+}
+/* Responsive Design */
+@media (min-width: 768px) {
+  .hero-section {
+    padding: 0;
+  }
+  
+  .hero-title {
+    font-size: 3.75rem;
+  }
+  
+  .hero-description {
+    font-size: 1.25rem;
+  }
+}
