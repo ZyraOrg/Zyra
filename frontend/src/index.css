@@ -1,7 +1,8 @@
 /* App Container */
 body {
   /* background-color: #00051B; */
-  background: linear-gradient(140deg, #00051B 50%, #081b6e 100%);
+  background: linear-gradient(140deg, #00051b 50%, #081b6e 100%);
+  color: white;
 }
 
 /* Navbar Styles */
@@ -19,7 +20,7 @@ body {
 }
 
 .navbar a {
-  color: #F3F0F0;
+  color: #f3f0f0;
   font-family: "Roboto", sans-serif;
   font-weight: 600;
   position: relative;
@@ -33,13 +34,13 @@ body {
 }
 
 .navbar a::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #CCCFCF;
+  background-color: #cccfcf;
   transition: width 0.4s ease;
 }
 
@@ -48,24 +49,24 @@ body {
 }
 /* Hero Section */
 
-.hero-h1{
- width: 571px;
- height: 320px;
- top: 230px;
- left: 64px;
- text-align: left;
- font-family: "Roboto", sans-serif;
- font-weight: 700;
- font-style: extra-bold;
- line-height: 130%;
- position: absolute;
- letter-spacing: 0%;
- color: white;
- size: 70px;
- font-size: 3.5em;
+.hero-h1 {
+  width: 571px;
+  height: 320px;
+  top: 230px;
+  left: 64px;
+  text-align: left;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: extra-bold;
+  line-height: 130%;
+  position: absolute;
+  letter-spacing: 0%;
+  color: white;
+  size: 70px;
+  font-size: 3.5em;
 }
 
-.hero-p{
+.hero-p {
   position: absolute;
   width: 476px;
   height: 44px;
@@ -76,12 +77,12 @@ body {
   font-style: semi-bold;
   line-height: 130%;
   letter-spacing: 0%;
-  color: #FFFFFF;
+  color: #ffffff;
   size: 17px;
 }
 
-.hero-span{
-  color: #91F2F9;
+.hero-span {
+  color: #91f2f9;
 }
 
 /* Button Styles */
@@ -91,7 +92,7 @@ body {
   height: 58px;
   left: 66px;
   top: 630px;
-  background: linear-gradient(135deg, #0A36F7 0%, #91F2F9 100%);
+  background: linear-gradient(135deg, #0a36f7 0%, #91f2f9 100%);
   border: none;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(145, 242, 249, 0.6);
@@ -120,14 +121,14 @@ body {
   height: 58px;
   left: 340px;
   top: 630px;
-  border: 3px solid #91F2F9;
+  border: 3px solid #91f2f9;
   border-radius: 10px;
   font-family: "Roboto", sans-serif;
   font-weight: 700;
   line-height: 130%;
   text-align: center;
   letter-spacing: 0%;
-  color: #91F2F9;
+  color: #91f2f9;
   font-size: 1.25em;
   display: flex;
   align-items: center;
@@ -145,11 +146,11 @@ body {
   .hero-section {
     padding: 0;
   }
-  
+
   .hero-title {
     font-size: 3.75rem;
   }
-  
+
   .hero-description {
     font-size: 1.25rem;
   }
