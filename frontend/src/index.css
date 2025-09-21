@@ -3,13 +3,15 @@ body {
   /* background-color: #00051B; */
   background: linear-gradient(140deg, #00051b 50%, #081b6e 100%);
   color: white;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 /* Navbar Styles */
 .navbar {
   width: 340px;
   height: 25px;
-  position: absolute;
+  position: relative;
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
@@ -35,7 +37,7 @@ body {
 
 .navbar a::after {
   content: "";
-  position: absolute;
+  position: relative;
   bottom: 0;
   left: 0;
   width: 0;
@@ -59,7 +61,6 @@ body {
   font-weight: 700;
   font-style: extra-bold;
   line-height: 130%;
-  position: absolute;
   letter-spacing: 0%;
   color: white;
   size: 70px;
@@ -67,7 +68,6 @@ body {
 }
 
 .hero-p {
-  position: absolute;
   width: 476px;
   height: 44px;
   top: 544px;
@@ -87,7 +87,6 @@ body {
 
 /* Button Styles */
 .button-1 {
-  position: absolute;
   width: 227px;
   height: 58px;
   left: 66px;
@@ -116,7 +115,6 @@ body {
 }
 
 .button-2 {
-  position: absolute;
   width: 227px;
   height: 58px;
   left: 340px;
