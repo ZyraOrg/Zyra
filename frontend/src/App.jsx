@@ -1,35 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Navbar from './components/Navbar/Navbar';
+import HeroSection from './components/HeroSection/HeroSection';
+import ExploreSection from './components/ExploreSection/ExploreSection';
+import FAQSection from './components/FAQSection/FAQSection';
+import FooterSection from './components/FooterSection/FooterSection';
+import HowItWorksSection from './components/HowItWorksSection/HowItWorksSection';
+import WhyChooseZyraSection from './components/WhyChooseZyraSection/WhyChooseZyraSection';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Navbar />
+      <HeroSection />
+      <ExploreSection />
+      <HowItWorksSection />
+      <WhyChooseZyraSection />
+      <FAQSection />
+      <FooterSection />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
