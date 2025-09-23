@@ -111,15 +111,32 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50 overflow-x-hidden;
+    @apply border-border outline-ring/50;
   }
+  
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden; /* Only hide horizontal overflow on body */
+  }
+  
+  html {
+    overflow-x: hidden; /* Prevent horizontal scrolling on html */
+  }
+  
+  /* Apply overflow-hidden only to specific elements that need it */
+  img, video, canvas {
+    @apply overflow-hidden;
   }
 }
 
 body {
   /* background-color: #00051B; */
-  background: linear-gradient(140deg, #00051b 50%, #081b6e 100%);
+  background: linear-gradient(90deg, #00051b 70%, #051041 100%);
   color: white;
+  overflow: hidden;
+  overflow-x: hidden;
 }
+
+
+
+
