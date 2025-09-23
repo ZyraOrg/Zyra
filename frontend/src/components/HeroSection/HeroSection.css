@@ -22,10 +22,10 @@
 /* ================= Headings ================= */
 .mainHeading {
   font-family: 'Roboto', sans-serif;
-  font-weight: 550;
+  font-weight: 500;
   width: 100%;
   font-size: 1rem;
-  line-height: 1.1;
+  line-height: 1;
   color: rgb(255, 254, 254);
   transform: scaleY(0.98);
 }
@@ -94,7 +94,7 @@
   transform: translateY(-50%);
   z-index: 10;
   object-fit: contain;
-  width: 840px;
+  width: 800px;
   height: auto;
   pointer-events: none;
 }
