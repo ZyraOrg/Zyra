@@ -37,6 +37,7 @@ export default function ExploreSection() {
                   <span> {card.icon1} </span>
                   <span className="text-md font-semibold text-gray-400">
                     {card.name}
+                    fewuwegeu
                   </span>
                 </div>
                 <div className="flex flex-col text-right">
