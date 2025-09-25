@@ -22,10 +22,10 @@
 /* ================= Headings ================= */
 .mainHeading {
   font-family: 'Roboto', sans-serif;
-  font-weight: 500;
+  font-weight: 550;
   width: 100%;
   font-size: 1rem;
-  line-height: 1;
+  line-height: 110%;
   color: rgb(255, 254, 254);
   transform: scaleY(0.98);
 }
@@ -36,9 +36,8 @@
   max-width: 500px;
   font-family: 'Sora', sans-serif;
   font-weight: 500;
-  font-size: 1.125rem;
-  line-height: 150%;
-  color: white;
+  line-height: 121%;
+  color: rgb(255, 255, 255);
 }
 
 /* ================= Buttons ================= */
@@ -51,11 +50,11 @@
 .primaryBtn {
   padding: 1rem 2rem;
   background: linear-gradient(to right, #0A36F7, #91F2F9);
-  border-radius: 0.5rem;
+  border-radius: 0.9rem;
   box-shadow: 0 0 20px rgba(145, 242, 249, 0.6);
   font-family: 'Roboto', sans-serif;
-  font-weight: 700;
-  font-size: 1.125rem;
+  font-weight: 770;
+  font-size: 1.130rem;
   color: black;
   min-width: 200px;
   transition: all 0.3s ease;
@@ -66,7 +65,7 @@
 .secondaryBtn {
   padding: 1rem 2rem;
   border: 2px solid #91F2F9;
-  border-radius: 0.5rem;
+  border-radius: 0.9rem;
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
   font-size: 1.125rem;
@@ -79,19 +78,19 @@
   transition: all 0.3s ease;
 }
 .arrowIcon {
-  font-size: 1.125rem;
+  font-size: 1.129rem;
   transition: transform 0.3s ease;
 }
 .secondaryBtn:hover .arrowIcon {
-  transform: translateX(0.5rem);
+  transform: rotate(43deg); 
 }
-
 /* ================= Hero Shield Image ================= */
 .shieldImg {
   position: absolute;
   right: -6%;
   top: 65%;
   transform: translateY(-50%);
+  transform-origin: center; /* Anchor zoom-in animation to center */
   z-index: 10;
   object-fit: contain;
   width: 800px;
@@ -178,37 +177,44 @@
 }
 .cardGrid {
   display: grid;
-  width: 100%;
+  width: 150%;
   max-width: 72rem;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 6rem;
 }
 .card {
-  width: 100%;
-  max-width: 476px;
+  width: 110%;
+  max-width: 586px;
   margin: 0 auto;
-  background: #00051b;
-  border: 1px solid #1E293B;
-  border-radius: 20px;
+  background: #010411;
+  border: 1px solid;
+  border-color:  #0a195c #7df0ffbd #1d3dc7b9;
+  border-radius: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  min-height: 320px;
+  min-height: 350px;
   transition: border-color 0.3s ease;
+  transform: scale(1.1);
 }
 .card:hover {
-  border-color: #91F2F9;
+  border-color: #06103d;
 }
 .cardImage {
-  width: 4rem;
-  height: 4rem;
-  margin-bottom: 1.5rem;
+  width: 4.7rem;
+  height: 4.5rem;
+  margin-bottom: 5rem;
+ padding-top: 9px;
+  border: 2px solid;
+  border-color: #30449e #1933a7 #657ad8  #83f1ff;
+  border-radius: 25px;
 }
 .cardTitle {
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
-  font-size: 1.375rem;
+  font-size: 1.7rem;
+  line-height: 1.1;
   color: white;
   margin-bottom: 1rem;
   text-align: center;
@@ -217,8 +223,8 @@
   font-family: 'Sora', sans-serif;
   font-weight: 500;
   font-size: 1.125rem;
-  line-height: 150%;
-  color: #7DEFFF;
+  line-height: 120%;
+  color: FFFDFD;
   text-align: center;
 }
 
