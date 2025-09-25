@@ -113,18 +113,20 @@
   * {
     @apply border-border outline-ring/50;
   }
-  
+
   body {
     @apply bg-background text-foreground;
     overflow-x: hidden; /* Only hide horizontal overflow on body */
   }
-  
+
   html {
     overflow-x: hidden; /* Prevent horizontal scrolling on html */
   }
-  
+
   /* Apply overflow-hidden only to specific elements that need it */
-  img, video, canvas {
+  img,
+  video,
+  canvas {
     @apply overflow-hidden;
   }
 }
@@ -137,6 +139,11 @@ body {
   overflow-x: hidden;
 }
 
-
-
-
+@layer components {
+  .number-style {
+    @apply flex justify-center items-center text-center text-xl font-semibold border-3 rounded-full w-9 h-9 p-4 border-[#5A9CBA];
+  }
+  .border-button-gradient {
+    @apply rounded-2xl p-[2px] bg-gradient-to-r from-secondary via-[#3C5DF3]  to-[#3C5DF3] shadow-md;
+  }
+}
