@@ -11,9 +11,9 @@ function App() {
     <>
       <Navbar />
       <HeroSection />
+      <WhyChooseZyraSection />
       <ExploreSection />
       <HowItWorksSection />
-      <WhyChooseZyraSection />
       <FAQSection />
       <FooterSection />
     </>

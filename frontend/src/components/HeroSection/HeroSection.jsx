@@ -23,6 +23,9 @@ const HeroSection = () => {
     <>
       {/* ================= Hero Section ================= */}
       <section className="heroSection" data-aos="fade-up" data-aos-delay="0">
+        {/* Mobile Overlay - Added for dim effect on mobile */}
+        <div className="mobileOverlay"></div>
+
         {/* -------- Left Text -------- */}
         <div className="leftContent" data-aos="fade-down" data-aos-delay="200">
           <h1 className="mainHeading" data-aos="fade-down" data-aos-delay="400">
@@ -67,58 +70,6 @@ const HeroSection = () => {
               <div className="dot"></div>
               <span className="badgeText">Smart Contract Protected</span>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= Why Choose Zyra Section ================= */}
-      <section className="whyChoose" data-aos="fade-up" data-aos-delay="0">
-        <h1 className="whyHeading" data-aos="fade-down" data-aos-delay="200">
-          Why Choose <br /> <span className="highlight">Zyra?</span>
-        </h1>
-        <p className="whySub" data-aos="fade-up" data-aos-delay="400">
-          Built on blockchain technology to ensure every <br />
-          donation creates real, verifiable impact
-        </p>
-
-        <div className="cardGrid" data-aos="fade-up" data-aos-delay="600">
-          <div className="card" data-aos="fade-up" data-aos-delay="800">
-            <img
-              src={Shield2Img}
-              alt="Verified Beneficiaries"
-              className="cardImage"
-            />
-            <h3 className="cardTitle">Verified Beneficiaries</h3>
-            <p className="cardText">
-              Every campaign creator undergoes rigorous identity verification
-              and background checks.
-            </p>
-          </div>
-
-          <div className="card" data-aos="fade-up" data-aos-delay="1000">
-            <img
-              src={DocumentImg}
-              alt="Blockchain Transparency"
-              className="cardImage"
-            />
-            <h3 className="cardTitle">Blockchain <br />Transparency</h3>
-            <p className="cardText">
-              All transactions are recorded on-chain, providing immutable proof
-              of every donation and fund allocation.
-            </p>
-          </div>
-
-          <div className="card" data-aos="fade-up" data-aos-delay="1200">
-            <img
-              src={MulticulturalImg}
-              alt="Community Trust"
-              className="cardImage"
-            />
-            <h3 className="cardTitle">Community Trust</h3>
-            <p className="cardText">
-              Community-driven governance and reputation system ensures
-              accountability and builds trust.
-            </p>
           </div>
         </div>
       </section>

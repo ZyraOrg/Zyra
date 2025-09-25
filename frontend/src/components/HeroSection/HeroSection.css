@@ -10,6 +10,11 @@
   position: relative;
   height: 130vh;
 }
+
+.mobileOverlay {
+  display: none; /* Hidden by default on desktop */
+}
+
 .leftContent {
   z-index: 10;
   display: flex;
@@ -84,13 +89,14 @@
 .secondaryBtn:hover .arrowIcon {
   transform: rotate(43deg); 
 }
+
 /* ================= Hero Shield Image ================= */
 .shieldImg {
   position: absolute;
   right: -6%;
   top: 65%;
   transform: translateY(-50%);
-  transform-origin: center; /* Anchor zoom-in animation to center */
+  transform-origin: center;
   z-index: 10;
   object-fit: contain;
   width: 800px;
@@ -115,7 +121,7 @@
   overflow: hidden;
   bottom: 1rem;
   position: absolute;
-  left: 1.rem;
+  left: 1rem;
 }
 .profileImg {
   width: 100%;
@@ -147,87 +153,6 @@
   color: white;
 }
 
-/* ================= Why Choose Zyra ================= */
-.whyChoose {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 5rem 1.5rem;
-  color: white;
-  margin-top: 20%;
-}
-.whyHeading {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 500;
-  font-size: 1.875rem;
-  line-height: 120%;
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-.whySub {
-  margin-top: 1rem;
-  max-width: 600px;
-  font-family: 'Sora', sans-serif;
-  font-weight: 700;
-  font-size: 1.125rem;
-  line-height: 150%;
-  text-align: center;
-  color: white;
-  margin-bottom: 4rem;
-}
-.cardGrid {
-  display: grid;
-  width: 150%;
-  max-width: 72rem;
-  grid-template-columns: 1fr;
-  gap: 6rem;
-}
-.card {
-  width: 110%;
-  max-width: 586px;
-  margin: 0 auto;
-  background: #010411;
-  border: 1px solid;
-  border-color:  #0a195c #7df0ffbd #1d3dc7b9;
-  border-radius: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-  min-height: 350px;
-  transition: border-color 0.3s ease;
-  transform: scale(1.1);
-}
-.card:hover {
-  border-color: #06103d;
-}
-.cardImage {
-  width: 4.7rem;
-  height: 4.5rem;
-  margin-bottom: 5rem;
- padding-top: 9px;
-  border: 2px solid;
-  border-color: #30449e #1933a7 #657ad8  #83f1ff;
-  border-radius: 25px;
-}
-.cardTitle {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 700;
-  font-size: 1.7rem;
-  line-height: 1.1;
-  color: white;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-.cardText {
-  font-family: 'Sora', sans-serif;
-  font-weight: 500;
-  font-size: 1.125rem;
-  line-height: 120%;
-  color: FFFDFD;
-  text-align: center;
-}
-
 /* ================= Media Queries ================= */
 @media (min-width: 640px) {
   .buttonGroup { flex-direction: row; }
@@ -249,4 +174,157 @@
   .profileImgWrapper { width: 5rem; height: 5rem; }
   .whyHeading { font-size: 3.75rem; }
   .cardGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 800px) {
+  /* Hero Section */
+  .heroSection {
+    background: url('../../assets/MobileHero.png') no-repeat top/cover;
+    background-position: center -10px;
+    position: relative;
+    overflow: hidden;
+    height: 85vh; /* Adjusted to 85vh, but we'll fix positioning below */
+  }
+
+  .mobileOverlay {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(2, 1, 1, 0.55);
+    z-index: 7;
+  }
+
+  .leftContent,
+  .buttonGroup,
+  .verificationWrapper {
+    position: relative;
+    z-index: 10;
+  }
+
+  .shieldImg {
+    display: none;
+  }
+
+  .leftContent {
+    margin-top: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+  }
+
+  .mainHeading {
+    margin-top: 10%;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    font-size: 2.2rem;
+    text-align: center;
+    position: relative;
+    line-height: 1.3;
+    z-index: 10;
+  }
+
+  .subHeading {
+    font-size: 0.8rem;
+    font-family: 'Sora', sans-serif;
+    max-width: 100%;
+    font-weight: normal;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+  }
+
+  .primaryBtn {
+    font-size: 1.4rem;
+    padding: 1.2rem 2.2rem;
+    border-radius: 50px;
+    background: linear-gradient(to right, #0A36F7, #91F2F9);
+    color: black;
+    box-shadow: 0 0 20px rgba(145, 242, 249, 0.6);
+  }
+
+  .secondaryBtn {
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    border: 2px solid #91F2F9;
+    font-size: 0.9em;
+    color: #91F2F9;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Verification Section Adjustment */
+  .verificationWrapper {
+    position: absolute;
+    bottom: -10rem; /* Move below hero section */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 20;
+    width: 100%;
+    padding: 0 1.5rem;
+  }
+
+  .singleProfileWrapper {
+    width: 10.1rem;
+    height: 5rem;
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    z-index: 20;
+  }
+
+  .profileImg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    margin-top: 0; /* Reset margin-top */
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 20;
+  }
+
+  .verificationContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+    
+  }
+
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    background: #91F2F9;
+    border-radius: 50%;
+  }
+
+  .badgeText {
+    font-family: 'Sora', sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: white;
+  }
 }
