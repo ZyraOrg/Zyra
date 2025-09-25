@@ -10,7 +10,7 @@ const HowItWorksSection = () => {
         <p className="text-md font-semibold">
           Four simple steps to transparent, blockchain-powered{" "}
           <br className="hidden md:block" />
-          crowdfunding
+          crowdfundi
         </p>
       </div>
     </main>
