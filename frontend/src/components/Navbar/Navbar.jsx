@@ -16,15 +16,17 @@ const Navbar = () => {
 
   return (
     <nav className="fixed left-0 z-50 flex items-center w-full px-8 py-2 transition-transform duration-300 top-10">
-      {/* Logo*/}
-      <div className="absolute left-2">
-        <img 
-          src={MulticulturalImg} 
-          alt="Zyra Logo" 
-          className="object-contain h-40 cursor-pointer w-50"
-          data-aos="fade-down"
-        />
-      </div>
+     {/* Logo */}
+<div className="absolute max-[800px]:-left-6 left-2">
+  <img 
+    src={MulticulturalImg} 
+    alt="Zyra Logo" 
+    className="object-contain h-40 cursor-pointer w-50"
+    data-aos="fade-down"
+  />
+</div>
+
+
 
       {/* Desktop Navbar */}
       <ul className="items-center hidden gap-10 mx-auto md:flex">

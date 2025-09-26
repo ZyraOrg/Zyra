@@ -55,7 +55,7 @@ const FAQSection = () => {
                   <span className="text-lg max-[800px]:text-sm">{faq.question}</span>
                   <span
                     className={`text-xl transform transition-transform duration-300 max-[800px]:text-sm ${
-                      openIndex === index ? 'rotate-180' : ''
+                      openIndex === index ? 'rotate-90' : ''
                     }`}
                   >
                     ▼
@@ -64,7 +64,7 @@ const FAQSection = () => {
 
                 <div
                   ref={(el) => (contentRefs.current[index] = el)}
-                  className="overflow-hidden transition-max-height duration-300 mt-2 text-gray-300 text-base max-[800px]:text-xs"
+                    className="overflow-hidden transition-max-height duration-300 mt-2 text-gray-300 text-base max-[800px]:text-xs max-[800px]:font-normal"
                   style={{
                     maxHeight: openIndex === index ? '500px' : '0px',
                   }}

@@ -52,7 +52,9 @@ const WhyChooseZyraSection = () => {
   };
 
   return (
-    <section className="relative flex flex-col items-center px-0 py-24 md:pt-40">
+   <section className="relative flex flex-col items-center px-0 pt-40 pb-40 md:pt-30 md:pb-30">
+
+
       {/* H1 */}
       <h1
         data-aos="fade-up"
@@ -63,13 +65,14 @@ const WhyChooseZyraSection = () => {
       </h1>
 
       {/* Subtitle */}
-      <p
-        data-aos="fade-in"
-        className="mt-2 max-w-[600px] font-sora font-bold text-base md:text-lg leading-[1.5] text-center text-white mb-8 md:mb-16"
-      >
-        Built on blockchain technology to ensure every <br />
-        donation creates real, verifiable impact
-      </p>
+<p
+  data-aos="fade-in"
+  className="mt-2 max-w-[600px] font-sora font-small text-sm md:text-base md:font-semibold leading-[1.5] text-center text-white mb-8 md:mb-16"
+>
+  Built on blockchain technology to ensure every <br />
+  donation creates real, verifiable impact
+</p>
+
 
       {/* Card container */}
       <div
@@ -107,7 +110,7 @@ const WhyChooseZyraSection = () => {
       </div>
 
       {/* Mobile dots indicator */}
-      <div className="absolute flex gap-2 transform -translate-x-1/2 bottom-6 md:hidden left-1/2">
+      <div className="absolute flex gap-2 pt-40 pb-40 transform -translate-x-1/2 bottom-7 top-140 md:hidden left-1/2">
         {cards.map((_, idx) => (
           <button
             key={idx}
