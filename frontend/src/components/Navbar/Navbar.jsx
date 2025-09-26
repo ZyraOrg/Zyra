@@ -16,7 +16,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed left-0 z-50 flex items-center w-full px-8 py-2 transition-transform duration-300 top-10">
-      {/* Logo (unchanged size) */}
+      {/* Logo*/}
       <div className="absolute left-2">
         <img 
           src={MulticulturalImg} 
@@ -41,7 +41,7 @@ const Navbar = () => {
         ))}
       </ul>
 
-      {/* Burger Menu (Mobile only) */}
+      
       <div className="ml-auto md:hidden">
         <button
           onClick={toggleMobileMenu}
@@ -58,16 +58,16 @@ const Navbar = () => {
           }`}></span>
         </button>
 
-        {/* Mobile Menu */}
+       
         {isMobileMenuOpen && (
           <>
-            {/* Overlay */}
+           
             <div 
               className="fixed inset-0 z-40 bg-oacity-50 bg-wh backdrop-blur-sm"
               onClick={toggleMobileMenu}
             ></div>
 
-            {/* Slide-in menu with blurred background */}
+          
             <ul className="fixed top-0 right-0 z-50 flex flex-col items-center justify-center w-64 h-full space-y-8 border border-white/40 bg-black/40 backdrop-blur-xl">
               {["Home", "Campaigns", "Create", "About"].map((item, i) => (
                 <li key={i} data-aos="fade-left" data-aos-delay={i * 100}>
