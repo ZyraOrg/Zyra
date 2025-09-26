@@ -11,9 +11,21 @@ const WhyChooseZyraSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const cards = [
-    { img: Shield2Img, title: "Verified Beneficiaries", text: "Every campaign creator undergoes rigorous identity verification and background checks." },
-    { img: DocumentImg, title: "Blockchain\nTransparency", text: "All transactions are recorded on-chain, providing immutable proof of every donation and fund allocation." },
-    { img: MulticulturalImg, title: "Community Trust", text: "Community-driven governance and reputation system ensures accountability and builds trust." },
+    {
+      img: Shield2Img,
+      title: "Verified Beneficiaries",
+      text: "Every campaign creator undergoes rigorous identity verification and background checks.",
+    },
+    {
+      img: DocumentImg,
+      title: "Blockchain\nTransparency",
+      text: "All transactions are recorded on-chain, providing immutable proof of every donation and fund allocation.",
+    },
+    {
+      img: MulticulturalImg,
+      title: "Community Trust",
+      text: "Community-driven governance and reputation system ensures accountability and builds trust.",
+    },
   ];
 
   useEffect(() => {
@@ -52,9 +64,7 @@ const WhyChooseZyraSection = () => {
   };
 
   return (
-   <section className="relative flex flex-col items-center px-0 pt-40 pb-40 md:pt-30 md:pb-30">
-
-
+    <section className="relative flex flex-col items-center px-0 pt-40 pb-40 md:pt-30 md:pb-30">
       {/* H1 */}
       <h1
         data-aos="fade-up"
@@ -65,14 +75,13 @@ const WhyChooseZyraSection = () => {
       </h1>
 
       {/* Subtitle */}
-<p
-  data-aos="fade-in"
-  className="mt-2 max-w-[600px] font-sora font-small text-sm md:text-base md:font-semibold leading-[1.5] text-center text-white mb-8 md:mb-16"
->
-  Built on blockchain technology to ensure every <br />
-  donation creates real, verifiable impact
-</p>
-
+      <p
+        data-aos="fade-in"
+        className="mt-2 max-w-[600px] font-sora font-small text-sm md:text-base md:font-semibold leading-[1.5] text-center text-white mb-8 md:mb-16"
+      >
+        Built on blockchain technology to ensure every <br />
+        donation creates real, verifiable impact
+      </p>
 
       {/* Card container */}
       <div
@@ -80,7 +89,7 @@ const WhyChooseZyraSection = () => {
         className="flex md:grid md:grid-cols-3 md:justify-between gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth touch-pan-x w-full max-w-[1148px] mx-auto px-4 md:px-0"
         style={{ scrollbarWidth: "none" }}
       >
-        <style>{`::-webkit-scrollbar { display: none; }`}</style>
+        {/* <style>{`::-webkit-scrollbar { display: none; }`}</style> */}
 
         {cards.map((card, idx) => (
           <div
@@ -101,8 +110,12 @@ const WhyChooseZyraSection = () => {
                   />
                 </div>
 
-                <h3 className="font-roboto font-bold text-xl md:text-[1.7rem] text-center mb-2 whitespace-pre-line">{card.title}</h3>
-                <p className="font-sora font-medium text-base md:text-lg leading-[1.3] md:leading-[1.2] text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">{card.text}</p>
+                <h3 className="font-roboto font-bold text-xl md:text-[1.7rem] text-center mb-2 whitespace-pre-line">
+                  {card.title}
+                </h3>
+                <p className="font-sora font-medium text-base md:text-lg leading-[1.3] md:leading-[1.2] text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  {card.text}
+                </p>
               </div>
             </div>
           </div>
