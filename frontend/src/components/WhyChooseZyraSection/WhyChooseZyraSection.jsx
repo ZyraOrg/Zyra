@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import Shield2Img from "../../assets/shield2.svg";
 import DocumentImg from "../../assets/Document.svg";
 import MulticulturalImg from "../../assets/Multicultural People.svg";
@@ -38,6 +40,10 @@ const WhyChooseZyraSection = () => {
     return () => container.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    AOS.init({ duration: 800, once: true, easing: "ease-in-out" });
+  }, []);
+
   const handleDotClick = (idx) => {
     const card = cardRefs.current[idx];
     if (!card) return;
@@ -48,13 +54,19 @@ const WhyChooseZyraSection = () => {
   return (
     <section className="relative flex flex-col items-center px-0 py-24 md:pt-40">
       {/* H1 */}
-      <h1 className="font-roboto font-semibold bold text-[2rem] md:text-[3.4rem] leading-[1.2] text-center mb-6">
+      <h1
+        data-aos="fade-up"
+        className="font-roboto font-semibold bold text-[2rem] md:text-[3.4rem] leading-[1.2] text-center mb-6"
+      >
         Why Choose <br />
         <span className="text-[#91F2F9]">Zyra?</span>
       </h1>
 
       {/* Subtitle */}
-      <p className="mt-2 max-w-[600px] font-sora font-bold text-base md:text-lg leading-[1.5] text-center text-white mb-8 md:mb-16">
+      <p
+        data-aos="fade-in"
+        className="mt-2 max-w-[600px] font-sora font-bold text-base md:text-lg leading-[1.5] text-center text-white mb-8 md:mb-16"
+      >
         Built on blockchain technology to ensure every <br />
         donation creates real, verifiable impact
       </p>
@@ -68,12 +80,22 @@ const WhyChooseZyraSection = () => {
         <style>{`::-webkit-scrollbar { display: none; }`}</style>
 
         {cards.map((card, idx) => (
-          <div key={idx} ref={(el) => (cardRefs.current[idx] = el)} className="snap-center flex-shrink-0 w-[90vw] md:w-[360px] max-w-[586px]">
+          <div
+            key={idx}
+            ref={(el) => (cardRefs.current[idx] = el)}
+            data-aos="zoom-in"
+            data-aos-delay={idx * 150} // stagger cards
+            className="snap-center flex-shrink-0 w-[90vw] md:w-[360px] max-w-[586px]"
+          >
             <div className="p-[1px] rounded-[30px] bg-gradient-to-l from-primary to-secondary shadow-md">
               <div className="relative flex flex-col items-center p-8 min-h-[350px] md:min-h-[390px] h-full w-full bg-[#010411] rounded-[30px] border border-[#0a195c] border-t-[#7df0ffbd] border-b-[#1d3dc7b9] hover:border-[#06103d] transition-colors duration-300">
                 {/* Gradient wrapper for image */}
                 <div className="p-[2px] rounded-[20px] md:rounded-[25px] bg-gradient-to-r from-primary to-secondary mb-12 md:mb-20">
-                  <img src={card.img} alt={card.title} className="w-16 h-16 md:w-[4.7rem] md:h-[4.5rem] pt-2 rounded-[18px] md:rounded-[23px] object-contain bg-[#010411]" />
+                  <img
+                    src={card.img}
+                    alt={card.title}
+                    className="w-16 h-16 md:w-[4.7rem] md:h-[4.5rem] pt-2 rounded-[18px] md:rounded-[23px] object-contain bg-[#010411]"
+                  />
                 </div>
 
                 <h3 className="font-roboto font-bold text-xl md:text-[1.7rem] text-center mb-2 whitespace-pre-line">{card.title}</h3>
@@ -87,7 +109,16 @@ const WhyChooseZyraSection = () => {
       {/* Mobile dots indicator */}
       <div className="absolute flex gap-2 transform -translate-x-1/2 bottom-6 md:hidden left-1/2">
         {cards.map((_, idx) => (
-          <button key={idx} aria-label={`Go to slide ${idx + 1}`} onClick={() => handleDotClick(idx)} className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ease-in-out ${activeIndex === idx ? "bg-[#91F2F9] scale-125 shadow-[0_0_8px_#91F2F9]" : "bg-white opacity-50 scale-90"}`} />
+          <button
+            key={idx}
+            aria-label={`Go to slide ${idx + 1}`}
+            onClick={() => handleDotClick(idx)}
+            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ease-in-out ${
+              activeIndex === idx
+                ? "bg-[#91F2F9] scale-125 shadow-[0_0_8px_#91F2F9]"
+                : "bg-white opacity-50 scale-90"
+            }`}
+          />
         ))}
       </div>
     </section>

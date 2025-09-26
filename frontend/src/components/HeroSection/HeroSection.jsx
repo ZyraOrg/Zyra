@@ -8,7 +8,7 @@ import MobileHero from "../../assets/MobileHero.png";
 
 const HeroSection = () => {
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({ once: true });
   }, []);
 
   return (
@@ -65,7 +65,8 @@ const HeroSection = () => {
             transition-all duration-300 
             bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] 
             hover:shadow-[0_0_30px_rgba(145,242,249,0.8)]"
-            data-aos="slide-right"
+            data-aos="fade-right"
+            data-aos-duration="800"
             data-aos-delay="400"
           >
             Start a Campaign
@@ -76,7 +77,8 @@ const HeroSection = () => {
             rounded-full border-2 border-[#91F2F9] 
             font-roboto font-bold text-base md:text-lg 
             text-[#91F2F9] transition-all duration-300"
-            data-aos="slide-left"
+            data-aos="fade-left"
+            data-aos-duration="900"
             data-aos-delay="500"
           >
             {/* Hide arrow on mobile */}
@@ -99,20 +101,22 @@ const HeroSection = () => {
         />
       </div>
 
-      {/* Verification Section*/}
+      {/* Verification Section */}
       <div
         className="absolute z-20 flex flex-col items-center md:items-start gap-4
                    bottom-auto top-[90%] md:bottom-[-10rem] 
                    left-1/2 md:left-16 -translate-x-1/2 md:translate-x-0 
                    text-center md:text-left w-full px-6"
         data-aos="fade-up"
-        data-aos-delay="900"
+        data-aos-duration="600"
+        data-aos-delay="700"
       >
         {/* Avatars */}
         <div
           className="relative h-20 mb-2 overflow-hidden rounded-full w-30"
           data-aos="zoom-in"
-          data-aos-delay="1000"
+          data-aos-duration="700"
+          data-aos-delay="800"
         >
           <img
             src={Shielding2}
@@ -125,7 +129,7 @@ const HeroSection = () => {
         <div className="flex flex-row justify-between w-full max-w-[320px] md:max-w-none md:justify-start md:gap-6">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 bg-[#91F2F9] rounded-full"></span>
-            <span className="text-sm font-light text-small white font- font-sora">
+            <span className="text-sm font-light text-white font-sora">
               Blockchain Verified
             </span>
           </div>
