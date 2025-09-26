@@ -18,7 +18,7 @@ const HowItWorksSection = () => {
         <div className="flex flex-col md:flex-row justify-between items-center text-center md:w-2xl gap-10">
           <div className="flex flex-col justify-center items-center gap-5">
             <div className="number-style">1</div>
-            <p className="font-semibold text-xl">Create Campaign</p>
+            <p className="font-semibold text-xl">Create Campaig</p>
           </div>
           <div className="flex flex-col justify-center items-center gap-5">
             <div className="number-style">2</div>
