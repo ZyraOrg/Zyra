@@ -7,7 +7,6 @@ const FAQSection = () => {
   const contentRefs = useRef([]);
 
   const faqs = [
-<<<<<<< HEAD
     { 
       question: "What is Zyra?", 
       answer: "Zyra is a donations-facilitation platform built for Africa. It helps individuals and communities raise funds for medical, educational, or social needs, while enabling donors worldwide to give in crypto or fiat with full transparency." 
@@ -20,14 +19,6 @@ const FAQSection = () => {
       question: "How can I donate?", 
       answer: "You can give using crypto or stablecoins, and soon via local fiat gateways such as Naira. Web2 donors can pay with cards or bank transfers, while Web3 donors can contribute directly from their crypto wallets." 
     },
-=======
-    { question: "What is Zyra", answer: "Zyra is a platform that ..." },
-    {
-      question: "How does Zyra ensure transparency and trust",
-      answer: "Zyra ensures transparency by ...",
-    },
-    { question: "How can I donate", answer: "You can donate via ..." },
->>>>>>> 7a3f01dcd648dc9e80b98df6c4d1d84cfcf26863
   ];
 
   const toggleFAQ = (index) => {
@@ -40,15 +31,9 @@ const FAQSection = () => {
 
   return (
     <div className="w-full min-h-[819px] pt-25 px-8 box-border flex flex-col items-center text-white">
-<<<<<<< HEAD
       {/* H1 */}
       <h1 
         className="text-5xl max-[800px]:text-3xl font-semibold leading-tight max-[800px]:leading-snug text-center mb-9" 
-=======
-      {/* H1 with responsive font size */}
-      <h1
-        className="text-5xl max-[800px]:text-3xl font-semibold leading-tight max-[800px]:leading-snug text-center mb-9"
->>>>>>> 7a3f01dcd648dc9e80b98df6c4d1d84cfcf26863
         data-aos="fade-up"
       >
         Frequently <span className="text-[#00C4FF]">Asked </span>
@@ -68,59 +53,35 @@ const FAQSection = () => {
               data-aos-duration={durations[index]}
               data-aos-delay={delays[index]}
               className="rounded-[25px] p-[1px] bg-gradient-to-r from-[#91F2F9] to-[#0A36F7] overflow-hidden border-25px border-[#0A195C] 
-                         max-[800px]:rounded-[20px] /* Mobile border radius, edit here */"
+                         max-[800px]:rounded-[20px]"
             >
               <div
                 onClick={() => toggleFAQ(index)}
                 className="bg-[#010410] rounded-[25px] p-6 flex flex-col justify-center cursor-pointer shadow-lg transition-all duration-500
-                           max-[800px]:rounded-[20px] max-[800px]:p-3 /* Mobile padding, edit here */"
+                           max-[800px]:rounded-[20px] max-[800px]:p-3"
               >
-<<<<<<< HEAD
                 {/* Question */}
                 <div className="flex items-center justify-between font-semibold text-white max-[800px]:gap-2">
-                  <span className="text-lg max-[800px]:text-sm /* Mobile text size, edit here */">{faq.question}</span>
+                  <span className="text-lg max-[800px]:text-sm">{faq.question}</span>
                   <span
                     className={`text-xl transform transition-transform duration-500 max-[800px]:text-sm ${
-                      openIndex === index ? 'rotate-90' : ''
-=======
-                <div className="flex items-center justify-between font-bold text-white max-[800px]:gap-2">
-                  <span className="text-lg max-[800px]:text-sm">
-                    {faq.question}
-                  </span>
-                  <span
-                    className={`text-xl transform transition-transform duration-300 max-[800px]:text-sm ${
                       openIndex === index ? "rotate-90" : ""
->>>>>>> 7a3f01dcd648dc9e80b98df6c4d1d84cfcf26863
                     }`}
                   >
                     ▼
                   </span>
                 </div>
 
-<<<<<<< HEAD
-              {/* Answer */}
-<div
-  ref={(el) => (contentRefs.current[index] = el)}
-  className="overflow-hidden transition-max-height duration-500 mt-2 text-base max-[800px]:text-xs max-[800px]:font-semibold font-bold bg-gradient-to-r from-[#5868df] to-[#91F2F9] bg-clip-text text-transparent"
-  style={{
-    maxHeight: openIndex === index ? '500px' : '0px',
-  }}
->
-  {faq.answer} 
-</div>
-
-
-=======
+                {/* Answer */}
                 <div
                   ref={(el) => (contentRefs.current[index] = el)}
-                  className="overflow-hidden transition-max-height duration-300 mt-2 text-gray-300 text-base max-[800px]:text-xs max-[800px]:font-normal"
+                  className="overflow-hidden transition-max-height duration-500 mt-2 text-base max-[800px]:text-xs max-[800px]:font-semibold font-bold bg-gradient-to-r from-[#5868df] to-[#91F2F9] bg-clip-text text-transparent"
                   style={{
                     maxHeight: openIndex === index ? "500px" : "0px",
                   }}
                 >
-                  {faq.answer}
+                  {faq.answer} 
                 </div>
->>>>>>> 7a3f01dcd648dc9e80b98df6c4d1d84cfcf26863
               </div>
             </div>
           );
