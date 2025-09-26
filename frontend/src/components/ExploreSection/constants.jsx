@@ -29,7 +29,7 @@ export const Card = [
   {
     id: 3,
     image: "/card/cardImage3.png",
-    imageText: "Eduation",
+    imageText: "Education",
     title: "Education fund for Underprivileged Children",
     icon1: <CiUser />,
     name: "Hope Foundation",

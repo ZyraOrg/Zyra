@@ -3,7 +3,7 @@ import React from "react";
 
 const HowItWorksSection = () => {
   return (
-    <main className="w-full overflow-hidden md:mt-10 px-5 md:px-10 flex flex-col justify-center items-center text-center">
+    <main className="w-full overflow-x-hidden md:mt-10 px-5 md:px-10 flex flex-col justify-center items-center text-center">
       <div className="space-y-5 pb-5">
         <h1 className="text-2xl md:text-5xl font-semibold md:leading-15">
           How It <span className="text-secondary">Works</span>

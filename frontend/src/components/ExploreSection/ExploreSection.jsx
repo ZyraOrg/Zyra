@@ -1,4 +1,3 @@
-import { FaHourglassHalf } from "react-icons/fa";
 import { Card } from "./constants";
 
 import { ArrowUpRight } from "lucide-react";
