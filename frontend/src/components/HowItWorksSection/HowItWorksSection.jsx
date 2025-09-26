@@ -22,7 +22,7 @@ const HowItWorksSection = () => {
           </div>
           <div className="flex flex-col justify-center items-center gap-5">
             <div className="number-style">2</div>
-            <p className="font-semibold text-xl">Donate with Wallet</p>
+            <p className="font-semibold text-xl">Donate with Walle</p>
           </div>
         </div>
         <div className="flex flex-col md:flex-row  justify-between items-center text-center md:w-4xl gap-10">
