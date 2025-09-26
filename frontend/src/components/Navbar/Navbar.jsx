@@ -14,19 +14,23 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  // Function to open PDF for viewing (with optional download)
+  const handleViewPdf = () => {
+    window.open('/Zyra LitePaper 2025.pdf', '_blank');
+  };
+
   return (
     <nav className="fixed left-0 z-50 flex items-center w-full px-8 py-2 transition-transform duration-300 top-10">
-     {/* Logo */}
-<div className="absolute max-[800px]:-left-6 left-2">
-  <img 
-    src={MulticulturalImg} 
-    alt="Zyra Logo" 
-    className="object-contain h-40 cursor-pointer w-50"
-    data-aos="fade-down"
-  />
-</div>
 
-
+      {/* Logo */}
+      <div className="absolute max-[800px]:-left-6 left-2">
+        <img 
+          src={MulticulturalImg} 
+          alt="Zyra Logo" 
+          className="object-contain h-40 cursor-pointer w-50"
+          data-aos="fade-down"
+        />
+      </div>
 
       {/* Desktop Navbar */}
       <ul className="items-center hidden gap-10 mx-auto md:flex">
@@ -43,46 +47,47 @@ const Navbar = () => {
         ))}
       </ul>
 
-      
-      <div className="ml-auto md:hidden">
+      {/* Mobile Hamburger */}
+      <div className="relative z-50 ml-auto md:hidden">
         <button
           onClick={toggleMobileMenu}
-          className="relative z-50 flex flex-col justify-between w-8 h-6"
+          className="relative flex flex-col justify-between w-8 h-6" data-aos="fade-down"
+                data-aos-duration="800"
+                data-aos-delay="400"
         >
-          <span className={`w-full h-0.5 bg-white transition-all duration-300 ${
-            isMobileMenuOpen ? 'rotate-45 translate-y-2.5' : ''
-          }`}></span>
-          <span className={`w-full h-0.5 bg-white transition-all duration-300 ${
-            isMobileMenuOpen ? 'opacity-0' : ''
-          }`}></span>
-          <span className={`w-full h-0.5 bg-white transition-all duration-300 ${
-            isMobileMenuOpen ? '-rotate-45 -translate-y-2.5' : ''
-          }`}></span>
+          <span className={`w-full h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-2.5' : ''}`}></span>
+          <span className={`w-full h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''}`}></span>
+          <span className={`w-full h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-2.5' : ''}`}></span>
         </button>
 
-       
+        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <>
-           
+            {/* Background overlay */}
             <div 
-              className="fixed inset-0 z-40 bg-oacity-50 bg-wh backdrop-blur-sm"
-              onClick={toggleMobileMenu}
-            ></div>
+  className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+  onClick={toggleMobileMenu}
+/>
 
-          
-            <ul className="fixed top-0 right-0 z-50 flex flex-col items-center justify-center w-64 h-full space-y-8 border border-white/40 bg-black/40 backdrop-blur-xl">
-              {["Home", "Campaigns", "Create", "About"].map((item, i) => (
-                <li key={i} data-aos="fade-left" data-aos-delay={i * 100}>
-                  <a
-                    href={`#${item.toLowerCase().replace(" ", "-")}`}
-                    className="text-white font-roboto font-semibold text-lg hover:text-[#91F2F9] transition-colors duration-300"
-                    onClick={toggleMobileMenu}
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
+
+            {/* Menu content */}
+            <div className="fixed top-0 right-0 z-50 flex flex-col items-center justify-center w-64 h-full space-y-8 border border-transparent/40 bg-black/40 backdrop-blur-xl">
+              {/* Lite Paper button - opens PDF for viewing with optional download */}
+              <button
+                className="px-10 py-5 min-w-[220px] rounded-full 
+                           text-black font-roboto font-extrabold text-lg 
+                           shadow-[0_0_20px_rgba(145,242,249,0.6)]
+                           transition-all duration-300 
+                           bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] 
+                           hover:shadow-[0_0_30px_rgba(145,242,249,0.8)]"
+                data-aos="slide-left"
+                data-aos-duration="500"
+                data-aos-delay="100"
+                onClick={handleViewPdf}
+              >
+                Lite Paper
+              </button>
+            </div>
           </>
         )}
       </div>

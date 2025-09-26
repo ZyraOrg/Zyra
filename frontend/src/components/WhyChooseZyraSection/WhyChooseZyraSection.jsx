@@ -87,7 +87,7 @@ const WhyChooseZyraSection = () => {
             key={idx}
             ref={(el) => (cardRefs.current[idx] = el)}
             data-aos="zoom-in"
-            data-aos-delay={idx * 150} // stagger cards
+            data-aos-delay={idx * 100} // stagger cards
             className="snap-center flex-shrink-0 w-[90vw] md:w-[360px] max-w-[586px]"
           >
             <div className="p-[1px] rounded-[30px] bg-gradient-to-l from-primary to-secondary shadow-md">
