@@ -6,7 +6,7 @@ import ShieldImg from "../../assets/SHIELDw.svg";
 import Shielding2 from "../../assets/Bottomimg.svg";
 import MobileHero from "../../assets/MobileHero.png";
 
-// PDF must be inside public/ folder
+
 const litepaper = "/litepaper.pdf";
 
 const HeroSection = () => {
@@ -189,9 +189,9 @@ const HeroSection = () => {
 
         {/* Badges */}
         <div className="flex flex-row justify-between w-full max-w-[320px] md:max-w-none md:justify-start md:gap-6 -mt-8">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <span className="w-2 h-2 bg-[#91F2F9] rounded-full"></span>
-            <span className="text-xs font-light text-white md:text-sm font-sora">
+            <span className="text-xs font-medium text-white md:text-sm font-sora">
               Blockchain Verified
             </span>
           </div>
