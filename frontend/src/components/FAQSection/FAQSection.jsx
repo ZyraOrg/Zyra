@@ -7,17 +7,20 @@ const FAQSection = () => {
   const contentRefs = useRef([]);
 
   const faqs = [
-    { 
-      question: "What is Zyra?", 
-      answer: "Zyra is a donations-facilitation platform built for Africa. It helps individuals and communities raise funds for medical, educational, or social needs, while enabling donors worldwide to give in crypto or fiat with full transparency." 
+    {
+      question: "What is Zyra?",
+      answer:
+        "Zyra is a donations-facilitation platform built for Africa. It helps individuals and communities raise funds for medical, educational, or social needs, while enabling donors worldwide to give in crypto or fiat with full transparency.",
     },
-    { 
-      question: "How does Zyra ensure transparency and trust?", 
-      answer: "Every campaign goes through digital and offline verification. All crypto donations are recorded on the blockchain and displayed on a public Transparency Dashboard, allowing donors to track every contribution and see exactly how funds are used." 
+    {
+      question: "How does Zyra ensure transparency and trust?",
+      answer:
+        "Every campaign goes through digital and offline verification. All crypto donations are recorded on the blockchain and displayed on a public Transparency Dashboard, allowing donors to track every contribution and see exactly how funds are used.",
     },
-    { 
-      question: "How can I donate?", 
-      answer: "You can give using crypto or stablecoins, and soon via local fiat gateways such as Naira. Web2 donors can pay with cards or bank transfers, while Web3 donors can contribute directly from their crypto wallets." 
+    {
+      question: "How can I donate?",
+      answer:
+        "You can give using crypto or stablecoins, and soon via local fiat gateways such as Naira. Web2 donors can pay with cards or bank transfers, while Web3 donors can contribute directly from their crypto wallets.",
     },
   ];
 
@@ -30,10 +33,10 @@ const FAQSection = () => {
   }, []);
 
   return (
-    <div className="w-full min-h-[819px] pt-25 px-8 box-border flex flex-col items-center text-white">
+    <div className="w-full pt-25 px-8 box-border flex flex-col items-center text-white">
       {/* H1 */}
-      <h1 
-        className="text-5xl max-[800px]:text-3xl font-semibold leading-tight max-[800px]:leading-snug text-center mb-9" 
+      <h1
+        className="text-5xl max-[800px]:text-3xl font-semibold leading-tight max-[800px]:leading-snug text-center mb-9"
         data-aos="fade-up"
       >
         Frequently <span className="text-[#00C4FF]">Asked </span>
@@ -62,7 +65,9 @@ const FAQSection = () => {
               >
                 {/* Question */}
                 <div className="flex items-center justify-between font-semibold text-white max-[800px]:gap-2">
-                  <span className="text-lg max-[800px]:text-sm">{faq.question}</span>
+                  <span className="text-lg max-[800px]:text-sm">
+                    {faq.question}
+                  </span>
                   <span
                     className={`text-xl transform transition-transform duration-500 max-[800px]:text-sm ${
                       openIndex === index ? "rotate-90" : ""
@@ -80,7 +85,7 @@ const FAQSection = () => {
                     maxHeight: openIndex === index ? "500px" : "0px",
                   }}
                 >
-                  {faq.answer} 
+                  {faq.answer}
                 </div>
               </div>
             </div>
