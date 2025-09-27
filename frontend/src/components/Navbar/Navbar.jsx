@@ -5,9 +5,33 @@ import MulticulturalImg from "../../assets/logo.png";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({
+      duration: 1000,
+      once: true,
+       offset: 50,
+    });
+  }, []);
+
+  useEffect(() => {
+    let ticking = false;
+
+    const update = () => {
+      setScrolled(window.scrollY > 0);
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const toggleMobileMenu = () => {
@@ -15,7 +39,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed left-0 z-50 flex items-center w-full px-8 py-2 transition-transform duration-300 top-10">
+    <nav className={`fixed left-0 z-50 flex items-center w-full px-8 py-2 transition-all duration-300 ${scrolled ? 'top-0 md:bg-black/40' : 'top-10'}`}>
       {/* Logo */}
       <div className="absolute max-[800px]:-left-6 left-2">
         <img
@@ -83,7 +107,7 @@ const Navbar = () => {
                 href="/Zyra-Litepaper-2025.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-10 py-5 min-w-[220px] rounded-full 
+                className="px-10 py-5 min-w-[100px] rounded-full 
                            text-black font-roboto font-extrabold text-lg 
                            shadow-[0_0_20px_rgba(145,242,249,0.6)]
                            transition-all duration-300 
@@ -93,7 +117,7 @@ const Navbar = () => {
                 data-aos-duration="500"
                 data-aos-delay="100"
               >
-                Lite Pape
+                Lite Paper
               </a>
             </div>
           </>

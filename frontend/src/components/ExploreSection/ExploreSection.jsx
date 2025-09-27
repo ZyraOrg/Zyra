@@ -1,26 +1,33 @@
 import { Card } from "./constants";
+import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
 import { ArrowUpRight } from "lucide-react";
 
 export default function ExploreSection() {
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      easing: "ease-in-out",
+      offset: 20,  
+    });
+  }, []);
+
   return (
     <main className="flex flex-col items-center justify-center w-full overflow-hidden text-center px-7 md:mt-10">
       <div className="pb-5 space-y-3 md:space-y-5">
         <h1 className="text-3xl font-semibold md:text-5xl md:leading-15" data-aos="fade-up" data-aos-duration="800" data-aos-easing="ease-in-out" data-aos-delay="600">
           Explore <span className="text-secondary">Active Campaigns</span>
         </h1>
-        <p className="font-semibold text-[11px] md:text-[16px]" data-aos="zoom-in" data-aos-duration="800" data-aos-easing="ease-in-out" data-aos-delay="800">
+        <p className="font-semibold text-[11px] md:text-[16px]" data-aos="fade-up" data-aos-duration="800" data-aos-easing="ease-in-out" data-aos-delay="800">
           Support verified causes and track your impact in real-time on
           <br className="hidden md:block" /> the blockchain
         </p>
       </div>
       <div className="relative grid grid-cols-1 gap-12 pt-10 md:grid-cols-3">
         {Card.map((card) => (
-          <div className="p-[1px] rounded-4xl bg-gradient-to-r from-primary to-secondary shadow-md" data-aos="zoom-in-up" data-aos-duration="600" data-aos-easing="ease-in-out" data-aos-delay="600">
+          <div key={card.id} className="p-[1px] rounded-4xl bg-gradient-to-r from-primary to-secondary shadow-md" data-aos="fade-up" data-aos-duration="600" data-aos-easing="ease-in-out" data-aos-delay="600">
             <div
-              key={card.id}
               className="relative flex flex-col justify-between h-full max-w-sm mx-auto overflow-hidden bg-black rounded-4xl"
             >
               <div className="relative">
