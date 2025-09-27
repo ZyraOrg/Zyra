@@ -14,11 +14,6 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Function to open PDF for viewing (with optional download)
-  const handleViewPdf = () => {
-    window.open("/Zyra-LitePaper-2025.pdf", "_blank");
-  };
-
   return (
     <nav className="fixed left-0 z-50 flex items-center w-full px-8 py-2 transition-transform duration-300 top-10">
       {/* Logo */}
@@ -84,7 +79,10 @@ const Navbar = () => {
             {/* Menu content */}
             <div className="fixed top-0 right-0 z-50 flex flex-col items-center justify-center w-64 h-full space-y-8 border border-transparent/40 bg-black/40 backdrop-blur-xl">
               {/* Lite Paper button - opens PDF for viewing with optional download */}
-              <button
+              <a
+                href="/Zyra-Litepaper-2025.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-10 py-5 min-w-[220px] rounded-full 
                            text-black font-roboto font-extrabold text-lg 
                            shadow-[0_0_20px_rgba(145,242,249,0.6)]
@@ -94,10 +92,9 @@ const Navbar = () => {
                 data-aos="slide-left"
                 data-aos-duration="500"
                 data-aos-delay="100"
-                onClick={handleViewPdf}
               >
                 Lite Paper
-              </button>
+              </a>
             </div>
           </>
         )}
