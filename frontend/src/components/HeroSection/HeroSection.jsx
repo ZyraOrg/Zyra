@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react"; 
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { ArrowUpRight } from "lucide-react";
@@ -6,14 +6,21 @@ import ShieldImg from "../../assets/SHIELDw.svg";
 import Shielding2 from "../../assets/Bottomimg.svg";
 import MobileHero from "../../assets/MobileHero.png";
 
+// PDF must be inside public/ folder
+const litepaper = "/litepaper.pdf";
+
 const HeroSection = () => {
+  const [showDialog, setShowDialog] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     AOS.init({ once: true });
 
-    // FIX mobile vh zooming issue caused by browser bars
     const setMobileVH = () => {
-      if (window.innerWidth < 768) {
-        // mobile only
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+
+      if (mobile) {
         document.documentElement.style.setProperty(
           "--mobile-vh",
           `${window.innerHeight}px`
@@ -27,14 +34,25 @@ const HeroSection = () => {
     return () => window.removeEventListener("resize", setMobileVH);
   }, []);
 
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = litepaper;
+    link.download = "Zyra LitePaper 2025.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setShowDialog(false);
+  };
+
   return (
     <section
       className="relative flex flex-col items-center justify-between gap-8
-             px-6 pt-20 md:pt-32 sm:px-8 md:px-16 
-             text-white h-[85vh] md:h-[150vh] lg:flex-row
-             pb-20 md:pb-0" // <-- Added this
+                 px-6 pt-20 md:pt-32 sm:px-8 md:px-16 
+                 text-white h-[85vh] md:h-[150vh] lg:flex-row
+                 pb-20 md:pb-0"
       data-aos="fade-up"
     >
+
       {/* Mobile background */}
       <div
         className="absolute inset-0 bg-top bg-cover md:hidden"
@@ -72,28 +90,55 @@ const HeroSection = () => {
           Every donation traceable on-chain, every beneficiary <br />
           verified. The future of crowdfunding is here
         </h2>
+
         {/* Buttons */}
         <div className="flex flex-col items-center gap-4 mt-0 sm:flex-row md:items-start">
-          <button
-            className="px-10 py-5 min-w-[220px] md:min-w-[200px] rounded-full 
-            text-black font-roboto font-extrabold text-lg 
-            shadow-[0_0_20px_rgba(145,242,249,0.6)]
-            transition-all duration-300 
-            bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] 
-            hover:shadow-[0_0_30px_rgba(145,242,249,0.8)]"
-            data-aos="fade-right"
-            data-aos-duration="800"
-            data-aos-delay="400"
-          >
-            Start a Campaign
-          </button>
 
+          {/* Desktop → open dialog */}
+          {!isMobile && (
+            <button
+              onClick={() => setShowDialog(true)}
+              className="px-10 py-5 min-w-[220px] md:min-w-[200px] rounded-full 
+                       text-black font-roboto font-extrabold text-lg 
+                       shadow-[0_0_20px_rgba(145,242,249,0.6)]
+                       transition-all duration-300 
+                       bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] 
+                       hover:shadow-[0_0_30px_rgba(145,242,249,0.8)]"
+              data-aos="fade-right"
+              data-aos-duration="800"
+              data-aos-delay="400"
+            >
+              Start a Campaign
+            </button>
+          )}
+
+          {/* Mobile → inline PDF preview */}
+          {isMobile && (
+            <a
+              href={litepaper}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-10 py-5 min-w-[220px] md:min-w-[200px] rounded-full 
+                       text-black font-roboto font-extrabold text-lg 
+                       shadow-[0_0_20px_rgba(145,242,249,0.6)]
+                       transition-all duration-300 
+                       bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] 
+                       hover:shadow-[0_0_30px_rgba(145,242,249,0.8)] flex items-center justify-center"
+              data-aos="fade-right"
+              data-aos-duration="800"
+              data-aos-delay="400"
+            >
+              Start a Campaign
+            </a>
+          )}
+
+          {/* Donate Now button */}
           <button
             className="flex items-center justify-center gap-2
-             w-[166px] h-[42px] md:w-[220px] md:h-[70px]  // desktop now same height as Start a Campaign
-             rounded-full border-2 border-[#91F2F9] 
-             font-roboto font-bold text-base md:text-lg 
-             text-[#91F2F9] transition-all duration-300"
+                       w-[166px] h-[42px] md:w-[220px] md:h-[70px]  
+                       rounded-full border-2 border-[#91F2F9] 
+                       font-roboto font-bold text-base md:text-lg 
+                       text-[#91F2F9] transition-all duration-300"
             data-aos="fade-left"
             data-aos-duration="900"
             data-aos-delay="500"
@@ -120,10 +165,10 @@ const HeroSection = () => {
       {/* Verification Section */}
       <div
         className="absolute z-20 flex flex-col items-center md:items-start gap-4
-             top-[98%] md:top-[90%] 
-             left-1/2 md:left-16 -translate-x-1/2 md:translate-x-0 
-             text-center md:text-left w-full px-6
-             mb-20 md:mb-0" // <-- Added mobile-only bottom margin
+                   top-[98%] md:top-[90%] 
+                   left-1/2 md:left-16 -translate-x-1/2 md:translate-x-0 
+                   text-center md:text-left w-full px-6
+                   mb-20 md:mb-0"
         data-aos="fade-up"
         data-aos-duration="600"
         data-aos-delay="700"
@@ -158,6 +203,34 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+
+      {/* Desktop-only Dialog */}
+      {!isMobile && showDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Blurred background */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowDialog(false)}
+          ></div>
+
+          {/* Dialog box */}
+          <div className="relative bg-[#010410] rounded-[30px] p-8 w-[400px] md:w-[450px] flex flex-col items-center z-50 shadow-lg">
+            <h3 className="mb-4 text-xl font-semibold text-center text-white font-roboto">
+              Download Lite Paper
+            </h3>
+            <p className="mb-6 text-center text-gray-300">
+              Click to download.
+            </p>
+            <button
+              onClick={handleDownload}
+              className="px-6 py-3 rounded-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] font-bold text-black shadow-lg transition-all duration-300 hover:shadow-xl"
+            >
+              Download
+            </button>
+          </div>
+        </div>
+      )}
+
     </section>
   );
 };
