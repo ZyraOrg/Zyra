@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import React, { useState, useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import MulticulturalImg from "../../assets/logo.png";
 
 const Navbar = () => {
@@ -16,17 +16,16 @@ const Navbar = () => {
 
   // Function to open PDF for viewing (with optional download)
   const handleViewPdf = () => {
-    window.open('/Zyra LitePaper 2025.pdf', '_blank');
+    window.open("/Zyra-LitePaper-2025.pdf", "_blank");
   };
 
   return (
     <nav className="fixed left-0 z-50 flex items-center w-full px-8 py-2 transition-transform duration-300 top-10">
-
       {/* Logo */}
       <div className="absolute max-[800px]:-left-6 left-2">
-        <img 
-          src={MulticulturalImg} 
-          alt="Zyra Logo" 
+        <img
+          src={MulticulturalImg}
+          alt="Zyra Logo"
           className="object-contain h-40 cursor-pointer w-50"
           data-aos="fade-down"
         />
@@ -51,24 +50,36 @@ const Navbar = () => {
       <div className="relative z-50 ml-auto md:hidden">
         <button
           onClick={toggleMobileMenu}
-          className="relative flex flex-col justify-between w-8 h-6" data-aos="fade-down"
-                data-aos-duration="800"
-                data-aos-delay="400"
+          className="relative flex flex-col justify-between w-8 h-6"
+          data-aos="fade-down"
+          data-aos-duration="800"
+          data-aos-delay="400"
         >
-          <span className={`w-full h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-2.5' : ''}`}></span>
-          <span className={`w-full h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''}`}></span>
-          <span className={`w-full h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-2.5' : ''}`}></span>
+          <span
+            className={`w-full h-0.5 bg-white transition-all duration-300 ${
+              isMobileMenuOpen ? "rotate-45 translate-y-2.5" : ""
+            }`}
+          ></span>
+          <span
+            className={`w-full h-0.5 bg-white transition-all duration-300 ${
+              isMobileMenuOpen ? "opacity-0" : ""
+            }`}
+          ></span>
+          <span
+            className={`w-full h-0.5 bg-white transition-all duration-300 ${
+              isMobileMenuOpen ? "-rotate-45 -translate-y-2.5" : ""
+            }`}
+          ></span>
         </button>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <>
             {/* Background overlay */}
-            <div 
-  className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
-  onClick={toggleMobileMenu}
-/>
-
+            <div
+              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+              onClick={toggleMobileMenu}
+            />
 
             {/* Menu content */}
             <div className="fixed top-0 right-0 z-50 flex flex-col items-center justify-center w-64 h-full space-y-8 border border-transparent/40 bg-black/40 backdrop-blur-xl">
