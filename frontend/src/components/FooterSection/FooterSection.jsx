@@ -1,12 +1,16 @@
-import logo from "../../assets/logo.png";
+import logo3 from "../../assets/logo.png";
 import React from "react";
 
 const FooterSection = () => {
   return (
-    <main className="px-7 md:px-30 pb-5 md:space-y-9">
+    <main className="px-7 md:px-30 pb-5 md:space-y-9 pt-10 md:pt-20">
       <div className="flex flex-col md:flex-row justify-between md:items-center md:max-w-6xl gap-5">
         <div className="flex flex-col justify-between">
-          <img src={logo} alt="logo" className="w-32 h-32 object-cover" />
+          <img
+            src={logo3}
+            alt="logo"
+            className="object-contain w-32 h-32 inline-block"
+          />
           <p className="text-left text-[12px] md:text-[16px] text-gray-400 font-semibold">
             Transparent blockchain <br className="hidden md:block" />
             crowdfunding for verified causes <br className="hidden md:block" />
