@@ -53,7 +53,7 @@ const WhyChooseZyraSection = () => {
   }, []);
 
   useEffect(() => {
-    AOS.init({ duration: 800, once: true, easing: "ease-in-out" });
+    AOS.init({ duration: 800, once: true, easing: "ease-in-out", offset: 20,});
   }, []);
 
   const handleDotClick = (idx) => {

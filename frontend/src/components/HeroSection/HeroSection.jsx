@@ -14,7 +14,10 @@ const HeroSection = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    AOS.init({ once: true });
+    AOS.init({
+      once: true,
+       offset: 50,
+    });
 
     const setMobileVH = () => {
       const mobile = window.innerWidth < 768;
@@ -87,8 +90,8 @@ const HeroSection = () => {
           data-aos="fade-up"
           data-aos-delay="600"
         >
-          Every donation traceable on-chain, every beneficiary <br />
-          verified. The future of crowdfunding is here
+          Every donation traced, every beneficiary <br />
+          verified. The future of crowdfunding is Zyra
         </h2>
 
         {/* Buttons */}
@@ -108,7 +111,7 @@ const HeroSection = () => {
               data-aos-duration="800"
               data-aos-delay="400"
             >
-              Start a Campaign
+              Donate Now
             </button>
           )}
 
@@ -128,7 +131,7 @@ const HeroSection = () => {
               data-aos-duration="800"
               data-aos-delay="400"
             >
-              Start a Campaign
+              Donate Now
             </a>
           )}
 
@@ -143,10 +146,10 @@ const HeroSection = () => {
             data-aos-duration="900"
             data-aos-delay="500"
           >
-            <span className="block md:hidden">Donate Now</span>
+            <span className="block md:hidden">Start a Campaign</span>
             <span className="items-center hidden gap-2 md:flex">
               <ArrowUpRight className="w-5 h-5 transition-transform duration-300 group-hover:rotate-45" />
-              Donate Now
+              Start a Campaign
             </span>
           </button>
         </div>
