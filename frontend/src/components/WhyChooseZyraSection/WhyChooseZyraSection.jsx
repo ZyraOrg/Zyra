@@ -113,7 +113,7 @@ const WhyChooseZyraSection = () => {
                 <h3 className="font-roboto font-bold text-xl md:text-[1.7rem] text-center mb-2 whitespace-pre-line">
                   {card.title}
                 </h3>
-                <p className="font-sora font-medium text-base md:text-lg leading-[1.3] md:leading-[1.2] text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                <p className="font-sora font-medium text-base md:text-lg leading-[1.3] md:leading-[1.2] text-center text-secondary">
                   {card.text}
                 </p>
               </div>
