@@ -33,7 +33,7 @@ const FAQSection = () => {
   }, []);
 
   return (
-    <div className="w-full pt-25 px-8 box-border flex flex-col items-center text-white">
+    <div className="box-border flex flex-col items-center w-full px-8 text-white pt-25">
       {/* H1 */}
       <h1
         className="text-5xl max-[800px]:text-3xl font-semibold leading-tight max-[800px]:leading-snug text-center mb-9"
@@ -80,7 +80,8 @@ const FAQSection = () => {
                 {/* Answer */}
                 <div
                   ref={(el) => (contentRefs.current[index] = el)}
-                  className="overflow-hidden transition-max-height duration-500 mt-2 text-base max-[800px]:text-xs max-[800px]:font-semibold font-bold bg-gradient-to-r from-[#5868df] to-[#91F2F9] bg-clip-text text-transparent"
+                 className="overflow-hidden transition-max-height duration-500 mt-2 text-base max-[800px]:text-xs max-[800px]:font-semibold font-light text-[#91F2F9]"
+
                   style={{
                     maxHeight: openIndex === index ? "500px" : "0px",
                   }}
