@@ -33,8 +33,7 @@ const FooterSection = () => {
               data-aos-delay="200"
             >
               Transparent blockchain <br className="hidden md:block" />
-              crowdfunding for verified causes{" "}
-              <br className="hidden md:block" />
+              crowdfunding for verified cause <br className="hidden md:block" />
               worldwide
             </p>
           </div>
