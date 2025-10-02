@@ -1,7 +1,13 @@
-import logo3 from "../../assets/logo.png";
+import logo2 from "../../assets/logo.png";
+import { BsTwitterX, BsTelegram, BsEnvelope } from "react-icons/bs";
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+
+const SOCIAL_LINKS = {
+  twitter: "https://x.com/zyraapp?s=21",
+  telegram: "https://t.me/zyraApp",
+};
 
 const FooterSection = () => {
   useEffect(() => {
@@ -23,7 +29,7 @@ const FooterSection = () => {
             data-aos-delay="100"
           >
             <img
-              src={logo3}
+              src={logo2}
               alt="logo"
               className="inline-block object-contain w-32 h-32"
             />
@@ -40,16 +46,36 @@ const FooterSection = () => {
           <div className="space-y-2" data-aos="slide-left" data-aos-delay="200">
             <h1 className="text-lg font-semibold">Platform</h1>
             <div className="flex flex-col gap-2 font-semibold text-gray-400 text-md">
-              <a href="/" data-aos="slide-left" data-aos-delay="300">
+              <a
+                href="#home"
+                data-aos="slide-left"
+                data-aos-delay="300"
+                className="hover:text-gray-300"
+              >
                 Home
               </a>
-              <a href="/" data-aos="slide-left" data-aos-delay="400">
+              <a
+                href="#campaigns"
+                className="hover:text-gray-300"
+                data-aos="slide-left"
+                data-aos-delay="400"
+              >
                 Campaigns
               </a>
-              <a href="/" data-aos="slide-left" data-aos-delay="500">
+              <a
+                href="#create"
+                className="hover:text-gray-300"
+                data-aos="slide-left"
+                data-aos-delay="500"
+              >
                 Create
               </a>
-              <a href="/" data-aos="slide-left" data-aos-delay="600">
+              <a
+                href="#about"
+                className="hover:text-gray-300"
+                data-aos="slide-left"
+                data-aos-delay="600"
+              >
                 Explore
               </a>
             </div>
@@ -57,19 +83,59 @@ const FooterSection = () => {
           <div className="space-y-2" data-aos="slide-left" data-aos-delay="700">
             <h1 className="text-lg font-semibold">Legal</h1>
             <div className="flex flex-col gap-2 font-semibold text-gray-400 text-md">
-              <a href="/" data-aos="slide-left" data-aos-delay="800">
+              <a
+                href="/"
+                className="hover:text-gray-300"
+                data-aos="slide-left"
+                data-aos-delay="800"
+              >
                 Terms
               </a>
-              <a href="/" data-aos="slide-left" data-aos-delay="900">
+              <a
+                href="/"
+                className="hover:text-gray-300"
+                data-aos="slide-left"
+                data-aos-delay="900"
+              >
                 Privacy
               </a>
-              <a href="/" data-aos="slide-left" data-aos-delay="1000">
+              <a
+                href="/"
+                className="hover:text-gray-300"
+                data-aos="slide-left"
+                data-aos-delay="1000"
+              >
                 Security
               </a>
-              <a href="/" data-aos="slide-left" data-aos-delay="1100">
+              <a
+                href="/"
+                className="hover:text-gray-300"
+                data-aos="slide-left"
+                data-aos-delay="1100"
+              >
                 Litepaper
               </a>
             </div>
+          </div>
+        </div>
+        <div>
+          <div className="flex gap-2 my-4">
+            <a
+              href={SOCIAL_LINKS.twitter}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-full bg-primary/70 flex items-center justify-center hover:bg-primary transition-colors"
+            >
+              <BsTwitterX size={18} />
+            </a>
+            <a
+              href={SOCIAL_LINKS.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-full bg-primary/70 flex items-center justify-center hover:bg-primary transition-colors"
+            >
+              <BsTelegram size={18} />
+            </a>
           </div>
         </div>
         <p
