@@ -20,7 +20,7 @@ const FooterSection = () => {
 
   return (
     <main className="pb-5 md:space-y-9 pt-15 md:pt-20">
-      <div className="h-1 w-full border border-primary"></div>
+      <div className="w-full h-1 border border-primary"></div>
       <div className="px-7 md:px-30">
         <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center md:max-w-6xl">
           <div
@@ -31,7 +31,7 @@ const FooterSection = () => {
             <img
               src={logo2}
               alt="logo"
-              className="inline-block object-contain w-32 h-32"
+             className="inline-block object-contain w-32 h-32 ml-[-26px]" 
             />
             <p
               className="text-left text-[12px] md:text-[16px] text-gray-400 font-semibold"
@@ -124,7 +124,7 @@ const FooterSection = () => {
               href={SOCIAL_LINKS.twitter}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full bg-primary/70 flex items-center justify-center hover:bg-primary transition-colors"
+              className="flex items-center justify-center w-8 h-8 transition-colors rounded-full bg-primary/70 hover:bg-primary"
             >
               <BsTwitterX size={18} />
             </a>
@@ -132,7 +132,7 @@ const FooterSection = () => {
               href={SOCIAL_LINKS.telegram}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full bg-primary/70 flex items-center justify-center hover:bg-primary transition-colors"
+              className="flex items-center justify-center w-8 h-8 transition-colors rounded-full bg-primary/70 hover:bg-primary"
             >
               <BsTelegram size={18} />
             </a>
