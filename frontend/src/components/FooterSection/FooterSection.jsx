@@ -1,5 +1,5 @@
-import logo2 from "../../assets/logo.png";
-import { BsTwitterX, BsTelegram, BsEnvelope } from "react-icons/bs";
+import logo4 from "../../assets/logo4.png";
+import { BsTwitterX, BsTelegram } from "react-icons/bs";
 import React, { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -21,26 +21,28 @@ const FooterSection = () => {
   return (
     <main className="pb-5 md:space-y-9 pt-15 md:pt-20">
       <div className="w-full h-1 border border-primary"></div>
-      <div className="px-7 md:px-30">
-        <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center md:max-w-6xl">
+      <div className="px-5 md:px-30 pt-7">
+        <div className="flex flex-col justify-between gap-5 md:flex-row md:max-w-6xl">
           <div
-            className="flex flex-col justify-between"
+            className="flex flex-col"
             data-aos="slide-left"
             data-aos-delay="100"
           >
-            <img
-              src={logo2}
-              alt="logo"
-             className="inline-block object-contain w-32 h-32 ml-[-26px]" 
-            />
+            <div>
+              <img
+                src={logo4}
+                alt="Zyra Logo"
+                className="h-full w-20 cursor-pointer"
+              />
+            </div>
             <p
-              className="text-left text-[12px] md:text-[16px] text-gray-400 font-semibold"
+              className="text-left text-[12px] md:text-[16px] text-gray-400 font-semibold pt-2"
               data-aos="slide-left"
               data-aos-delay="200"
             >
               Transparent blockchain <br className="hidden md:block" />
               crowdfunding for verified cause <br className="hidden md:block" />
-              worldwide
+              worldwide.
             </p>
           </div>
           <div className="space-y-2" data-aos="slide-left" data-aos-delay="200">
@@ -68,7 +70,7 @@ const FooterSection = () => {
                 data-aos="slide-left"
                 data-aos-delay="500"
               >
-                Creat
+                Create
               </a>
               <a
                 href="#about"
@@ -76,7 +78,7 @@ const FooterSection = () => {
                 data-aos="slide-left"
                 data-aos-delay="600"
               >
-                Explor
+                Explore
               </a>
             </div>
           </div>
@@ -108,7 +110,9 @@ const FooterSection = () => {
                 Security
               </a>
               <a
-                href="/"
+                href="/Zyra-Litepaper-2025.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-gray-300"
                 data-aos="slide-left"
                 data-aos-delay="1100"
@@ -119,12 +123,17 @@ const FooterSection = () => {
           </div>
         </div>
         <div>
-          <div className="flex gap-2 my-4">
+          <div
+            className="flex gap-2 mt-4"
+            data-aos="slide-left"
+            data-aos-delay="1200"
+            data-aos-offset="20"
+          >
             <a
               href={SOCIAL_LINKS.twitter}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-8 h-8 transition-colors rounded-full bg-primary/70 hover:bg-primary"
+              className="flex items-center justify-center w-7 h-7 md:w-h md:h-8 transition-colors rounded-full bg-primary/70 hover:bg-primary"
             >
               <BsTwitterX size={18} />
             </a>
@@ -132,14 +141,14 @@ const FooterSection = () => {
               href={SOCIAL_LINKS.telegram}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-8 h-8 transition-colors rounded-full bg-primary/70 hover:bg-primary"
+              className="flex items-center justify-center w-7 h-7 md:w-h md:h-8 transition-colors rounded-full bg-primary/70 hover:bg-primary"
             >
               <BsTelegram size={18} />
             </a>
           </div>
         </div>
         <p
-          className="text-center md:text-left text-[12px] md:text-[16px] text-gray-500 pt-5"
+          className="text-center md:text-left text-[12px] md:text-[16px] text-gray-500 pt-2"
           data-aos="slide-left"
           data-aos-delay="1200"
           data-aos-offset="20"
