@@ -68,7 +68,7 @@ const FooterSection = () => {
                 data-aos="slide-left"
                 data-aos-delay="500"
               >
-                Create
+                Creat
               </a>
               <a
                 href="#about"
@@ -76,7 +76,7 @@ const FooterSection = () => {
                 data-aos="slide-left"
                 data-aos-delay="600"
               >
-                Explore
+                Explor
               </a>
             </div>
           </div>
