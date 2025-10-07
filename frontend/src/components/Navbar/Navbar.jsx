@@ -37,7 +37,12 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
- 
+  // 👇 Smooth scroll to top when "Home" is clicked
+  const handleScrollToTop = (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const buttonClasses =
     "px-8 py-3 rounded-full text-black font-roboto font-extrabold text-lg " +
     "shadow-[0_0_20px_rgba(145,242,249,0.6)] " +
@@ -58,6 +63,7 @@ const Navbar = () => {
           alt="Zyra Logo"
           className="object-contain h-40 cursor-pointer w-50"
           data-aos="fade-down"
+          onClick={handleScrollToTop} // 👈 Clicking logo also scrolls to top
         />
       </div>
 
@@ -65,13 +71,24 @@ const Navbar = () => {
       <ul className="items-center hidden gap-10 mx-auto md:flex">
         {["Home", "Campaigns", "Create", "About"].map((item, i) => (
           <li key={i} data-aos="fade-down" data-aos-delay={i * 200}>
-            <a
-              href={`#${item.toLowerCase().replace(" ", "-")}`}
-              className="text-white font-roboto font-semibold relative py-3 px-1 hover:text-[#91F2F9] transition-colors duration-300 
-                after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#91F2F9] after:transition-all after:duration-300 hover:after:w-full"
-            >
-              {item}
-            </a>
+            {item === "Home" ? (
+              <a
+                href="#home"
+                onClick={handleScrollToTop} // 👈 Scroll to top for Home
+                className="text-white font-roboto font-semibold relative py-3 px-1 hover:text-[#91F2F9] transition-colors duration-300 
+                  after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#91F2F9] after:transition-all after:duration-300 hover:after:w-full"
+              >
+                {item}
+              </a>
+            ) : (
+              <a
+                href={`#${item.toLowerCase().replace(" ", "-")}`}
+                className="text-white font-roboto font-semibold relative py-3 px-1 hover:text-[#91F2F9] transition-colors duration-300 
+                  after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#91F2F9] after:transition-all after:duration-300 hover:after:w-full"
+              >
+                {item}
+              </a>
+            )}
           </li>
         ))}
       </ul>
@@ -105,20 +122,24 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <>
-            {/* Background overlay */}
             <div
               className="fixed inset-0 z-40 backdrop-blur-md bg-blue-950/20"
               onClick={toggleMobileMenu}
             />
-
-            {/* Menu content */}
             <div className="fixed top-0 right-0 z-50 flex flex-col items-center justify-start w-64 h-full pt-10 space-y-8 border border-white/10 bg-white/10 backdrop-blur-2xl">
-              {/* Navlinks */}
               {["Home", "Campaigns", "Create", "About"].map((item, i) => (
                 <a
                   key={i}
                   href={`#${item.toLowerCase().replace(" ", "-")}`}
-                  className={`${buttonClasses} py-4`} // 🔹 extra top/bottom padding
+                  onClick={
+                    item === "Home"
+                      ? (e) => {
+                          handleScrollToTop(e);
+                          toggleMobileMenu();
+                        }
+                      : toggleMobileMenu
+                  }
+                  className="text-white font-roboto font-semibold text-lg hover:text-[#91F2F9] transition-colors duration-300"
                   data-aos="slide-left"
                   data-aos-duration="500"
                   data-aos-delay={100 + i * 100}
@@ -126,13 +147,11 @@ const Navbar = () => {
                   {item}
                 </a>
               ))}
-
-              {/* Lite Paper */}
               <a
                 href="/Zyra-Litepaper-2025.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`${buttonClasses} py-4`} // 🔹 extra padding too
+                className={`${buttonClasses} py-4`}
                 data-aos="slide-left"
                 data-aos-duration="500"
                 data-aos-delay="600"

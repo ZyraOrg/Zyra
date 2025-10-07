@@ -14,7 +14,7 @@ export default function ExploreSection() {
   }, []);
 
   return (
-    <main className="flex flex-col items-center justify-center w-full overflow-hidden text-center px-8 md:px-7 md:mt-10">
+    <main className="flex flex-col items-center justify-center w-full px-8 overflow-hidden text-center md:px-7 md:mt-10">
       <div className="pb-5 space-y-3 md:space-y-5">
         <h1
           className="text-3xl font-semibold md:text-5xl md:leading-15"
@@ -58,7 +58,7 @@ export default function ExploreSection() {
                 </span>
               </div>
 
-              <div className="px-3 md:px-5 space-y-3">
+              <div className="px-3 space-y-3 md:px-5">
                 <div className="text-left pt-4 text-[15px] md:text-[21px] font-semibold line-clamp-2">
                   {card.title}{" "}
                 </div>
