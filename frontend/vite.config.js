@@ -5,13 +5,12 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true, // 👈 allows access from network
-    allowedHosts: [
-      // 👇 add your ngrok domain here
-      "unploughed-unrespected-rory.ngrok-free.dev",
-    ],
+    host: true,
+    allowedHosts: ["unploughed-unrespected-rory.ngrok-free.dev"],
   },
   build: {
-    outDir: "docs", // ✅ output build files to 'docs' instead of 'dist'
+    outDir: "../docs", // ✅ output to 'docs' for GitHub Pages
+    emptyOutDir: true, // ✅ ensures old files are cleared before each build
   },
+  base: "./", // ✅ makes sure assets load correctly on GitHub Pages
 });
