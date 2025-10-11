@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -8,7 +8,10 @@ export default defineConfig({
     host: true, // 👈 allows access from network
     allowedHosts: [
       // 👇 add your ngrok domain here
-      "unploughed-unrespected-rory.ngrok-free.dev"
-    ]
-  }
-})
+      "unploughed-unrespected-rory.ngrok-free.dev",
+    ],
+  },
+  build: {
+    outDir: "docs", // ✅ output build files to 'docs' instead of 'dist'
+  },
+});
