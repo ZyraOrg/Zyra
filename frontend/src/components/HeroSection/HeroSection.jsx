@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { ArrowUpRight } from "lucide-react";
@@ -56,14 +56,12 @@ const HeroSection = () => {
       )}
 
       {/* Main Content Container */}
-      <div className="relative z-20 flex flex-col items-center justify-between w-full gap-8 px-6 pt-20 pb-20 sm:px-8 md:flex-row md:px-16 md:pt-32 md:pb-0 min-h-[10vh] md:min-h-[100vh]">
-        
+      <div className="relative z-20 flex flex-col items-center justify-between w-full gap-8 px-6 pt-2 pb-20 sm:px-8 md:flex-row md:px-16 md:pt-32 md:pb-0 min-h-[10vh] md:min-h-[100vh]">
         {/* Left Content */}
-       <div
-  className="flex flex-col items-center w-full gap-6 mt-2 text-center sm:mt-12 md:mt-0 md:w-1/2 md:items-start md:text-left"
-  data-aos="fade-down"
->
-
+        <div
+          className="flex flex-col items-center w-full gap-6 mt-2 text-center sm:mt-12 md:mt-0 md:w-1/2 md:items-start md:text-left"
+          data-aos="fade-down"
+        >
           <h1
             className="font-roboto font-semibold text-[2.2rem] leading-[1.3] md:text-[2rem] md:leading-[1.1] lg:text-[4.2rem] scale-y-[0.98] mt-40"
             data-aos="fade-down"
@@ -129,13 +127,13 @@ const HeroSection = () => {
         </div>
 
         {/* Right Shield Image (desktop only) */}
-      <div className="hidden md:block">
-        <img
-          src={ShieldImg}
-          alt="Hero Illustration"
-          className="absolute right-[-6%] top-[60%] 
+        <div className="hidden md:block">
+          <img
+            src={ShieldImg}
+            alt="Hero Illustration"
+            className="absolute right-[-6%] top-[60%] 
                      -translate-y-1/2 z-10 object-contain w-[900px] pointer-events-none mt-30"
-        />
+          />
         </div>
       </div>
       {/* Verification Section - Below main content */}
@@ -190,9 +188,7 @@ const HeroSection = () => {
             <h3 className="mb-4 text-xl font-semibold text-center text-white font-roboto">
               Download Lite Paper
             </h3>
-            <p className="mb-6 text-center text-gray-300">
-              Click to download.
-            </p>
+            <p className="mb-6 text-center text-gray-300">Click to download.</p>
             <button
               onClick={handleDownload}
               className="px-6 py-3 rounded-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] font-bold text-black shadow-lg transition-all duration-300 hover:shadow-xl"
