@@ -1,10 +1,16 @@
 import { FaHourglassHalf } from "react-icons/fa";
 import { CiUser } from "react-icons/ci";
+import cardImage1 from "../../assets/cardImage1.png";
+import cardImage2 from "../../assets/cardImage2.png";
+import cardImage3 from "../../assets/cardImage3.png";
+import cardImage4 from "../../assets/cardImage4.png";
+import cardImage5 from "../../assets/cardImage5.png";
+import cardImage6 from "../../assets/cardImage6.png";
 
 export const Card = [
   {
     id: 1,
-    image: "/card/cardImage1.png",
+    image: cardImage1,
     imageText: "Medical",
     title: "Medical Treatment for Sarah's Cancer Recovery",
     icon1: <CiUser />,
@@ -16,7 +22,7 @@ export const Card = [
   },
   {
     id: 2,
-    image: "/card/cardImage2.png",
+    image: cardImage2,
     imageText: "Emergency",
     title: "Emergency Relief For Food victims",
     icon1: <CiUser />,
@@ -28,7 +34,7 @@ export const Card = [
   },
   {
     id: 3,
-    image: "/card/cardImage3.png",
+    image: cardImage3,
     imageText: "Education",
     title: "Education fund for Underprivileged Children",
     icon1: <CiUser />,
@@ -40,7 +46,7 @@ export const Card = [
   },
   {
     id: 4,
-    image: "/card/cardImage4.png",
+    image: cardImage4,
     imageText: "Amenities",
     title: "Clean Water Project for Remote Village",
     icon1: <CiUser />,
@@ -52,7 +58,7 @@ export const Card = [
   },
   {
     id: 5,
-    image: "/card/cardImage5.png",
+    image: cardImage5,
     imageText: "Green life",
     title: "Green Ecosystem Life Recovery After Fire",
     icon1: <CiUser />,
@@ -64,7 +70,7 @@ export const Card = [
   },
   {
     id: 6,
-    image: "/card/cardImage6.png",
+    image: cardImage6,
     imageText: "Nature",
     title: "Community Environment Clean up",
     icon1: <CiUser />,

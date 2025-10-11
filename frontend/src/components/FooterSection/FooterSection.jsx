@@ -117,7 +117,7 @@ const FooterSection = () => {
                 data-aos="slide-left"
                 data-aos-delay="1100"
               >
-                Litepape
+                Litepaper
               </a>
             </div>
           </div>
