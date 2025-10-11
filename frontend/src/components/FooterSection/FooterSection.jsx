@@ -117,7 +117,7 @@ const FooterSection = () => {
                 data-aos="slide-left"
                 data-aos-delay="1100"
               >
-                Litepaper
+                Litepape
               </a>
             </div>
           </div>
@@ -133,7 +133,7 @@ const FooterSection = () => {
               href={SOCIAL_LINKS.twitter}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-7 h-7 md:w-h md:h-8 transition-colors rounded-full bg-primary/70 hover:bg-primary"
+              className="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 transition-colors rounded-full bg-primary/70 hover:bg-primary"
             >
               <BsTwitterX size={18} />
             </a>
