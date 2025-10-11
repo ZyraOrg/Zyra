@@ -53,7 +53,7 @@ const WhyChooseZyraSection = () => {
   }, []);
 
   useEffect(() => {
-    AOS.init({ duration: 800, once: true, easing: "ease-in-out", offset: 20,});
+    AOS.init({ duration: 800, once: true, easing: "ease-in-out", offset: 20 });
   }, []);
 
   const handleDotClick = (idx) => {
@@ -86,7 +86,7 @@ const WhyChooseZyraSection = () => {
       {/* Card container */}
       <div
         ref={cardGridRef}
-        className="flex md:grid md:grid-cols-3 md:justify-between gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth touch-pan-x w-80% max-w-[1148px] mx-auto px-4 md:px-0"
+        className="flex grid-cols-none md:grid md:grid-cols-3 md:justify-between gap-4 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth touch-pan-x w-full max-w-[1148px] mx-auto px-4 md:px-0"
         style={{ scrollbarWidth: "none" }}
       >
         {/* <style>{`::-webkit-scrollbar { display: none; }`}</style> */}
