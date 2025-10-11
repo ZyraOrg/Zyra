@@ -133,6 +133,7 @@ const HeroSection = () => {
             alt="Hero Illustration"
             className="absolute right-[-6%] top-[60%] 
                      -translate-y-1/2 z-10 object-contain w-[900px] pointer-events-none mt-30"
+            fetchPriority="high"
           />
         </div>
       </div>
@@ -154,6 +155,7 @@ const HeroSection = () => {
             src={Shielding2}
             alt="Verified users"
             className="object-contain w-full h-full"
+            fetchPriority="high"
           />
         </div>
 

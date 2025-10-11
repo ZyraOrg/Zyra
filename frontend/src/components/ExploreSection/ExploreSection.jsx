@@ -36,7 +36,7 @@ export default function ExploreSection() {
           <br className="hidden md:block" /> the blockchain
         </p>
       </div>
-      <div className="relative grid grid-cols-1 gap-12 pt-10 md:grid-cols-3">
+      <div className="relative grid grid-cols-1 gap-11 pt-10 md:grid-cols-3">
         {Card.map((card) => (
           <div
             key={card.id}
@@ -52,6 +52,7 @@ export default function ExploreSection() {
                   src={card.image}
                   alt="cardimage"
                   className="object-cover w-full"
+                  fetchPriority="high"
                 />
                 <span className="absolute px-5 py-1 text-sm font-semibold bg-gray-200 rounded-full top-3 right-5 text-[#00051b]/80">
                   {card.imageText}
