@@ -14,7 +14,7 @@ export default function ExploreSection() {
   }, []);
 
   return (
-    <main className="flex flex-col items-center justify-center w-full px-8 overflow-hidden text-center md:px-7 md:mt-10">
+    <main id="explore" className="flex flex-col items-center justify-center w-full px-8 overflow-hidden text-center md:px-7 md:mt-10">
       <div className="pb-5 space-y-3 md:space-y-5">
         <h1
           className="text-3xl font-semibold md:text-5xl md:leading-15"
