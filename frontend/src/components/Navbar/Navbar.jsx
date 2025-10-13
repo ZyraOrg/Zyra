@@ -7,10 +7,12 @@ import { RiMenu3Fill } from "react-icons/ri";
 import { MdCampaign } from "react-icons/md";
 import { FaPlus, FaInfoCircle } from "react-icons/fa";
 import MulticulturalImg from "../../assets/logo.png";
+import AboutModal from "./AboutModal";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [showAbout, setShowAbout] = useState(false); // 👈 modal state
 
   useEffect(() => {
     AOS.init({
@@ -42,7 +44,6 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // 👇 Smooth scroll to section
   const handleSmoothScroll = (e, targetId) => {
     e.preventDefault();
     const element = document.getElementById(targetId);
@@ -51,24 +52,15 @@ const Navbar = () => {
     }
   };
 
-  // 👇 Smooth scroll to top when "Home" is clicked
   const handleScrollToTop = (e) => {
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Desktop button classes (kept for potential future use)
-  // const buttonClasses =
-  //   "px-8 py-3 rounded-full text-black font-roboto font-extrabold text-lg " +
-  //   "shadow-[0_0_20px_rgba(145,242,249,0.6)] " +
-  //   "transition-all duration-300 " +
-  //   "bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] " +
-  //   "hover:shadow-[0_0_30px_rgba(145,242,249,0.8)]";
-
   return (
     <nav
       className={`fixed left-0 z-50 flex items-center w-full px-8 py-3 transition-all duration-300 ${
-        scrolled ? "top-0 bg-[#0b1b63]" : "top-10 bg-transparent"
+        scrolled ? "top-0 bg-[#040a24]" : "top-10 bg-transparent"
       }`}
     >
       {/* Logo */}
@@ -88,7 +80,6 @@ const Navbar = () => {
           { name: "Home", id: "home" },
           { name: "Campaigns", id: "explore" },
           { name: "Create", id: "create" },
-          { name: "About", id: "about" }
         ].map((item, i) => (
           <li key={i} data-aos="fade-down" data-aos-delay={i * 200}>
             {item.name === "Home" ? (
@@ -112,6 +103,17 @@ const Navbar = () => {
             )}
           </li>
         ))}
+
+        {/* About link opens modal */}
+        <li data-aos="fade-down" data-aos-delay="600">
+          <button
+            onClick={() => setShowAbout(true)}
+            className="text-white font-roboto font-semibold relative py-3 px-1 hover:text-[#91F2F9] transition-colors duration-300 
+              after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#91F2F9] after:transition-all after:duration-300 hover:after:w-full"
+          >
+            About
+          </button>
+        </li>
       </ul>
 
       {/* Mobile Hamburger */}
@@ -137,29 +139,23 @@ const Navbar = () => {
               className="fixed inset-0 z-40 bg-black/50"
               onClick={toggleMobileMenu}
             />
-            <div className="fixed top-0 right-0 z-50 flex flex-col items-start justify-start w-40 h-full pt-20 px-4 space-y-8 bg-[#051041]">
+            <div className="fixed top-0 right-0 z-50 flex flex-col items-start justify-start w-50 h-full pt-20 px-4 space-y-8 bg-[#040a24]">
               {[
                 { name: "Home", icon: HiHome, id: "home" },
                 { name: "Campaigns", icon: MdCampaign, id: "explore" },
                 { name: "Create", icon: FaPlus, id: "create" },
-                { name: "About", icon: FaInfoCircle, id: "about" }
+                { name: "About", icon: FaInfoCircle, id: "about" },
               ].map((item, i) => {
                 const Icon = item.icon;
                 return (
-                  <a
+                  <button
                     key={i}
-                    href={`#${item.id}`}
-                    onClick={
-                      item.name === "Home"
-                        ? (e) => {
-                            handleScrollToTop(e);
-                            toggleMobileMenu();
-                          }
-                        : (e) => {
-                            handleSmoothScroll(e, item.id);
-                            toggleMobileMenu();
-                          }
-                    }
+                    onClick={() => {
+                      if (item.name === "Home") handleScrollToTop(event);
+                      else if (item.name === "About") setShowAbout(true);
+                      else handleSmoothScroll(event, item.id);
+                      toggleMobileMenu();
+                    }}
                     className="text-white font-roboto font-semibold text-base hover:text-[#91F2F9] transition-colors duration-300 w-full text-left flex items-center gap-3"
                     data-aos="slide-left"
                     data-aos-duration="500"
@@ -167,7 +163,7 @@ const Navbar = () => {
                   >
                     <Icon className="w-5 h-5 text-[#91F2F9]" />
                     {item.name}
-                  </a>
+                  </button>
                 );
               })}
               <a
@@ -185,6 +181,9 @@ const Navbar = () => {
           </>
         )}
       </div>
+
+      {/* About Modal */}
+      <AboutModal show={showAbout} onClose={() => setShowAbout(false)} />
     </nav>
   );
 };
