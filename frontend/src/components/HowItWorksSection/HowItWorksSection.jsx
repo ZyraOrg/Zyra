@@ -14,7 +14,7 @@ const HowItWorksSection = () => {
   }, []);
 
   return (
-    <main className="flex flex-col items-center justify-center w-full px-5 overflow-x-hidden overflow-y-hidden text-center md:mt-10 md:px-10">
+    <main id="create" className="flex flex-col items-center justify-center w-full px-5 overflow-x-hidden overflow-y-hidden text-center md:mt-10 md:px-10">
       {" "}
       {/* Add overflow-y-hidden */}
       <div className="pb-5 space-y-5">

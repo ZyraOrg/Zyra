@@ -9,8 +9,8 @@ export default defineConfig({
     allowedHosts: ["unploughed-unrespected-rory.ngrok-free.dev"],
   },
   build: {
-    outDir: "../docs", // ✅ output to 'docs' for GitHub Pages
-    emptyOutDir: true, // ✅ ensures old files are cleared before each build
+    outDir: "../docs",
+    emptyOutDir: true,
   },
-  base: "./", // ✅ makes sure assets load correctly on GitHub Pages
+  base: "/", // ✅ Changed from "./" to "/"
 });
