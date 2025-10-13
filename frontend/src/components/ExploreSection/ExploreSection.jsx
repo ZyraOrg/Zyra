@@ -32,7 +32,7 @@ export default function ExploreSection() {
           data-aos-easing="ease-in-out"
           data-aos-delay="800"
         >
-          Support verified causes and track your impact in real-time on
+          Support verified causes and track your impact in real-time o
           <br className="hidden md:block" /> the blockchain
         </p>
       </div>
