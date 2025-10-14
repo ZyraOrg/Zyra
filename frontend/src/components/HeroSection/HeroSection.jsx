@@ -87,7 +87,7 @@ const HeroSection = () => {
                          shadow-[0_0_20px_rgba(145,242,249,0.5)]
                          hover:shadow-[0_0_35px_rgba(145,242,249,0.8)]
                          active:shadow-[inset_0_0_15px_rgba(145,242,249,0.6)]
-                         transition-all duration-300 ease-out flex items-center justify-center"
+                         transition-all duration-300 ease-out flex items-center justify-center cursor-pointer"
               data-aos="fade-right"
               data-aos-duration="800"
               data-aos-delay="400"
@@ -103,7 +103,7 @@ const HeroSection = () => {
                          shadow-[0_0_10px_rgba(145,242,249,0.4)]
                          hover:shadow-[0_0_25px_rgba(145,242,249,0.7)]
                          active:shadow-[inset_0_0_10px_rgba(145,242,249,0.6)]
-                         transition-all duration-300 ease-out"
+                         transition-all duration-300 ease-out cursor-pointer"
               data-aos="fade-left"
               data-aos-duration="900"
               data-aos-delay="500"
@@ -122,7 +122,7 @@ const HeroSection = () => {
           <img
             src={ShieldImg}
             alt="Hero Illustration"
-            className="absolute right-[-2%] top-[55%] 
+            className="absolute right-[-1%] top-[55%] 
                      -translate-y-1/2 z-10 object-contain w-[350px] lg:w-[650px]
                      pointer-events-none mt-30"
             fetchPriority="high"
@@ -173,7 +173,7 @@ const HeroSection = () => {
       {showDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-[#010410]/70 backdrop-blur-sm"
             onClick={() => setShowDialog(false)}
           ></div>
 
@@ -188,7 +188,8 @@ const HeroSection = () => {
               🚧 Still under development
             </h3>
             <p className="mb-6 text-center text-gray-300">
-              Join our community to stay updated — or download our Litepaper to learn more.
+              Join our community to stay updated — or download our Litepaper to
+              learn more.
             </p>
 
             <div className="flex flex-col justify-center w-full gap-4 sm:flex-row">
