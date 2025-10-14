@@ -145,4 +145,7 @@ body {
   .border-button-gradient {
     @apply rounded-2xl p-[2px] bg-gradient-to-r from-secondary via-[#3C5DF3]  to-[#3C5DF3] shadow-md;
   }
+  .view-campaign-btn {
+    @apply flex items-center px-10 py-1 text-sm font-semibold text-white shadow-sm md:px-15 bg-[#051041] shadow-secondary rounded-2xl cursor-pointer;
+  }
 }

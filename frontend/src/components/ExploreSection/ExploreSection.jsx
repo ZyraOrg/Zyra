@@ -1,10 +1,17 @@
 import { Card } from "./constants";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { ArrowUpRight } from "lucide-react";
+import Dialog from "../Dialog";
 
 export default function ExploreSection() {
+  const [showDialog, setShowDialog] = useState(false);
+
+  const handleClick = () => {
+    setShowDialog(true);
+  };
+
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -14,7 +21,10 @@ export default function ExploreSection() {
   }, []);
 
   return (
-    <main id="explore" className="flex flex-col items-center justify-center w-full px-8 overflow-hidden text-center md:px-7 md:mt-10">
+    <main
+      id="explore"
+      className="flex flex-col items-center justify-center w-full px-8 overflow-hidden text-center md:px-7 md:mt-10"
+    >
       <div className="pb-5 space-y-3 md:space-y-5">
         <h1
           className="text-3xl font-semibold md:text-5xl md:leading-15"
@@ -83,7 +93,10 @@ export default function ExploreSection() {
                     </div>
                   </div>
                 </div>
-                <button className="w-full px-6 py-3 mb-5 font-semibold transition-transform duration-300 ease-in-out bg-white rounded-full text-[17px] text-[#0A36F7]/90 hover:text-[#0A36F7] hover:scale-103">
+                <button
+                  className="w-full px-6 py-3 mb-5 font-semibold transition-transform duration-300 ease-in-out bg-white rounded-full text-[17px] text-[#0A36F7]/90 hover:text-[#0A36F7] hover:scale-103 cursor-pointer"
+                  onClick={handleClick}
+                >
                   {card.buttonText}
                 </button>
               </div>
@@ -93,12 +106,14 @@ export default function ExploreSection() {
       </div>
       <div className="max-w-sm py-20" data-aos="fade-up">
         <button className="border-button-gradient">
-          <div className="flex items-center px-10 py-1 text-sm font-semibold text-black transition-transform duration-300 ease-in-out shadow-sm md:px-15 bg-gradient-to-r from-primary to-secondary shadow-secondary rounded-2xl hover:scale-101 hover:bg-gradient-to-l hover:from-primary hover:to-secondary hover:duration-800 hover:ease-in-out">
+          <div className="view-campaign-btn" onClick={handleClick}>
             <p>View All Campaigns</p>
             <ArrowUpRight size={20} />
           </div>
         </button>
       </div>
+
+      {showDialog && <Dialog setShowDialog={setShowDialog} />}
     </main>
   );
 }

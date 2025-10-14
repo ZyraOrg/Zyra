@@ -1,9 +1,16 @@
 import { ArrowUpRight } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Dialog from "../Dialog";
 
 const HowItWorksSection = () => {
+  const [showDialog, setShowDialog] = useState(false);
+
+  const handleClick = () => {
+    setShowDialog(true);
+  };
+
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -14,7 +21,10 @@ const HowItWorksSection = () => {
   }, []);
 
   return (
-    <main id="create" className="flex flex-col items-center justify-center w-full px-5 overflow-x-hidden overflow-y-hidden text-center md:mt-10 md:px-10">
+    <main
+      id="create"
+      className="flex flex-col items-center justify-center w-full px-5 overflow-x-hidden overflow-y-hidden text-center md:mt-10 md:px-10"
+    >
       {" "}
       {/* Add overflow-y-hidden */}
       <div className="pb-5 space-y-5">
@@ -77,8 +87,9 @@ const HowItWorksSection = () => {
         className="mt-16 transition-transform duration-300 ease-in-out shadow-sm border-button-gradient hover:scale-101"
         data-aos="fade-up"
         data-aos-duration="800"
+        onClick={handleClick}
       >
-        <div className="bg-[#00051b] flex justify-between items-center text-center gap-1 md:gap-3 rounded-2xl md:py-1 px-4 md:px-6 font-semibold text-[9px] md:text-sm">
+        <div className="bg-[#00051b] flex justify-between items-center text-center gap-1 md:gap-3 rounded-2xl md:py-1 px-4 md:px-6 font-semibold text-[9px] md:text-sm  cursor-pointer">
           <p className="pr-1 border-r md:pr-3">Ready now ?</p>
           <p className="flex items-center text-secondary">
             Launch your campaign in minutes
@@ -88,6 +99,7 @@ const HowItWorksSection = () => {
           </p>
         </div>
       </button>
+      {showDialog && <Dialog setShowDialog={setShowDialog} />}
     </main>
   );
 };

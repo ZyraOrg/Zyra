@@ -39,7 +39,7 @@ const FAQSection = () => {
         className="text-5xl max-[800px]:text-3xl font-semibold leading-tight max-[800px]:leading-snug text-center mb-9"
         data-aos="fade-up"
       >
-        Frequently <span className="text-[#00C4FF]">Asked </span>
+        Frequently <span className="text-secondary">Asked </span>
         <br />
         Questions
       </h1>
@@ -80,8 +80,7 @@ const FAQSection = () => {
                 {/* Answer */}
                 <div
                   ref={(el) => (contentRefs.current[index] = el)}
-                 className="overflow-hidden transition-max-height duration-500 mt-2 text-base max-[800px]:text-xs max-[800px]:font-semibold font-light text-[#91F2F9]"
-
+                  className="overflow-hidden transition-max-height duration-500 mt-2 text-base max-[800px]:text-xs max-[800px]:font-semibold font-light text-[#91F2F9]"
                   style={{
                     maxHeight: openIndex === index ? "500px" : "0px",
                   }}
