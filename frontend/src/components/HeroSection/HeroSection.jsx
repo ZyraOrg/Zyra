@@ -38,10 +38,12 @@ const HeroSection = () => {
       )}
 
       {/* Main Content */}
-      <div className="relative z-20 flex flex-col items-center justify-between w-full gap-6 px-6 pt-4 pb-0 sm:px-8 md:flex-row md:px-16 md:pt-32 md:pb-0">
+      <div
+  className="relative z-20 flex flex-col items-center justify-between w-full gap-6 px-6 pt-10 pb-0 sm:px-8 md:flex-row md:px-16 md:pt-32 md:pb-0 transform md:-translate-y-[10%]"
+>
         {/* Left Text Content */}
         <div
-          className="flex flex-col items-center w-full gap-6 mt-2 text-center sm:mt-12 md:mt-0 md:w-1/2 md:items-start md:text-left"
+          className="flex flex-col items-center w-full gap-6 mt-5 text-center sm:mt-12 md:mt-0 md:w-1/2 md:items-start md:text-left"
           data-aos="fade-down"
         >
           <h1
