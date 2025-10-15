@@ -6,8 +6,6 @@ import ShieldImg from "../../assets/SHIELDw.svg";
 import Shielding2 from "../../assets/Bottomimg.svg";
 import MobileHero from "../../assets/MobileHero.png";
 
-const litepaper = "/litepaper.pdf";
-
 const HeroSection = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -19,16 +17,6 @@ const HeroSection = () => {
     window.addEventListener("resize", checkViewport);
     return () => window.removeEventListener("resize", checkViewport);
   }, []);
-
-  const handleDownload = () => {
-    const link = document.createElement("a");
-    link.href = litepaper;
-    link.download = "Zyra LitePaper 2025.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setShowDialog(false);
-  };
 
   return (
     <section
@@ -207,9 +195,11 @@ const HeroSection = () => {
                 Join Community
               </a>
 
-              <button
-                onClick={handleDownload}
-                className="px-6 py-3 font-bold text-white border border-gray-500 rounded-full
+              <a
+                href="/Zyra-Litepaper-2025.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-center px-6 py-3 font-bold text-white border border-gray-500 rounded-full
                            bg-white/10
                            shadow-[0_0_10px_rgba(255,255,255,0.2)]
                            hover:shadow-[0_0_25px_rgba(255,255,255,0.4)]
@@ -217,7 +207,7 @@ const HeroSection = () => {
                            transition-all duration-300 ease-out"
               >
                 Download Litepaper
-              </button>
+              </a>
             </div>
           </div>
         </div>

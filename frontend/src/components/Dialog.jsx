@@ -1,23 +1,13 @@
 import React from "react";
 
 export default function Dialog({ setShowDialog }) {
-  const litepaper = "/path/to/your/litepaper.pdf"; // change to your actual path
+  // change to your actual path
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-
-  const handleDownload = () => {
-    const link = document.createElement("a");
-    link.href = litepaper;
-    link.download = "Zyra LitePaper 2025.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setShowDialog(false);
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
-        className="absolute inset-0 bg-[#010410]/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-[#010410]/70 backdrop-blur-sm overflow-y-auto"
         onClick={() => setShowDialog(false)}
       ></div>
 
@@ -51,8 +41,10 @@ export default function Dialog({ setShowDialog }) {
             Join Community
           </a>
 
-          <button
-            onClick={handleDownload}
+          <a
+            href="/Zyra-Litepaper-2025.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
             className="px-6 py-3 font-bold text-white border border-gray-500 rounded-full
                        bg-white/10
                        shadow-[0_0_10px_rgba(255,255,255,0.2)]
@@ -61,7 +53,7 @@ export default function Dialog({ setShowDialog }) {
                        transition-all duration-300 ease-out"
           >
             Download Litepaper
-          </button>
+          </a>
         </div>
       </div>
     </div>
