@@ -33,7 +33,7 @@ export default function ExploreSection() {
           data-aos-easing="ease-in-out"
           data-aos-delay="600"
         >
-          Explore <span className="text-secondary">Active Campaigns</span>
+          Explore <span className="text-secondary">Active Campaign</span>
         </h1>
         <p
           className="font-semibold text-[11px] md:text-[16px]"
