@@ -56,4 +56,4 @@ If you’re passionate about Web3, transparency, and impact, join us!
 
 🪴 License
 
-Released under the MIT License — free and open to build a more transparent future together.
+Released under the MIT License - free and open to build a more transparent future together.
