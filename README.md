@@ -11,6 +11,7 @@ Starting from Africa and scaling globally, Zyra enables secure, verifiable suppo
 
 💬 Telegram: t.me/ZyraApp
 
+
 ✨ Overview
 
 🔗 Transparent, on-chain donation tracking
@@ -23,6 +24,7 @@ Starting from Africa and scaling globally, Zyra enables secure, verifiable suppo
 
 💬 Community-driven trust layer for social good
 
+
 🛠️ Tech Direction
 
 Zyra combines:
@@ -34,6 +36,7 @@ Intuitive design for easy onboarding
 Scalable infrastructure built for global access
 
 (Detailed architecture and roadmap are available in the Litepaper.)
+
 
 📘 Litepaper
 
