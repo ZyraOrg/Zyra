@@ -136,6 +136,10 @@ body {
   background: linear-gradient(90deg, #00051b 70%, #051041 100%);
   /* background-color: #0A36F7; */
   color: white;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 @layer components {

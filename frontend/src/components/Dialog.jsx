@@ -22,8 +22,8 @@ export default function Dialog({ setShowDialog }) {
           🚧 Still under development
         </h3>
         <p className="mb-6 text-center text-gray-300">
-          Join our community to stay updated — or download our Litepaper to
-          learn more.
+          Join our community to stay updated or download our Litepaper to learn
+          more.
         </p>
 
         <div className="flex flex-col justify-center w-full gap-4 sm:flex-row">
