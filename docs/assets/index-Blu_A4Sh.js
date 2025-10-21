@@ -126,4 +126,4 @@ Transparency`,text:"All transactions are recorded on-chain, providing immutable 
   div::-webkit-scrollbar {
     display: none;
   }
-`})]})};function I1(){return o.jsxs(o.Fragment,{children:[o.jsx(A1,{}),o.jsxs("div",{className:"app-container max-w-[1400px] w-full mx-auto px-4 md:px-6",children:[o.jsx(R1,{}),o.jsx($1,{}),o.jsx(X1,{}),o.jsx(J1,{}),o.jsx(Z1,{}),o.jsx(K1,{})]})]})}a1.createRoot(document.getElementById("root")).render(o.jsx(Tl.StrictMode,{children:o.jsx(I1,{})}));
+`})]})};function I1(){return o.jsxs(o.Fragment,{children:[o.jsx(A1,{}),o.jsx(R1,{}),o.jsx($1,{}),o.jsx(X1,{}),o.jsx(J1,{}),o.jsx(Z1,{}),o.jsx(K1,{})]})}a1.createRoot(document.getElementById("root")).render(o.jsx(Tl.StrictMode,{children:o.jsx(I1,{})}));

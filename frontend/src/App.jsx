@@ -9,18 +9,13 @@ import WhyChooseZyraSection from "./components/WhyChooseZyraSection/WhyChooseZyr
 function App() {
   return (
     <>
-      {/* Navbar should always be full width */}
       <Navbar />
-
-      {/* Wrap all page content inside a centered container */}
-      <div className="app-container max-w-[1400px] w-full mx-auto px-4 md:px-6">
-        <HeroSection />
-        <WhyChooseZyraSection />
-        <ExploreSection />
-        <HowItWorksSection />
-        <FAQSection />
-        <FooterSection />
-      </div>
+      <HeroSection />
+      <WhyChooseZyraSection />
+      <ExploreSection />
+      <HowItWorksSection />
+      <FAQSection />
+      <FooterSection />
     </>
   );
 }
