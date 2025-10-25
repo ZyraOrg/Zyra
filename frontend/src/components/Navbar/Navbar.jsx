@@ -175,7 +175,7 @@ const Navbar = () => {
                 data-aos-duration="500"
                 data-aos-delay="600"
               >
-                Lite Pape
+                Lite Paper
               </a>
             </div>
           </>
