@@ -76,15 +76,15 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: #010415;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
+  --primary: #081b6e;
   --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
+  --secondary: #91f2f9;
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
@@ -137,13 +137,10 @@ body {
   /* background-color: #0A36F7; */
   color: white;
   width: 100%;
-   max-width: 1400px;
+  max-width: 1400px;
   margin: 0 auto;
   box-sizing: border-box;
 }
-
-
-
 
 @layer components {
   .number-style {
