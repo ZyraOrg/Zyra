@@ -100,7 +100,7 @@ export const Login = () => {
   className="w-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] 
              hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4"
 >
-  Sign up
+  Login
 </button>
           </div>
 
