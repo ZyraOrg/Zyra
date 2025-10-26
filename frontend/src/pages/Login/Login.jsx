@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import loginbgImage from "../../assets/loginbg-image.png";
 import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
 import logo4 from "../../assets/logo4.png";
+import toast from "react-hot-toast";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -14,8 +15,9 @@ export const Login = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log("Login data:", data);
+    console.log("data gotten");
     //API
+    toast.success("Login pending");
   };
 
   return (
@@ -48,7 +50,7 @@ export const Login = () => {
         </div>
         <div className="bg-background rounded-2xl p-8 relative flex flex-col justify-center">
           <div className="md:hidden mb-8">
-            <h1 className="text-3xl font-bold text-white mb-4 text-center">
+            <h1 className="text-3xl font-bold text-white mt-8 mb-4 text-center">
               Welcome Back to <span className="text-secondary">Zyra</span>
             </h1>
             <p className="text-gray-400 text-sm text-center">
