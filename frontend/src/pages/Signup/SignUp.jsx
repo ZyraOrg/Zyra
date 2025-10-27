@@ -55,10 +55,10 @@ export default function ZyraSignUp() {
             <img src={Logo} alt="ZYRA" />
           </div>
           <div className="flex flex-col justify-center">
-            <h1 className="mb-6 text-5xl font-bold leading-13" data-aos="fade-up" data-aos-duration="600"> 
+            <h1 className="mb-6 text-5xl font-bold leading-13" data-aos="fade-down" data-aos-duration="1000"> 
               Create Your <span className="text-secondary">Zyra</span> Account
             </h1>
-            <p className="max-w-md text-lg font-medium leading-snug" data-aos="fade-up" data-aos-duration="1000">
+            <p className="max-w-md text-lg font-medium leading-snug" data-aos="fade-up" data-aos-duration="900">
               Sign up to create campaigns, donate securely, and track every
               transaction on-chain.
             </p>
