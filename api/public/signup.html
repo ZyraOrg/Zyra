@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Zyra API — Signup Test</title>
+    <style>
+      body { font-family: system-ui, Arial, sans-serif; padding: 2rem; }
+      form { max-width: 480px; display: grid; gap: 0.75rem; }
+      label { font-weight: 600; }
+      input[type="text"], input[type="email"], input[type="password"] { padding: 0.5rem; width:100%; }
+      .message { padding: 0.75rem; border-radius: 6px; }
+      .error { background: #ffe6e6; color: #8b0000; }
+      .success { background: #e6ffed; color: #006400; }
+    </style>
+  </head>
+  <body>
+    <h1>Signup Test Form</h1>
+    <p>Use this simple HTML form to test the <code>/api/signup</code> endpoint.</p>
+
+    <form id="signup">
+      <div>
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" required />
+      </div>
+
+      <div>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required />
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required />
+      </div>
+
+      <div>
+        <label for="wallet">Wallet address (optional)</label>
+        <input id="wallet" name="wallet_address" type="text" />
+      </div>
+
+      <div>
+        <label>
+          <input id="visibility" name="profile_visibility" type="checkbox" checked /> Show my profile
+        </label>
+      </div>
+
+      <div>
+        <button type="submit">Sign up</button>
+      </div>
+    </form>
+
+    <div id="result" style="margin-top:1rem"></div>
+
+    <script>
+      const form = document.getElementById('signup');
+      const result = document.getElementById('result');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        result.innerHTML = '';
+
+        const data = {
+          name: document.getElementById('name').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          password: document.getElementById('password').value,
+          wallet_address: document.getElementById('wallet').value.trim() || null,
+          profile_visibility: document.getElementById('visibility').checked
+        };
+
+        result.textContent = 'Signing up...';
+
+        try {
+          const r = await fetch('/api/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          const json = await r.json();
+
+          if (!r.ok) {
+            showMessage(json.error || ('HTTP ' + r.status), true);
+            return;
+          }
+
+          showMessage('Success — user created. ID: ' + (json.user?.user_id || json.user?.id || 'unknown'), false);
+        } catch (err) {
+          showMessage('Network or server error: ' + (err.message || err), true);
+        }
+      });
+
+      function showMessage(msg, isError) {
+        result.innerHTML = '';
+        const div = document.createElement('div');
+        div.className = 'message ' + (isError ? 'error' : 'success');
+        div.textContent = msg;
+        result.appendChild(div);
+      }
+    </script>
+  </body>
+</html>
