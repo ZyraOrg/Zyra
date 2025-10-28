@@ -7,6 +7,7 @@ import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
 import logo4 from "../../assets/logo4.png";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import toast from "react-hot-toast";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -24,6 +25,10 @@ export const Login = () => {
   const onSubmit = (data) => {
     console.log("Login data:", data);
     //API
+  };
+
+  const handleLogin = () => {
+    toast.success("login pending");
   };
 
   return (
@@ -152,6 +157,7 @@ export const Login = () => {
 
             <button
               type="submit"
+              onClick={handleLogin}
               className="w-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] 
                          hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4"
               data-aos="fade-up"
