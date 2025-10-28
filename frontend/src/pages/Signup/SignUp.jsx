@@ -3,10 +3,10 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SignupBg from "../../assets/signup.png";
 import Logo from "../../assets/logo4.png";
-import { FaTwitter, FaApple } from "react-icons/fa";
-import { SiGoogle } from "react-icons/si";
+import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import toast from "react-hot-toast";
 
 export default function ZyraSignUp() {
   const navigate = useNavigate();
@@ -16,6 +16,8 @@ export default function ZyraSignUp() {
     password: "",
     confirmPassword: "",
   });
+
+  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -31,8 +33,24 @@ export default function ZyraSignUp() {
     }));
   };
 
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.email.trim()) newErrors.email = "Please enter your email";
+    if (!formData.password.trim()) newErrors.password = "Please create a password";
+    if (formData.password !== formData.confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
+    return newErrors;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      toast.error("Please fill in all required fields correctly");
+      return;
+    }
+    toast.success("Signup successful (pending backend)");
     console.log("Form submitted:", formData);
   };
 
@@ -112,7 +130,6 @@ export default function ZyraSignUp() {
             <input
               data-aos="slide-left"
               data-aos-duration="700"
-              data-aos-delay="0"
               type="text"
               name="name"
               placeholder="Your Name"
@@ -125,7 +142,6 @@ export default function ZyraSignUp() {
             <input
               data-aos="slide-left"
               data-aos-duration="800"
-              data-aos-delay="0"
               type="email"
               name="email"
               placeholder="Your Email"
@@ -133,13 +149,15 @@ export default function ZyraSignUp() {
               onChange={handleChange}
               className="w-full py-3 text-white placeholder-gray-500 transition border-b border-gray-600 bg-background focus:outline-none focus:border-secondary"
             />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-400">{errors.email}</p>
+            )}
           </div>
           <div>
             <div className="relative">
               <input
                 data-aos="slide-left"
                 data-aos-duration="900"
-                data-aos-delay="0"
                 type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Create Password"
@@ -152,16 +170,18 @@ export default function ZyraSignUp() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-0 text-gray-400 -translate-y-1/2 top-1/2 hover:text-white"
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
               </button>
             </div>
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-400">{errors.password}</p>
+            )}
           </div>
           <div>
             <div className="relative">
               <input
                 data-aos="slide-left"
                 data-aos-duration="1000"
-                data-aos-delay="0"
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
                 placeholder="Confirm Password"
@@ -171,12 +191,23 @@ export default function ZyraSignUp() {
               />
               <button
                 type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                onClick={() =>
+                  setShowConfirmPassword(!showConfirmPassword)
+                }
                 className="absolute right-0 text-gray-400 -translate-y-1/2 top-1/2 hover:text-white"
               >
-                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showConfirmPassword ? (
+                  <Eye size={20} />
+                ) : (
+                  <EyeOff size={20} />
+                )}
               </button>
             </div>
+            {errors.confirmPassword && (
+              <p className="mt-1 text-sm text-red-400">
+                {errors.confirmPassword}
+              </p>
+            )}
           </div>
 
           <button
@@ -185,43 +216,49 @@ export default function ZyraSignUp() {
              hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4"
             data-aos="fade-up"
             data-aos-duration="1000"
-            data-aos-delay="0"
           >
             Sign up
           </button>
         </form>
 
+        {/* Social Login */}
         <div className="mt-6">
           <div className="flex items-center gap-4 text-sm text-gray-500">
             <div
               className="flex-1 h-px bg-gray-700"
-              data-aos="fade-up"
-              data-aos-delay="300"
+              data-aos="fade-up" data-aos-delay="400"
             ></div>
             <span data-aos="fade-up" data-aos-delay="400">
               or sign up with
             </span>
             <div
               className="flex-1 h-px bg-gray-700"
-              data-aos="fade-up"
-              data-aos-delay="300"
+              data-aos="fade-up" data-aos-delay="400"
             ></div>
           </div>
 
-          <div className="flex items-center justify-center gap-2 mt-5">
-            <button className="flex items-center justify-center bg-white w-9 h-9 rounded-xl">
-              <SiGoogle className="w-5 h-5 text-black" />
+          <div
+            className="flex items-center justify-center gap-2 mt-5"          
+          >
+            <button
+              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"            
+            >
+              <BsGoogle className="w-5 h-5 text-black" />
             </button>
-            <button className="flex items-center justify-center bg-white w-9 h-9 rounded-xl">
-              <FaTwitter className="w-5 h-5 text-black" />
+            <button
+              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"             
+            >
+              <BsTwitterX className="w-5 h-5 text-black" />
             </button>
-            <button className="flex items-center justify-center bg-white w-9 h-9 rounded-xl">
-              <FaApple className="w-5 h-5 text-black" />
+            <button
+              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"            
+            >
+              <BsApple className="w-5 h-5 text-black" />
             </button>
           </div>
         </div>
 
-        <p className="mt-6 text-center text-gray-400">
+        <div className="mt-6 text-center text-gray-400">
           Already have an account?{" "}
           <button
             onClick={() => navigate("/login")}
@@ -229,7 +266,7 @@ export default function ZyraSignUp() {
           >
             Login
           </button>
-        </p>
+        </div>
       </div>
     </div>
   );

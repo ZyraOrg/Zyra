@@ -74,10 +74,10 @@ export const Login = () => {
             <div></div>
           </div>
         </div>
-        <div className="w-full relative flex flex-col justify-center items-stretch bg-background rounded-2xl px-8 md:pr-8">
+        <div className="relative flex flex-col items-stretch justify-center w-full px-8 bg-background rounded-2xl md:pr-8">
           <div className="mb-8 md:hidden">
             <h1
-              className="mb-4 mt-8 text-3xl font-bold text-center text-white"
+              className="mt-8 mb-4 text-3xl font-bold text-center text-white"
               data-aos="fade-down"
               data-aos-duration="1000"
               data-aos-delay="0"
@@ -141,12 +141,13 @@ export const Login = () => {
                   className="w-full py-3 pr-10 text-white placeholder-gray-500 transition border-b border-gray-600 bg-background focus:outline-none focus:border-secondary"
                 />
                 <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-0 text-gray-400 transform -translate-y-1/2 top-1/2 hover:text-white"
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                 type="button"
+                 onClick={() => setShowPassword(!showPassword)}
+                 className="absolute right-0 text-gray-400 -translate-y-1/2 top-1/2 hover:text-white"
+                 >
+                 {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                 </button>
+
               </div>
               {errors.password && (
                 <p className="mt-1 text-sm text-red-400">
