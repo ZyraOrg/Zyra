@@ -1,92 +1,68 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
-type ApiResponse = {
-  user?: Record<string, unknown>;
-  error?: string;
-};
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY! 
+);
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE_KEY;
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  res.setHeader(
+    'Access-Control-Allow-Origin',
+    process.env.NODE_ENV === 'production'
+      ? 'https://zyra.fund' 
+      : 'http://localhost:5173'
+  );
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE) {
-  console.warn('Supabase service role or URL not configured for signup endpoint');
-}
-
-const supabase = createClient(SUPABASE_URL ?? '', SUPABASE_SERVICE_ROLE ?? '');
-
-function isValidEmail(email: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
-    return res.status(405).json({ error: 'Method not allowed. Use POST.' });
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
   }
 
-  const body = req.body ?? {};
-  const name = (body.name || '').toString().trim();
-  const email = (body.email || '').toString().trim().toLowerCase();
-  const password = (body.password || '').toString();
-  const wallet_address = body.wallet_address ?? null;
-  const profile_visibility = typeof body.profile_visibility === 'boolean' ? body.profile_visibility : true;
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'Missing required fields: name, email, password' });
   }
 
-  if (!isValidEmail(email)) {
-    return res.status(400).json({ error: 'Invalid email format' });
-  }
-
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE) {
-    return res.status(500).json({ error: 'Server misconfiguration: missing Supabase credentials' });
-  }
-
   try {
-    const { data: createData, error: createErr } = await supabase.auth.admin.createUser({
+    const { data: userData, error: signupError } = await supabase.auth.admin.createUser({
       email,
       password,
+      email_confirm: true,
       user_metadata: { name },
     });
 
-    if (createErr) {
-      const msg = createErr.message || String(createErr);
-      if (/duplicate|already exists|unique/i.test(msg) || (createErr as any)?.status === 409) {
-        return res.status(409).json({ error: 'Email already in use' });
-      }
-      return res.status(400).json({ error: msg });
-    }
+    if (signupError) throw signupError;
+    const userId = userData.user?.id;
 
-    const userId = (createData as any)?.user?.id ?? (createData as any)?.id ?? null;
 
-    const profile = {
-      user_id: userId,
-      name,
-      email,
-      wallet_address,
-      profile_visibility,
-    };
+    const { data: insertData, error: insertError } = await supabase
+      .from('users')
+      .insert([
+        {
+          user_id: userId,
+          name,
+          email,
+          profile_visibility: true,
+        },
+      ])
+      .select('*')
+      .single();
 
-    const { data: insertData, error: insertErr } = await supabase.from('users').insert([profile]).select('*').single();
+    if (insertError) throw insertError;
 
-    if (insertErr) {
-      try {
-        if (userId) await supabase.auth.admin.deleteUser(userId);
-      } catch (e) {
-        console.error('Failed to rollback auth user after profile insert error', e);
-      }
-      const msg = insertErr.message || String(insertErr);
-      if (/duplicate|unique|constraint/i.test(msg)) {
-        return res.status(409).json({ error: 'Profile already exists or unique constraint violated' });
-      }
-      return res.status(500).json({ error: msg });
-    }
-
-    return res.status(201).json({ user: insertData as Record<string, unknown> });
+    return res.status(201).json({
+      message: 'User created successfully',
+      user: insertData,
+    });
   } catch (err: any) {
-    console.error('Unexpected signup error', err);
-    return res.status(500).json({ error: err?.message ?? 'Unexpected server error' });
+    console.error('Signup error:', err);
+    return res.status(500).json({ error: err.message || 'Internal server error' });
   }
 }
