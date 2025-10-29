@@ -116,14 +116,13 @@
 
   body {
     @apply bg-background text-foreground;
-    overflow-x: hidden; /* Only hide horizontal overflow on body */
+    overflow: hidden; 
   }
 
   html {
-    overflow-x: hidden; /* Prevent horizontal scrolling on html */
+    overflow-x: hidden; 
   }
 
-  /* Apply overflow-hidden only to specific elements that need it */
   img,
   video,
   canvas {
@@ -139,7 +138,20 @@ body {
   max-width: 1400px;
   margin: 0 auto;
   box-sizing: border-box;
-  overflow-x: hidden;
+  
+ /* prevents white auto fill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-internal-autofill-selected {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  transition: background-color 9999s ease-in-out 0s !important;
+  caret-color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+
 }
 
 @layer components {

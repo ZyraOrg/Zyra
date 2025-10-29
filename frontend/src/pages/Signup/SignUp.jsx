@@ -170,7 +170,7 @@ export default function ZyraSignUp() {
               placeholder="Your Name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full py-3 text-white placeholder-gray-500 transition border-b border-gray-600 bg-background focus:outline-none focus:border-secondary"
+              className="w-full py-3 text-white placeholder-gray-500 transition bg-transparent border-b border-gray-600 focus:outline-none focus:border-secondary"
             />
           </div>
           <div>
@@ -222,7 +222,7 @@ export default function ZyraSignUp() {
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="w-full py-3 pr-10 text-white placeholder-gray-500 transition border-b border-gray-600 bg-transparent focus:outline-none focus:border-secondary"
+                className="w-full py-3 pr-10 text-white placeholder-gray-500 transition bg-transparent border-b border-gray-600 focus:outline-none focus:border-secondary"
               />
               <button
                 type="button"
