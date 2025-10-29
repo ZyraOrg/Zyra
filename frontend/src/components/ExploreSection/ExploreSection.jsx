@@ -1,5 +1,6 @@
 import { Card } from "./constants";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { ArrowUpRight } from "lucide-react";
@@ -7,10 +8,8 @@ import Dialog from "../Dialog";
 
 export default function ExploreSection() {
   const [showDialog, setShowDialog] = useState(false);
+  const navigate = useNavigate();
 
-  const handleClick = () => {
-    setShowDialog(true);
-  };
 
   useEffect(() => {
     AOS.init({
@@ -46,7 +45,7 @@ export default function ExploreSection() {
           <br className="hidden md:block" /> the blockchain
         </p>
       </div>
-      <div className="relative grid grid-cols-1 gap-11 pt-10 md:grid-cols-3">
+      <div className="relative grid grid-cols-1 pt-10 gap-11 md:grid-cols-3">
         {Card.map((card) => (
           <div
             key={card.id}
@@ -95,7 +94,6 @@ export default function ExploreSection() {
                 </div>
                 <button
                   className="w-full px-6 py-3 mb-5 font-semibold transition-transform duration-300 ease-in-out bg-white rounded-full text-[17px] text-[#0A36F7]/90 hover:text-[#0A36F7] hover:scale-103 cursor-pointer"
-                  onClick={handleClick}
                 >
                   {card.buttonText}
                 </button>
@@ -105,8 +103,8 @@ export default function ExploreSection() {
         ))}
       </div>
       <div className="max-w-sm py-20" data-aos="fade-up">
-        <button className="border-button-gradient">
-          <div className="view-campaign-btn" onClick={handleClick}>
+        <button className="border-button-gradient" onClick={() => navigate("/signup")}>
+          <div className="view-campaign-btn">
             <p>View All Campaigns</p>
             <ArrowUpRight size={20} />
           </div>

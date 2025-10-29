@@ -53,7 +53,7 @@ export default function ZyraSignUp() {
       return;
     }
 
-    // Prepare request
+    // request
     const url = (API_BASE_URL ? API_BASE_URL : "") + "/signup";
     setIsSubmitting(true);
     try {
@@ -75,7 +75,7 @@ export default function ZyraSignUp() {
         toast.success(data.message || "Signup successful");
         navigate("/login");
       } else {
-        // Show server-provided error or generic message
+        
         const err = data.error || data.message || "Signup failed";
         toast.error(err);
         setErrors((prev) => ({ ...prev, server: err }));
@@ -130,7 +130,7 @@ export default function ZyraSignUp() {
 
       {/* Right Side - Form */}
       <div className="relative flex flex-col justify-center w-full max-w-md p-8 bg-background rounded-2xl md:max-w-full md:w-1/2">
-        {/* Mobile Top Text */}
+        {/* Mobile */}
         <div className="mb-8 text-center md:hidden">
           <h1
             className="mb-4 text-3xl font-bold text-white"
@@ -222,7 +222,7 @@ export default function ZyraSignUp() {
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="w-full py-3 pr-10 text-white placeholder-gray-500 transition border-b border-gray-600 bg-background focus:outline-none focus:border-secondary"
+                className="w-full py-3 pr-10 text-white placeholder-gray-500 transition border-b border-gray-600 bg-transparent focus:outline-none focus:border-secondary"
               />
               <button
                 type="button"

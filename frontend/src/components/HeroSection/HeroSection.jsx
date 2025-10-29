@@ -48,7 +48,6 @@ const HeroSection = () => {
   <button
     data-aos="slide-right"
     data-aos-duration="1000"
-    onClick={() => navigate("/signup")}
     className="px-10 py-5 min-w-[220px] rounded-full text-black font-roboto font-extrabold text-lg 
                bg-gradient-to-r from-[#0A36F7] to-[#91F2F9]
                shadow-[0_0_20px_rgba(145,242,249,0.5)]

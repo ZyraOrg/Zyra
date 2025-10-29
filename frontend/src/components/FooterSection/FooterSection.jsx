@@ -32,7 +32,7 @@ const FooterSection = () => {
               <img
                 src={logo4}
                 alt="Zyra Logo"
-                className="h-full w-20 cursor-pointer"
+                className="w-20 h-full cursor-pointer"
               />
             </div>
             <p
@@ -125,15 +125,15 @@ const FooterSection = () => {
         <div>
           <div
             className="flex gap-2 mt-4"
-            data-aos="slide-left"
-            data-aos-delay="1200"
+            data-aos="fade-up"
+            data-aos-delay="1000"
             data-aos-offset="20"
           >
             <a
               href={SOCIAL_LINKS.twitter}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 transition-colors rounded-full bg-primary/70 hover:bg-primary"
+              className="flex items-center justify-center transition-colors rounded-full w-7 h-7 md:w-8 md:h-8 bg-primary/70 hover:bg-primary"
             >
               <BsTwitterX size={18} />
             </a>
@@ -141,7 +141,7 @@ const FooterSection = () => {
               href={SOCIAL_LINKS.telegram}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-7 h-7 md:w-h md:h-8 transition-colors rounded-full bg-primary/70 hover:bg-primary"
+              className="flex items-center justify-center transition-colors rounded-full w-7 h-7 md:w-h md:h-8 bg-primary/70 hover:bg-primary"
             >
               <BsTelegram size={18} />
             </a>
@@ -149,8 +149,8 @@ const FooterSection = () => {
         </div>
         <p
           className="text-center md:text-left text-[12px] md:text-[16px] text-gray-500 pt-2"
-          data-aos="slide-left"
-          data-aos-delay="1200"
+          data-aos="fade-up"
+          data-aos-delay="1000"
           data-aos-offset="20"
         >
           2025 Zyra. All rights reserved. Built on Base
