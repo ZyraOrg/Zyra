@@ -100,7 +100,7 @@ const WhyChooseZyraSection = () => {
             ref={(el) => (cardRefs.current[idx] = el)}
             data-aos="zoom-in"
             data-aos-delay={idx * 100}
-            className="snap-center flex-shrink- w-[80vw] md:w-[340px] max-w-[560px] transition-transform duration-300"
+            className="snap-center flex-shrink-0 w-[80vw] md:w-[340px] max-w-[560px] transition-transform duration-300"
           >
             <div
               className="relative z-10 p-[1px] rounded-[25px] bg-gradient-to-l from-primary to-secondary 
