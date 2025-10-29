@@ -3,14 +3,13 @@ import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Dialog from "../Dialog";
+import { useNavigate } from "react-router-dom";
 
 const HowItWorksSection = () => {
   const [showDialog, setShowDialog] = useState(false);
+  const navigate = useNavigate();
 
-  const handleClick = () => {
-    setShowDialog(true);
-  };
-
+ 
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -87,7 +86,7 @@ const HowItWorksSection = () => {
         className="mt-16 transition-transform duration-300 ease-in-out shadow-sm border-button-gradient hover:scale-101"
         data-aos="fade-up"
         data-aos-duration="800"
-        onClick={handleClick}
+        onClick={() => navigate("/signup")}
       >
         <div className="bg-[#00051b] flex justify-between items-center text-center gap-1 md:gap-3 rounded-2xl md:py-1 px-4 md:px-6 font-semibold text-[9px] md:text-sm  cursor-pointer">
           <p className="pr-1 border-r md:pr-3">Ready now ?</p>

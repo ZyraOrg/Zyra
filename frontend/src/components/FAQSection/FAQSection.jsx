@@ -80,7 +80,7 @@ const FAQSection = () => {
                 {/* Answer */}
                 <div
                   ref={(el) => (contentRefs.current[index] = el)}
-                  className="overflow-hidden transition-max-height duration-500 mt-2 text-base max-[800px]:text-xs max-[800px]:font-semibold font-light text-[#91F2F9]"
+                  className="overflow-hidden transition-max-height duration-500 mt-2 text-base max-[800px]:text-xs max-[800px]:font-bold font-light text-[#ffffff]"
                   style={{
                     maxHeight: openIndex === index ? "500px" : "0px",
                   }}

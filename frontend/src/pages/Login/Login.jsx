@@ -8,6 +8,7 @@ import logo4 from "../../assets/logo4.png";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
+import { API_BASE_URL } from "../../config";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -17,18 +18,38 @@ export const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     AOS.init({ once: true, duration: 800, easing: "ease-in-out" });
   }, []);
 
-  const onSubmit = (data) => {
-    console.log("Login data:", data);
-    //API
-  };
+  const onSubmit = async (data) => {
+    const url = (API_BASE_URL ? API_BASE_URL : "") + "/login";
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: data.email, password: data.password }),
+      });
 
-  const handleLogin = () => {
-    toast.success("login pending");
+      const resp = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        toast.success(resp.message || "Login successful");
+        // Redirect to dashboard upon successful login...
+        navigate("/dashboard");
+      } else {
+        const err = resp.error || resp.message || "Login failed";
+        toast.error(err);
+      }
+    } catch (error) {
+      console.error("Login request error:", error);
+      toast.error("Network error. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -74,10 +95,10 @@ export const Login = () => {
             <div></div>
           </div>
         </div>
-        <div className="w-full relative flex flex-col justify-center items-stretch bg-background rounded-2xl px-8 md:pr-8">
+        <div className="relative flex flex-col items-stretch justify-center w-full px-8 bg-background rounded-2xl md:pr-8">
           <div className="mb-8 md:hidden">
             <h1
-              className="mb-4 mt-8 text-3xl font-bold text-center text-white"
+              className="mt-8 mb-4 text-3xl font-bold text-center text-white"
               data-aos="fade-down"
               data-aos-duration="1000"
               data-aos-delay="0"
@@ -141,12 +162,13 @@ export const Login = () => {
                   className="w-full py-3 pr-10 text-white placeholder-gray-500 transition border-b border-gray-600 bg-background focus:outline-none focus:border-secondary"
                 />
                 <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-0 text-gray-400 transform -translate-y-1/2 top-1/2 hover:text-white"
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                 type="button"
+                 onClick={() => setShowPassword(!showPassword)}
+                 className="absolute right-0 text-gray-400 -translate-y-1/2 top-1/2 hover:text-white"
+                 >
+                 {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                 </button>
+
               </div>
               {errors.password && (
                 <p className="mt-1 text-sm text-red-400">
@@ -157,14 +179,14 @@ export const Login = () => {
 
             <button
               type="submit"
-              onClick={handleLogin}
-              className="w-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] 
-                         hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4"
+              disabled={isSubmitting}
+              className={`w-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] 
+                         hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4 ${isSubmitting ? 'opacity-60 cursor-not-allowed' : ''}`}
               data-aos="fade-up"
               data-aos-duration="1000"
               data-aos-delay="0"
             >
-              Login
+              {isSubmitting ? 'Logging in...' : 'Login'}
             </button>
           </form>
 
