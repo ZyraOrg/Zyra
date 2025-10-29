@@ -8,6 +8,7 @@ import logo4 from "../../assets/logo4.png";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
+import { API_BASE_URL } from "../../config";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -17,18 +18,38 @@ export const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     AOS.init({ once: true, duration: 800, easing: "ease-in-out" });
   }, []);
 
-  const onSubmit = (data) => {
-    console.log("Login data:", data);
-    //API
-  };
+  const onSubmit = async (data) => {
+    const url = (API_BASE_URL ? API_BASE_URL : "") + "/login";
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: data.email, password: data.password }),
+      });
 
-  const handleLogin = () => {
-    toast.success("login pending");
+      const resp = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        toast.success(resp.message || "Login successful");
+        // Redirect to dashboard upon successful login...
+        navigate("/dashboard");
+      } else {
+        const err = resp.error || resp.message || "Login failed";
+        toast.error(err);
+      }
+    } catch (error) {
+      console.error("Login request error:", error);
+      toast.error("Network error. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -158,14 +179,14 @@ export const Login = () => {
 
             <button
               type="submit"
-              onClick={handleLogin}
-              className="w-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] 
-                         hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4"
+              disabled={isSubmitting}
+              className={`w-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] 
+                         hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4 ${isSubmitting ? 'opacity-60 cursor-not-allowed' : ''}`}
               data-aos="fade-up"
               data-aos-duration="1000"
               data-aos-delay="0"
             >
-              Login
+              {isSubmitting ? 'Logging in...' : 'Login'}
             </button>
           </form>
 

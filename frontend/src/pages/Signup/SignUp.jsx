@@ -3,6 +3,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SignupBg from "../../assets/signup.png";
 import Logo from "../../assets/logo4.png";
+import { API_BASE_URL } from "../../config";
 import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -20,6 +21,7 @@ export default function ZyraSignUp() {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     AOS.init({ once: true, duration: 800, easing: "ease-in-out" });
@@ -42,7 +44,7 @@ export default function ZyraSignUp() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
@@ -50,8 +52,41 @@ export default function ZyraSignUp() {
       toast.error("Please fill in all required fields correctly");
       return;
     }
-    toast.success("Signup successful (pending backend)");
-    console.log("Form submitted:", formData);
+
+    // Prepare request
+    const url = (API_BASE_URL ? API_BASE_URL : "") + "/signup";
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        toast.success(data.message || "Signup successful");
+        navigate("/login");
+      } else {
+        // Show server-provided error or generic message
+        const err = data.error || data.message || "Signup failed";
+        toast.error(err);
+        setErrors((prev) => ({ ...prev, server: err }));
+      }
+    } catch (error) {
+      console.error("Signup request failed:", error);
+      toast.error("Network error. Please try again.");
+      setErrors((prev) => ({ ...prev, server: "Network error" }));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -212,12 +247,13 @@ export default function ZyraSignUp() {
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] 
-             hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4"
+            disabled={isSubmitting}
+            className={`w-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] 
+             hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4 ${isSubmitting ? 'opacity-60 cursor-not-allowed' : ''}`}
             data-aos="fade-up"
             data-aos-duration="1000"
           >
-            Sign up
+            {isSubmitting ? 'Signing up...' : 'Sign up'}
           </button>
         </form>
 
