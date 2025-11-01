@@ -8,6 +8,7 @@ import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
+import supabase, { isSupabaseConfigured } from "../../lib/supabaseClient";
 
 export default function ZyraSignUp() {
   const navigate = useNavigate();
@@ -85,6 +86,28 @@ export default function ZyraSignUp() {
       toast.error("Network error. Please try again.");
       setErrors((prev) => ({ ...prev, server: "Network error" }));
     } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    if (!isSupabaseConfigured || !supabase) {
+      toast.error("Google sign up not configured");
+      return;
+    }
+    try {
+      setIsSubmitting(true);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) throw error;
+      // Redirect happens automatically
+    } catch (err) {
+      console.error("Google OAuth error:", err);
+      toast.error(err?.message || "Google sign up failed");
       setIsSubmitting(false);
     }
   };
@@ -277,7 +300,10 @@ export default function ZyraSignUp() {
             className="flex items-center justify-center gap-2 mt-5"          
           >
             <button
-              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"            
+              type="button"
+              onClick={handleGoogleSignup}
+              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl disabled:opacity-60"
+              disabled={isSubmitting}
             >
               <BsGoogle className="w-5 h-5 text-black" />
             </button>

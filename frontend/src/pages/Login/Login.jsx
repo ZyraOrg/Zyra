@@ -9,6 +9,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
 import { API_BASE_URL } from "../../config";
+import supabase, { isSupabaseConfigured } from "../../lib/supabaseClient";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -48,6 +49,28 @@ export const Login = () => {
       console.error("Login request error:", error);
       toast.error("Network error. Please try again.");
     } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    if (!isSupabaseConfigured || !supabase) {
+      toast.error("Google login not configured");
+      return;
+    }
+    try {
+      setIsSubmitting(true);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) throw error;
+      // Redirect occurs automatically
+    } catch (err) {
+      console.error("Google OAuth error:", err);
+      toast.error(err?.message || "Google login failed");
       setIsSubmitting(false);
     }
   };
@@ -207,17 +230,17 @@ export const Login = () => {
               ></div>
             </div>
             <div className="flex items-center justify-center gap-2 mt-5">
-              <a
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl disabled:opacity-60"
                 data-aos="slide-left"
                 data-aos-duration="800"
                 data-aos-delay="300"
+                disabled={isSubmitting}
               >
                 <BsGoogle size={24} className="text-black" />
-              </a>
+              </button>
               <a
                 href="/"
                 target="_blank"
