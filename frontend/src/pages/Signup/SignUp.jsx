@@ -3,12 +3,12 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SignupBg from "../../assets/signup.png";
 import Logo from "../../assets/logo4.png";
-import { API_BASE_URL } from "../../config";
 import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
 import supabase, { isSupabaseConfigured } from "../../lib/supabaseClient";
+import api from "../../services/api";
 
 export default function ZyraSignUp() {
   const navigate = useNavigate();
@@ -46,49 +46,35 @@ export default function ZyraSignUp() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      toast.error("Please fill in all required fields correctly");
-      return;
-    }
+  e.preventDefault();
+  const validationErrors = validate();
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    toast.error("Please fill in all required fields correctly");
+    return;
+  }
 
-    // request
-    const url = (API_BASE_URL ? API_BASE_URL : "") + "/signup";
-    setIsSubmitting(true);
-    try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+  setIsSubmitting(true);
+  try {
+    const res = await api.post("/signup", {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    });
 
-      const data = await res.json().catch(() => ({}));
-
-      if (res.ok) {
-        toast.success(data.message || "Signup successful");
-        navigate("/login");
-      } else {
-        
-        const err = data.error || data.message || "Signup failed";
-        toast.error(err);
-        setErrors((prev) => ({ ...prev, server: err }));
-      }
-    } catch (error) {
-      console.error("Signup request failed:", error);
-      toast.error("Network error. Please try again.");
-      setErrors((prev) => ({ ...prev, server: "Network error" }));
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    toast.success(res.data.message || "Signup successful");
+    navigate("/login");
+  } catch (error) {
+    const err =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      "Signup failed";
+    toast.error(err);
+    setErrors((prev) => ({ ...prev, server: err }));
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const handleGoogleSignup = async () => {
     if (!isSupabaseConfigured || !supabase) {
