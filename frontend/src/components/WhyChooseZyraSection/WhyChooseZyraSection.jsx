@@ -90,7 +90,7 @@ const WhyChooseZyraSection = () => {
              overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth touch-pan-x 
              w-full max-w-[1148px] mx-auto px-4 md:px-0 pb-16 md:pb-24"
         style={{
-          scrollbarWidth: "none",
+          scrollbarWidth: "non",
           msOverflowStyle: "none",
         }}
       >
