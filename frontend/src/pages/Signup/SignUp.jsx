@@ -3,11 +3,12 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SignupBg from "../../assets/signup.png";
 import Logo from "../../assets/logo4.png";
-import { API_BASE_URL } from "../../config";
 import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
+import supabase, { isSupabaseConfigured } from "../../lib/supabaseClient";
+import api from "../../services/api";
 
 export default function ZyraSignUp() {
   const navigate = useNavigate();
@@ -45,46 +46,54 @@ export default function ZyraSignUp() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      toast.error("Please fill in all required fields correctly");
+  e.preventDefault();
+  const validationErrors = validate();
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    toast.error("Please fill in all required fields correctly");
+    return;
+  }
+
+  setIsSubmitting(true);
+  try {
+    const res = await api.post("/signup", {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    });
+
+    toast.success(res.data.message || "Signup successful");
+    navigate("/login");
+  } catch (error) {
+    const err =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      "Signup failed";
+    toast.error(err);
+    setErrors((prev) => ({ ...prev, server: err }));
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+  const handleGoogleSignup = async () => {
+    if (!isSupabaseConfigured || !supabase) {
+      toast.error("Google sign up not configured");
       return;
     }
-
-    // request
-    const url = (API_BASE_URL ? API_BASE_URL : "") + "/signup";
-    setIsSubmitting(true);
     try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      setIsSubmitting(true);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
         },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
       });
-
-      const data = await res.json().catch(() => ({}));
-
-      if (res.ok) {
-        toast.success(data.message || "Signup successful");
-        navigate("/login");
-      } else {
-        
-        const err = data.error || data.message || "Signup failed";
-        toast.error(err);
-        setErrors((prev) => ({ ...prev, server: err }));
-      }
-    } catch (error) {
-      console.error("Signup request failed:", error);
-      toast.error("Network error. Please try again.");
-      setErrors((prev) => ({ ...prev, server: "Network error" }));
-    } finally {
+      if (error) throw error;
+      // Redirect happens automatically
+    } catch (err) {
+      console.error("Google OAuth error:", err);
+      toast.error(err?.message || "Google sign up failed");
       setIsSubmitting(false);
     }
   };
@@ -277,7 +286,10 @@ export default function ZyraSignUp() {
             className="flex items-center justify-center gap-2 mt-5"          
           >
             <button
-              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"            
+              type="button"
+              onClick={handleGoogleSignup}
+              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl disabled:opacity-60"
+              disabled={isSubmitting}
             >
               <BsGoogle className="w-5 h-5 text-black" />
             </button>

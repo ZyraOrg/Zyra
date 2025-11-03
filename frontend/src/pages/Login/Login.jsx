@@ -8,7 +8,9 @@ import logo4 from "../../assets/logo4.png";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
-import { API_BASE_URL } from "../../config";
+import supabase, { isSupabaseConfigured } from "../../lib/supabaseClient";
+import api from "../../services/api";
+
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -24,30 +26,46 @@ export const Login = () => {
     AOS.init({ once: true, duration: 800, easing: "ease-in-out" });
   }, []);
 
-  const onSubmit = async (data) => {
-    const url = (API_BASE_URL ? API_BASE_URL : "") + "/login";
-    setIsSubmitting(true);
+ const onSubmit = async (data) => {
+  setIsSubmitting(true);
+  try {
+    const res = await api.post("/login", {
+      email: data.email,
+      password: data.password,
+    });
+
+    toast.success(res.data.message || "Login successful");
+    localStorage.setItem("token", res.data.token); // store JWT if backend sends one
+    navigate("/dashboard");
+  } catch (error) {
+    const err =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      "Login failed";
+    toast.error(err);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+  const handleGoogleLogin = async () => {
+    if (!isSupabaseConfigured || !supabase) {
+      toast.error("Google login not configured");
+      return;
+    }
     try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: data.email, password: data.password }),
+      setIsSubmitting(true);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
-
-      const resp = await res.json().catch(() => ({}));
-
-      if (res.ok) {
-        toast.success(resp.message || "Login successful");
-        // Redirect to dashboard upon successful login...
-        navigate("/dashboard");
-      } else {
-        const err = resp.error || resp.message || "Login failed";
-        toast.error(err);
-      }
-    } catch (error) {
-      console.error("Login request error:", error);
-      toast.error("Network error. Please try again.");
-    } finally {
+      if (error) throw error;
+      // Redirect occurs automatically
+    } catch (err) {
+      console.error("Google OAuth error:", err);
+      toast.error(err?.message || "Google login failed");
       setIsSubmitting(false);
     }
   };
@@ -207,17 +225,17 @@ export const Login = () => {
               ></div>
             </div>
             <div className="flex items-center justify-center gap-2 mt-5">
-              <a
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl disabled:opacity-60"
                 data-aos="slide-left"
                 data-aos-duration="800"
                 data-aos-delay="300"
+                disabled={isSubmitting}
               >
                 <BsGoogle size={24} className="text-black" />
-              </a>
+              </button>
               <a
                 href="/"
                 target="_blank"
