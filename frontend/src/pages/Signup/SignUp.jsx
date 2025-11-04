@@ -56,7 +56,7 @@ export default function ZyraSignUp() {
 
   setIsSubmitting(true);
   try {
-    const res = await api.post("/signup", {
+    const res = await api.post("/api/signup", {
       name: formData.name,
       email: formData.email,
       password: formData.password,

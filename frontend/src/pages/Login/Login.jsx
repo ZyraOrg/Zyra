@@ -29,7 +29,7 @@ export const Login = () => {
  const onSubmit = async (data) => {
   setIsSubmitting(true);
   try {
-    const res = await api.post("/login", {
+    const res = await api.post("/api/login", {
       email: data.email,
       password: data.password,
     });
