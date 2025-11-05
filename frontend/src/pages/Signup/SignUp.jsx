@@ -3,7 +3,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SignupBg from "../../assets/signup.png";
 import Logo from "../../assets/logo4.png";
-import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
+import { FcGoogle } from "react-icons/fc";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
@@ -90,7 +90,6 @@ export default function ZyraSignUp() {
         },
       });
       if (error) throw error;
-      // Redirect happens automatically
     } catch (err) {
       console.error("Google OAuth error:", err);
       toast.error(err?.message || "Google sign up failed");
@@ -100,7 +99,7 @@ export default function ZyraSignUp() {
 
   return (
     <div className="h-[100dvh] bg-background flex justify-center overflow-hidden">
-      {/* Left Side - Image */}
+      
       <div
         className="hidden md:flex relative w-full md:w-1/2 h-[100dvh] items-center justify-center"
         data-aos="fade-right"
@@ -266,47 +265,38 @@ export default function ZyraSignUp() {
           </button>
         </form>
 
-        {/* Social Login */}
-        <div className="mt-6">
-          <div className="flex items-center gap-4 text-sm text-gray-500">
-            <div
-              className="flex-1 h-px bg-gray-700"
-              data-aos="fade-up" data-aos-delay="400"
-            ></div>
-            <span data-aos="fade-up" data-aos-delay="400">
-              or sign up with
-            </span>
-            <div
-              className="flex-1 h-px bg-gray-700"
-              data-aos="fade-up" data-aos-delay="400"
-            ></div>
-          </div>
+       {/* Social Login */}
+<div className="mt-6">
+            <div className="flex items-center gap-4 text-sm text-gray-500">
+              <div
+                className="flex-1 h-px bg-gray-700"
+                data-aos="fade-up"
+                data-aos-delay="300"
+              ></div>
+              <span data-aos="fade-up" data-aos-delay="300">
+                or login in with
+              </span>
+              <div
+                className="flex-1 h-px bg-gray-700"
+                data-aos="fade-up"
+                data-aos-delay="300"
+              ></div>
+            </div>
+  <div className="flex items-center justify-center mt-5">
+    <button
+      type="button"
+      onClick={handleGoogleSignup}
+      className="flex items-center justify-center gap-2 bg-white text-black text-sm font-medium w-52 h-9 rounded-[20px] shadow-md hover:bg-gray-100 transition disabled:opacity-60"
+      disabled={isSubmitting}
+    >
+      <FcGoogle className="w-4 h-4" />
+      <span>Continue with Google</span>
+    </button>
+  </div>
+</div>
 
-          <div
-            className="flex items-center justify-center gap-2 mt-5"          
-          >
-            <button
-              type="button"
-              onClick={handleGoogleSignup}
-              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl disabled:opacity-60"
-              disabled={isSubmitting}
-            >
-              <BsGoogle className="w-5 h-5 text-black" />
-            </button>
-            <button
-              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"             
-            >
-              <BsTwitterX className="w-5 h-5 text-black" />
-            </button>
-            <button
-              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"            
-            >
-              <BsApple className="w-5 h-5 text-black" />
-            </button>
-          </div>
-        </div>
 
-        <div className="mt-6 text-center text-gray-400">
+        <div className="mt-4 text-center text-gray-400">
           Already have an account?{" "}
           <button
             onClick={() => navigate("/login")}

@@ -228,36 +228,14 @@ export const Login = () => {
               <button
                 type="button"
                 onClick={handleGoogleLogin}
-                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl disabled:opacity-60"
-                data-aos="slide-left"
-                data-aos-duration="800"
+                className="flex items-center justify-center bg-white w-30 h-9 rounded-[50px] disabled:opacity-60"
+                data-aos="fade-up"
+                data-aos-duration="1000"
                 data-aos-delay="300"
                 disabled={isSubmitting}
               >
                 <BsGoogle size={24} className="text-black" />
               </button>
-              <a
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"
-                data-aos="slide-left"
-                data-aos-duration="800"
-                data-aos-delay="300"
-              >
-                <BsTwitterX size={24} className="text-black" />
-              </a>
-              <a
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"
-                data-aos="slide-left"
-                data-aos-duration="800"
-                data-aos-delay="400"
-              >
-                <BsApple size={27} className="text-black" />
-              </a>
             </div>
           </div>
 
