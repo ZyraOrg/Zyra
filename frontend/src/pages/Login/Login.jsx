@@ -3,14 +3,15 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import loginbgImage from "../../assets/loginbg-image.png";
-import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
+// import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
 import logo4 from "../../assets/logo4.png";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
 import supabase, { isSupabaseConfigured } from "../../lib/supabaseClient";
 import api from "../../services/api";
-
+import { SITE_URL } from "../../config";
+import GoogleIcon from "../../assets/googleicon.png";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -26,49 +27,9 @@ export const Login = () => {
     AOS.init({ once: true, duration: 800, easing: "ease-in-out" });
   }, []);
 
- const onSubmit = async (data) => {
-  setIsSubmitting(true);
-  try {
-    const res = await api.post("/api/login", {
-      email: data.email,
-      password: data.password,
-    });
+  const onSubmit = async (data) => {};
 
-    toast.success(res.data.message || "Login successful");
-    localStorage.setItem("token", res.data.token); // store JWT if backend sends one
-    navigate("/dashboard");
-  } catch (error) {
-    const err =
-      error.response?.data?.error ||
-      error.response?.data?.message ||
-      "Login failed";
-    toast.error(err);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
-  const handleGoogleLogin = async () => {
-    if (!isSupabaseConfigured || !supabase) {
-      toast.error("Google login not configured");
-      return;
-    }
-    try {
-      setIsSubmitting(true);
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) throw error;
-      // Redirect occurs automatically
-    } catch (err) {
-      console.error("Google OAuth error:", err);
-      toast.error(err?.message || "Google login failed");
-      setIsSubmitting(false);
-    }
-  };
+  const handleGoogleLogin = async () => {};
 
   return (
     <div className="h-[100dvh] bg-background flex justify-center overflow-hidden items-center">
@@ -180,13 +141,12 @@ export const Login = () => {
                   className="w-full py-3 pr-10 text-white placeholder-gray-500 transition border-b border-gray-600 bg-background focus:outline-none focus:border-secondary"
                 />
                 <button
-                 type="button"
-                 onClick={() => setShowPassword(!showPassword)}
-                 className="absolute right-0 text-gray-400 -translate-y-1/2 top-1/2 hover:text-white"
-                 >
-                 {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-0 text-gray-400 -translate-y-1/2 top-1/2 hover:text-white"
+                >
+                  {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                 </button>
-
               </div>
               {errors.password && (
                 <p className="mt-1 text-sm text-red-400">
@@ -199,12 +159,14 @@ export const Login = () => {
               type="submit"
               disabled={isSubmitting}
               className={`w-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] 
-                         hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4 ${isSubmitting ? 'opacity-60 cursor-not-allowed' : ''}`}
+                         hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4 ${
+                           isSubmitting ? "opacity-60 cursor-not-allowed" : ""
+                         }`}
               data-aos="fade-up"
               data-aos-duration="1000"
               data-aos-delay="0"
             >
-              {isSubmitting ? 'Logging in...' : 'Login'}
+              {isSubmitting ? "Logging in..." : "Login"}
             </button>
           </form>
 
@@ -216,7 +178,7 @@ export const Login = () => {
                 data-aos-delay="300"
               ></div>
               <span data-aos="fade-up" data-aos-delay="300">
-                or login in with
+                or
               </span>
               <div
                 className="flex-1 h-px bg-gray-700"
@@ -228,14 +190,35 @@ export const Login = () => {
               <button
                 type="button"
                 onClick={handleGoogleLogin}
-                className="flex items-center justify-center bg-white w-30 h-9 rounded-[50px] disabled:opacity-60"
-                data-aos="fade-up"
-                data-aos-duration="1000"
-                data-aos-delay="300"
+                className="flex items-center justify-center bg-white text-black py-1 px-4 font-semibold text-sm rounded-xl disabled:opacity-60 gap-2 cursor-pointer shadow-2xl shadow-neutral-200 hover:shadow-[0_0_5px_rgba(145,242,249,0.2)]"
                 disabled={isSubmitting}
               >
-                <BsGoogle size={24} className="text-black" />
+                <img src={GoogleIcon} alt="google icon" className="w-5 h-5" />
+                <span> Continue with google</span>
               </button>
+
+              {/* <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center bg-white cursor-pointer w-9 h-9 rounded-xl"
+                data-aos="slide-left"
+                data-aos-duration="800"
+                data-aos-delay="300"
+              >
+                <BsTwitterX size={24} className="text-black" />
+              </a>
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center bg-white cursor-pointer w-9 h-9 rounded-xl"
+                data-aos="slide-left"
+                data-aos-duration="800"
+                data-aos-delay="400"
+              >
+                <BsApple size={27} className="text-black" />
+              </a> */}
             </div>
           </div>
 

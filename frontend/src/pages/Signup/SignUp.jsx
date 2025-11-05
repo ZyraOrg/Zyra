@@ -9,6 +9,7 @@ import "aos/dist/aos.css";
 import toast from "react-hot-toast";
 import supabase, { isSupabaseConfigured } from "../../lib/supabaseClient";
 import api from "../../services/api";
+import { SITE_URL } from "../../config";
 
 export default function ZyraSignUp() {
   const navigate = useNavigate();
@@ -86,10 +87,11 @@ export default function ZyraSignUp() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${SITE_URL}/auth/callback`,
         },
       });
       if (error) throw error;
+      // Redirect happens automatically
     } catch (err) {
       console.error("Google OAuth error:", err);
       toast.error(err?.message || "Google sign up failed");
@@ -99,7 +101,7 @@ export default function ZyraSignUp() {
 
   return (
     <div className="h-[100dvh] bg-background flex justify-center overflow-hidden">
-      
+      {/* Left Side - Image */}
       <div
         className="hidden md:flex relative w-full md:w-1/2 h-[100dvh] items-center justify-center"
         data-aos="fade-right"
@@ -265,23 +267,26 @@ export default function ZyraSignUp() {
           </button>
         </form>
 
-       {/* Social Login */}
+        {/* Social Login */}
 <div className="mt-6">
-            <div className="flex items-center gap-4 text-sm text-gray-500">
-              <div
-                className="flex-1 h-px bg-gray-700"
-                data-aos="fade-up"
-                data-aos-delay="300"
-              ></div>
-              <span data-aos="fade-up" data-aos-delay="300">
-                or login in with
-              </span>
-              <div
-                className="flex-1 h-px bg-gray-700"
-                data-aos="fade-up"
-                data-aos-delay="300"
-              ></div>
-            </div>
+  {/* Divider */}
+  <div className="flex items-center gap-4 text-sm text-gray-500">
+    <div
+      className="flex-1 h-px bg-gray-700"
+      data-aos="fade-up"
+      data-aos-delay="400"
+    ></div>
+    <span data-aos="fade-up" data-aos-delay="400">
+      or
+    </span>
+    <div
+      className="flex-1 h-px bg-gray-700"
+      data-aos="fade-up"
+      data-aos-delay="400"
+    ></div>
+  </div>
+
+  {/* Google Button */}
   <div className="flex items-center justify-center mt-5">
     <button
       type="button"
@@ -296,7 +301,7 @@ export default function ZyraSignUp() {
 </div>
 
 
-        <div className="mt-4 text-center text-gray-400">
+        <div className="mt-6 text-center text-gray-400">
           Already have an account?{" "}
           <button
             onClick={() => navigate("/login")}
