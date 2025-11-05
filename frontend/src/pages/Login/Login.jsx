@@ -178,7 +178,7 @@ export const Login = () => {
                 data-aos-delay="300"
               ></div>
               <span data-aos="fade-up" data-aos-delay="300">
-                or login in with
+                or
               </span>
               <div
                 className="flex-1 h-px bg-gray-700"
