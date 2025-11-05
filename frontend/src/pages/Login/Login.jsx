@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import loginbgImage from "../../assets/loginbg-image.png";
-import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
+// import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
 import logo4 from "../../assets/logo4.png";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import supabase, { isSupabaseConfigured } from "../../lib/supabaseClient";
 import api from "../../services/api";
 import { SITE_URL } from "../../config";
-
+import GoogleIcon from "../../assets/googleicon.png";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -27,56 +27,9 @@ export const Login = () => {
     AOS.init({ once: true, duration: 800, easing: "ease-in-out" });
   }, []);
 
-  const onSubmit = async (data) => {
-    setIsSubmitting(true);
-    try {
-      const res = await api.post("/login", {
-        email: data.email,
-        password: data.password,
-      });
- const onSubmit = async (data) => {
-  setIsSubmitting(true);
-  try {
-    const res = await api.post("/api/login", {
-      email: data.email,
-      password: data.password,
-    });
+  const onSubmit = async (data) => {};
 
-      toast.success(res.data.message || "Login successful");
-      localStorage.setItem("token", res.data.token); // store JWT if backend sends one
-      navigate("/dashboard");
-    } catch (error) {
-      const err =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        "Login failed";
-      toast.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    if (!isSupabaseConfigured || !supabase) {
-      toast.error("Google login not configured");
-      return;
-    }
-    try {
-      setIsSubmitting(true);
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${SITE_URL}/auth/callback`,
-        },
-      });
-      if (error) throw error;
-      // Redirect occurs automatically
-    } catch (err) {
-      console.error("Google OAuth error:", err);
-      toast.error(err?.message || "Google login failed");
-      setIsSubmitting(false);
-    }
-  };
+  const handleGoogleLogin = async () => {};
 
   return (
     <div className="h-[100dvh] bg-background flex justify-center overflow-hidden items-center">
@@ -237,10 +190,7 @@ export const Login = () => {
               <button
                 type="button"
                 onClick={handleGoogleLogin}
-                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl disabled:opacity-60 cursor-pointer"
-                data-aos="slide-left"
-                data-aos-duration="800"
-                data-aos-delay="300"
+                className="flex items-center justify-center bg-white text-black py-1 px-4 font-semibold text-sm rounded-xl disabled:opacity-60 gap-2 cursor-pointer shadow-2xl shadow-neutral-200 hover:shadow-[0_0_5px_rgba(145,242,249,0.2)]"
                 disabled={isSubmitting}
               >
                 <img src={GoogleIcon} alt="google icon" className="w-5 h-5" />
