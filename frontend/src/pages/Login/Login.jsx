@@ -10,6 +10,7 @@ import "aos/dist/aos.css";
 import toast from "react-hot-toast";
 import supabase, { isSupabaseConfigured } from "../../lib/supabaseClient";
 import api from "../../services/api";
+import { SITE_URL } from "../../config";
 
 
 export const Login = () => {
@@ -58,7 +59,7 @@ export const Login = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${SITE_URL}/auth/callback`,
         },
       });
       if (error) throw error;
@@ -228,7 +229,7 @@ export const Login = () => {
               <button
                 type="button"
                 onClick={handleGoogleLogin}
-                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl disabled:opacity-60"
+                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl disabled:opacity-60 cursor-pointer"
                 data-aos="slide-left"
                 data-aos-duration="800"
                 data-aos-delay="300"
@@ -240,7 +241,7 @@ export const Login = () => {
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"
+                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl cursor-pointer"
                 data-aos="slide-left"
                 data-aos-duration="800"
                 data-aos-delay="300"
@@ -251,7 +252,7 @@ export const Login = () => {
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"
+                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl cursor-pointer"
                 data-aos="slide-left"
                 data-aos-duration="800"
                 data-aos-delay="400"
