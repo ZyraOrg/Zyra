@@ -9,6 +9,7 @@ import "aos/dist/aos.css";
 import toast from "react-hot-toast";
 import supabase, { isSupabaseConfigured } from "../../lib/supabaseClient";
 import api from "../../services/api";
+import { SITE_URL } from "../../config";
 
 export default function ZyraSignUp() {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ export default function ZyraSignUp() {
 
   setIsSubmitting(true);
   try {
-    const res = await api.post("/signup", {
+    const res = await api.post("/api/signup", {
       name: formData.name,
       email: formData.email,
       password: formData.password,
@@ -86,7 +87,7 @@ export default function ZyraSignUp() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${SITE_URL}/auth/callback`,
         },
       });
       if (error) throw error;
@@ -288,18 +289,18 @@ export default function ZyraSignUp() {
             <button
               type="button"
               onClick={handleGoogleSignup}
-              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl disabled:opacity-60"
+              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl disabled:opacity-60 cursor-pointer"
               disabled={isSubmitting}
             >
               <BsGoogle className="w-5 h-5 text-black" />
             </button>
             <button
-              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"             
+              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl cursor-pointer"             
             >
               <BsTwitterX className="w-5 h-5 text-black" />
             </button>
             <button
-              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"            
+              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl cursor-pointer"            
             >
               <BsApple className="w-5 h-5 text-black" />
             </button>

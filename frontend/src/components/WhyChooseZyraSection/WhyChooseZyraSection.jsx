@@ -88,7 +88,7 @@ const WhyChooseZyraSection = () => {
         ref={cardGridRef}
         className="relative flex md:grid md:grid-cols-3 md:justify-between gap-4 md:gap-10 
              overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth touch-pan-x 
-             w-full max-w-[1148px] mx-auto px-4 md:px-0 pb-16 md:pb-24"
+             w-full max-w-[1148px] mx-auto px-4 md:px-0 pb-16 md:pb-24 no-scrollbar"
         style={{
           scrollbarWidth: "none",
           msOverflowStyle: "none",
@@ -149,9 +149,9 @@ const WhyChooseZyraSection = () => {
         ))}
       </div>
 
-      <style jsx>{`
-        /* Hide scrollbars */
-        div::-webkit-scrollbar {
+      <style>{`
+        /* Hide scrollbars only on the targeted container */
+        .no-scrollbar::-webkit-scrollbar {
           display: none;
         }
       `}</style>

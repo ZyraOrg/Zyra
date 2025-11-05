@@ -10,7 +10,8 @@ import "aos/dist/aos.css";
 import toast from "react-hot-toast";
 import supabase, { isSupabaseConfigured } from "../../lib/supabaseClient";
 import api from "../../services/api";
-import GoogleIcon from "../../assets/googleicon.png";
+import { SITE_URL } from "../../config";
+
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -33,6 +34,13 @@ export const Login = () => {
         email: data.email,
         password: data.password,
       });
+ const onSubmit = async (data) => {
+  setIsSubmitting(true);
+  try {
+    const res = await api.post("/api/login", {
+      email: data.email,
+      password: data.password,
+    });
 
       toast.success(res.data.message || "Login successful");
       localStorage.setItem("token", res.data.token); // store JWT if backend sends one
@@ -58,7 +66,7 @@ export const Login = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${SITE_URL}/auth/callback`,
         },
       });
       if (error) throw error;
@@ -229,7 +237,10 @@ export const Login = () => {
               <button
                 type="button"
                 onClick={handleGoogleLogin}
-                className="flex items-center justify-center bg-white text-black py-1 px-4 font-semibold text-sm rounded-xl disabled:opacity-60 gap-2 cursor-pointer shadow-2xl shadow-neutral-200 hover:shadow-[0_0_5px_rgba(145,242,249,0.2)]"
+                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl disabled:opacity-60 cursor-pointer"
+                data-aos="slide-left"
+                data-aos-duration="800"
+                data-aos-delay="300"
                 disabled={isSubmitting}
               >
                 <img src={GoogleIcon} alt="google icon" className="w-5 h-5" />
@@ -240,7 +251,7 @@ export const Login = () => {
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"
+                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl cursor-pointer"
                 data-aos="slide-left"
                 data-aos-duration="800"
                 data-aos-delay="300"
@@ -251,7 +262,7 @@ export const Login = () => {
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl"
+                className="flex items-center justify-center bg-white w-9 h-9 rounded-xl cursor-pointer"
                 data-aos="slide-left"
                 data-aos-duration="800"
                 data-aos-delay="400"
