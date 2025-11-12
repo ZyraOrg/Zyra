@@ -12,7 +12,7 @@ import AboutModal from "./AboutModal";
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [showAbout, setShowAbout] = useState(false); // 👈 modal state
+  const [showAbout, setShowAbout] = useState(false);
 
   useEffect(() => {
     AOS.init({
@@ -116,11 +116,11 @@ const Navbar = () => {
         </li>
       </ul>
 
-      {/* Mobile Hamburger */}
-      <div className="relative z-50 ml-auto md:hidden">
+      {/* Mobile Hamburger - Now positioned to stay visible */}
+      <div className="ml-auto md:hidden">
         <button
           onClick={toggleMobileMenu}
-          className="text-white transition-colors duration-300 hover:text-[#91F2F9]"
+          className="relative z-[60] text-white transition-colors duration-300 hover:text-[#91F2F9]"
           data-aos="fade-down"
           data-aos-duration="800"
           data-aos-delay="400"
@@ -131,56 +131,71 @@ const Navbar = () => {
             <RiMenu3Fill className="w-8 h-8" />
           )}
         </button>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <>
-            <div
-              className="fixed inset-0 z-40 bg-black/50"
-              onClick={toggleMobileMenu}
-            />
-            <div className="fixed top-0 right-0 z-50 flex flex-col items-start justify-start w-50 h-full pt-20 px-4 space-y-8 bg-[#040a24]">
-              {[
-                { name: "Home", icon: HiHome, id: "home" },
-                { name: "Campaigns", icon: MdCampaign, id: "explore" },
-                { name: "Create", icon: FaPlus, id: "create" },
-                { name: "About", icon: FaInfoCircle, id: "about" },
-              ].map((item, i) => {
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={i}
-                    onClick={() => {
-                      if (item.name === "Home") handleScrollToTop(event);
-                      else if (item.name === "About") setShowAbout(true);
-                      else handleSmoothScroll(event, item.id);
-                      toggleMobileMenu();
-                    }}
-                    className="text-white font-roboto font-semibold text-base hover:text-[#91F2F9] transition-colors duration-300 w-full text-left flex items-center gap-3"
-                    data-aos="slide-left"
-                    data-aos-duration="500"
-                    data-aos-delay={100 + i * 100}
-                  >
-                    <Icon className="w-5 h-5 text-[#91F2F9]" />
-                    {item.name}
-                  </button>
-                );
-              })}
-              <a
-                href="/Zyra-Litepaper-2025.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2.5 rounded-full text-black font-roboto font-bold text-sm shadow-[0_0_15px_rgba(145,242,249,0.5)] transition-all duration-300 bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] hover:shadow-[0_0_25px_rgba(145,242,249,0.7)] text-center w-full"
-                data-aos="slide-left"
-                data-aos-duration="500"
-                data-aos-delay="600"
-              >
-                Lite Paper
-              </a>
-            </div>
-          </>
-        )}
       </div>
+
+      {/* Mobile Menu */}
+      <>
+        {/* Backdrop with fade animation */}
+        <div
+          className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ${
+            isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+          onClick={toggleMobileMenu}
+        />
+        
+        {/* Menu panel with slide animation */}
+        <div
+          className={`fixed top-0 right-0 z-50 flex flex-col items-start justify-start w-50 h-full pt-20 px-4 space-y-8 bg-[#040a24] transition-transform duration-300 ease-in-out ${
+            isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          {[
+            { name: "Home", icon: HiHome, id: "home" },
+            { name: "Campaigns", icon: MdCampaign, id: "explore" },
+            { name: "Create", icon: FaPlus, id: "create" },
+            { name: "About", icon: FaInfoCircle, id: "about" },
+          ].map((item, i) => {
+            const Icon = item.icon;
+            return (
+              <button
+                key={i}
+                onClick={(e) => {
+                  if (item.name === "Home") handleScrollToTop(e);
+                  else if (item.name === "About") setShowAbout(true);
+                  else handleSmoothScroll(e, item.id);
+                  toggleMobileMenu();
+                }}
+                className={`text-white font-roboto font-semibold text-base hover:text-[#91F2F9] transition-all duration-300 w-full text-left flex items-center gap-3 ${
+                  isMobileMenuOpen
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 translate-x-8"
+                }`}
+                style={{
+                  transitionDelay: isMobileMenuOpen ? `${100 + i * 50}ms` : "0ms",
+                }}
+              >
+                <Icon className="w-5 h-5 text-[#91F2F9]" />
+                {item.name}
+              </button>
+            );
+          })}
+          <a
+            href="/Zyra-Litepaper-2025.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`px-4 py-2.5 rounded-full text-black font-roboto font-bold text-sm shadow-[0_0_15px_rgba(145,242,249,0.5)] transition-all duration-300 bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] hover:shadow-[0_0_25px_rgba(145,242,249,0.7)] text-center w-full ${
+              isMobileMenuOpen
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 translate-x-8"
+            }`}
+            style={{
+              transitionDelay: isMobileMenuOpen ? "300ms" : "0ms",
+            }}
+          >
+            Lite Paper
+          </a>
+        </div>
+      </>
 
       {/* About Modal */}
       <AboutModal show={showAbout} onClose={() => setShowAbout(false)} />

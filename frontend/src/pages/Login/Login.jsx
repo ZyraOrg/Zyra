@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import loginbgImage from "../../assets/loginbg-image.png";
-// import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
 import logo4 from "../../assets/logo4.png";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -27,9 +26,48 @@ export const Login = () => {
     AOS.init({ once: true, duration: 800, easing: "ease-in-out" });
   }, []);
 
-  const onSubmit = async (data) => {};
+  const onSubmit = async (data) => {
+    setIsSubmitting(true);
+    try {
+      const res = await api.post("/api/login", {
+        email: data.email,
+        password: data.password,
+      });
 
-  const handleGoogleLogin = async () => {};
+      toast.success(res.data.message || "Login successful");
+      navigate("/dashboard");
+    } catch (error) {
+      const err =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Login failed";
+      toast.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    if (!isSupabaseConfigured || !supabase) {
+      toast.error("Google login not configured");
+      return;
+    }
+    try {
+      setIsSubmitting(true);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${SITE_URL}/auth/callback`,
+        },
+      });
+      if (error) throw error;
+      // Redirect happens automatically
+    } catch (err) {
+      console.error("Google OAuth error:", err);
+      toast.error(err?.message || "Google login failed");
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="h-[100dvh] bg-background flex justify-center overflow-hidden items-center">
@@ -196,29 +234,6 @@ export const Login = () => {
                 <img src={GoogleIcon} alt="google icon" className="w-5 h-5" />
                 <span> Continue with google</span>
               </button>
-
-              {/* <a
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center bg-white cursor-pointer w-9 h-9 rounded-xl"
-                data-aos="slide-left"
-                data-aos-duration="800"
-                data-aos-delay="300"
-              >
-                <BsTwitterX size={24} className="text-black" />
-              </a>
-              <a
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center bg-white cursor-pointer w-9 h-9 rounded-xl"
-                data-aos="slide-left"
-                data-aos-duration="800"
-                data-aos-delay="400"
-              >
-                <BsApple size={27} className="text-black" />
-              </a> */}
             </div>
           </div>
 
