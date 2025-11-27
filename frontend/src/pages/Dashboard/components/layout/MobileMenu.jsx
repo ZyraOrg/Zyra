@@ -7,7 +7,7 @@ export default function MobileMenu({ isOpen, setIsOpen, activeItem, setActiveIte
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-4 left-4 z-50 lg:hidden p-2 bg-[#13131A] rounded-lg border"
+        className="fixed top-4 left-4 z-50 lg:hidden p-2 bg-[#010410] rounded-lg border"
         aria-label="Toggle menu"
       >
         {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

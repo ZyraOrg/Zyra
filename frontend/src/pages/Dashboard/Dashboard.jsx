@@ -13,7 +13,7 @@ export default function Dashboard() {
   const [activeItem, setActiveItem] = useState('Dashboard');
 
   return (
-    <div className="flex min-h-screen bg-[#00051b] text-white">
+    <div className="flex min-h-screen bg-[#010415] text-white">
       {/* Sidebar */}
       <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 

@@ -3,16 +3,16 @@ import { chartData } from '../../constants/dashboardData';
 
 export default function DonationChart() {
   return (
-    <div className="lg:col-span-2 bg-[#13131A] rounded-xl p-6 border border-[#1E1E2D]">
+    <div className="lg:col-span-2 bg-[#010410] rounded-xl p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold">Donation Monthly Summary</h3>
         <div className="flex items-center gap-4 text-xs">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-blue-500 rounded-full" />
+            <div className="w-3 h-3 rounded-full bg-[#2B25E0]" />
             <span className="text-gray-400">This week</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-purple-500 rounded-full" />
+            <div className="w-3 h-3 rounded-full bg-[#18A0FB]" />
             <span className="text-gray-400">Last week</span>
           </div>
         </div>
@@ -41,13 +41,13 @@ export default function DonationChart() {
           />
           <Bar 
             dataKey="thisWeek" 
-            fill="#3B82F6" 
+            fill="#2B25E0" 
             radius={[4, 4, 0, 0]}
             barSize={24}
           />
           <Bar 
             dataKey="lastWeek" 
-            fill="#8B5CF6" 
+            fill="#18A0FB" 
             radius={[4, 4, 0, 0]}
             barSize={24}
           />

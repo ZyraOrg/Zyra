@@ -3,36 +3,43 @@ import { formatCurrency, formatTime } from '../../utils/formatters';
 
 export default function TransactionsList() {
   return (
-    <div className="mt-4 sm:mt-6 bg-[#13131A] rounded-xl p-6 border border-[#1E1E2D]">
+    <div className="mt-4 sm:mt-6 bg-[#010410] rounded-xl p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold">Latest Transactions</h3>
-        <span className="text-xs text-gray-400">To:</span>
+        <h2 className="text-2xl font-bold">Latest Transactions</h2>
+        <span className="text-sm text-gray-400">To:</span>
       </div>
 
       <div className="space-y-4">
         {transactions.map((tx) => (
           <div 
             key={tx.id}
-            className="flex items-start gap-4 p-4 rounded-lg bg-[#0A0A0F] border border-[#1E1E2D] hover:border-gray-600 transition-colors"
+            className="flex items-center gap-4 p-4 rounded-lg bg-[#0A0A0F]"
           >
-            <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600">
-              <span className="text-sm font-semibold text-white">
-                {tx.organization.charAt(0)}
-              </span>
-            </div>
+            <img 
+              src={tx.image} 
+              alt={tx.title}
+              className="flex-shrink-0 object-cover w-12 h-12 rounded-lg"
+            />
+            
             <div className="flex-1 min-w-0">
-              <h4 className="mb-1 text-sm font-semibold truncate">{tx.title}</h4>
-              <p className="mb-2 text-xs text-gray-400">— from {tx.organization}</p>
-              <div className="flex items-center gap-4 text-xs text-gray-500">
-                <span className="flex items-center gap-1">
-                  <span className="font-semibold text-green-400">Amount</span>
-                  <span className="font-bold text-white">{formatCurrency(tx.amount)}</span>
-                </span>
-                <span>{formatTime(tx.time)}</span>
-              </div>
+              <h4 className="mb-1 text-sm font-semibold">{tx.title}</h4>
+              <p className="flex items-center gap-1 text-xs text-gray-400">
+                <span className="w-4 h-4">👤</span>
+                {tx.organization}
+              </p>
             </div>
-            <div className="flex-shrink-0 hidden text-right sm:block">
-              <p className="font-mono text-xs text-gray-500">{tx.recipient}</p>
+
+            <div className="flex flex-col items-start w-24 gap-1">
+              <div className="text-xs text-gray-400">Amount</div>
+              <div className="text-sm font-semibold">{formatCurrency(tx.amount)}</div>
+            </div>
+
+            <div className="flex-shrink-0 w-24 text-right">
+              <div className="text-xs text-gray-400">{formatTime(tx.time)}</div>
+            </div>
+
+            <div className="flex-shrink-0 w-32 text-right">
+              <p className="font-mono text-xs text-gray-400">{tx.recipient}</p>
             </div>
           </div>
         ))}
@@ -40,17 +47,20 @@ export default function TransactionsList() {
 
       {/* Pagination */}
       <div className="flex items-center justify-center gap-2 mt-6">
-        <button className="w-8 h-8 rounded-lg bg-[#0A0A0F] border border-[#1E1E2D] flex items-center justify-center text-gray-400 hover:border-gray-600 transition-colors">
-          1
+        <button className="w-8 h-8 rounded-lg bg-[#13131A] flex items-center justify-center text-gray-400 hover:bg-[#1A1A20] transition-colors">
+          ‹
         </button>
         <button className="flex items-center justify-center w-8 h-8 font-semibold text-white bg-blue-500 rounded-lg">
+          1
+        </button>
+        <button className="w-8 h-8 rounded-lg bg-[#13131A] flex items-center justify-center text-gray-400 hover:bg-[#1A1A20] transition-colors">
           2
         </button>
-        <button className="w-8 h-8 rounded-lg bg-[#0A0A0F] border border-[#1E1E2D] flex items-center justify-center text-gray-400 hover:border-gray-600 transition-colors">
+        <button className="w-8 h-8 rounded-lg bg-[#13131A] flex items-center justify-center text-gray-400 hover:bg-[#1A1A20] transition-colors">
           3
         </button>
-        <button className="w-8 h-8 rounded-lg bg-[#0A0A0F] border border-[#1E1E2D] flex items-center justify-center text-gray-400 hover:border-gray-600 transition-colors">
-          ...
+        <button className="w-8 h-8 rounded-lg bg-[#13131A] flex items-center justify-center text-gray-400 hover:bg-[#1A1A20] transition-colors">
+          ›
         </button>
       </div>
     </div>
