@@ -24,7 +24,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-64 h-screen bg-[#010410] fixed left-0 top-0 flex flex-col z-20 hidden lg:flex">
+    <aside className="hidden lg:flex w-64 h-screen bg-[#010410] fixed left-0 top-0 flex-col z-20">
       {/* Logo */}
       <div className="flex items-center h-20 px-4">
         <img src={Logo} alt="ZYRA Logo" className="w-auto h-40 -ml-8" />

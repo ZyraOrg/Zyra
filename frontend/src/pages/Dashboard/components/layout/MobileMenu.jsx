@@ -1,78 +1,106 @@
-import { Menu, X } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { X, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { navItems } from '../../constants/dashboardData';
 import Logo from '../../../../assets/logo.png';
+import supabase from '../../../../lib/supabaseClient';
 
-export default function MobileMenu({ isOpen, setIsOpen }) {
+export default function MobileMenu({ isOpen, onClose, activeItem, setActiveItem }) {
   const navigate = useNavigate();
-  const location = useLocation();
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      toast.success('Logged out successfully');
+      navigate('/login', { replace: true });
+    } catch (err) {
+      console.error('Logout error:', err);
+      toast.error(err?.message || 'Failed to log out');
+    }
+  };
+
+  const handleNavClick = (label) => {
+    setActiveItem(label);
+    onClose();
+  };
 
   return (
-    <>
+    <div className="lg:hidden">
       {/* Overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-black/70 lg:hidden"
-          onClick={() => setIsOpen(false)}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+          onClick={onClose}
         />
       )}
 
-      {/* Slide Menu */}
-      <div className={`fixed left-0 top-0 w-72 h-screen bg-[#010410] border-r border-gray-800 z-50 lg:hidden transition-transform duration-300 ${
-        isOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}>
-        {/* Header */}
-        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-800">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-              <span className="text-sm font-bold">Z</span>
-            </div>
-            <span className="text-lg font-bold">ZYRA</span>
-          </div>
-          <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-[#13131A] rounded-lg">
-            <X className="w-5 h-5" />
+      {/* Mobile Menu Drawer */}
+      <aside 
+        className={`fixed top-0 left-0 h-full w-72 bg-[#010410] z-50
+                    flex flex-col transform transition-transform duration-300 ease-in-out
+                    ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      >
+        {/* Menu Header with Logo & Close Button */}
+        <div className="flex items-center justify-between h-20 px-4 border-b border-gray-800">
+          <img src={Logo} alt="ZYRA Logo" className="w-auto h-40 -ml-8" />
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-[#13131A] rounded-lg transition-colors"
+            aria-label="Close mobile menu"
+          >
+            <X className="w-5 h-5 text-white" />
           </button>
         </div>
 
         {/* User Profile */}
         <div className="px-4 py-6 border-b border-gray-800">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-              <span className="text-sm font-semibold">U</span>
+            <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500">
+              <span className="text-sm font-semibold text-white">U</span>
             </div>
-            <div>
-              <p className="text-sm font-semibold">User</p>
-              <p className="text-xs text-gray-400">My Account</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold truncate text-white">User</p>
+              <p className="text-xs text-gray-400 truncate">My Account</p>
             </div>
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="px-4 py-6 space-y-1">
+        {/* Navigation - All items including Settings */}
+        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.href;
+            const isActive = activeItem === item.label;
             
             return (
               <button
                 key={item.label}
-                onClick={() => {
-                  navigate(item.href);
-                  setIsOpen(false);
-                }}
+                onClick={() => handleNavClick(item.label)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors w-full ${
                   isActive 
                     ? 'bg-[#13131A] text-white' 
-                    : 'text-gray-400 hover:bg-[#13131A]'
+                    : 'text-gray-400 hover:bg-[#13131A] hover:text-white'
                 }`}
               >
-                <Icon className="w-5 h-5" />
+                <Icon className="flex-shrink-0 w-5 h-5" />
                 <span className="text-sm font-medium">{item.label}</span>
               </button>
             );
           })}
         </nav>
-      </div>
-    </>
+
+        {/* Logout Only */}
+        <div className="px-4 pb-6 border-t border-gray-800 pt-4">
+          <button 
+            onClick={handleLogout}
+            className="flex items-center w-full gap-3 px-4 py-3 text-red-400 transition-colors rounded-lg hover:bg-[#13131A] hover:text-red-300"
+          >
+            <LogOut className="flex-shrink-0 w-5 h-5" />
+            <span className="text-sm font-medium">Log out</span>
+          </button>
+        </div>
+      </aside>
+    </div>
   );
 }
