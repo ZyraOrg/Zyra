@@ -5,9 +5,9 @@ import {
   Settings
 } from 'lucide-react';
 
-import MoneyIcon from '../../../assets/Money.svg?react';
+import MoneyIcon from '../../../assets/money.svg?react';
 import DonationIcon from '../../../assets/donation.svg?react';
-import MegaphoneIcon from '../../../assets/Megaphone.svg?react';
+import MegaphoneIcon from '../../../assets/megaphone.svg?react';
 import Trans1 from '../../../assets/tran1.png';
 import Trans2 from '../../../assets/tran2.png';
 import Trans3 from '../../../assets/tran3.png';
