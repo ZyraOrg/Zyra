@@ -8,6 +8,23 @@ export default defineConfig({
   server: {
     host: true,
     allowedHosts: ["unploughed-unrespected-rory.ngrok-free.dev"],
+    proxy: {
+      '/api': {
+        target: 'https://zyraapi.vercel.app',
+        changeOrigin: true,
+        secure: true,
+        cookieDomainRewrite: 'localhost',
+        cookiePathRewrite: '/',
+        configure: (proxy, _options) => {
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            // Forward cookies from the original request
+            if (req.headers.cookie) {
+              proxyReq.setHeader('cookie', req.headers.cookie);
+            }
+          });
+        }
+      }
+    }
   },
   build: {
     outDir: "../docs",

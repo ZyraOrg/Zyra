@@ -34,6 +34,9 @@ export const Login = () => {
         password: data.password,
       });
 
+      // Confirm session exists before navigating.
+      await api.getUser();
+
       toast.success(res.data.message || "Login successful");
       navigate("/dashboard");
     } catch (error) {

@@ -6,6 +6,7 @@ import { Login } from "./pages/Login/Login";
 import SignUp from "./pages/Signup/SignUp";
 import AuthCallback from "./pages/AuthCallback";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import CreateCampaign from "./pages/Dashboard/CreateCampaign";
 
 import Navbar from "./components/Navbar/Navbar";
 import HeroSection from "./components/HeroSection/HeroSection";
@@ -43,6 +44,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/create-campaign" element={<CreateCampaign />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route
             path="/"
