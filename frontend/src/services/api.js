@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://zyraapi.vercel.app";
 
 function buildUrl(path) {
   return `${BASE_URL || ""}${path}`;
@@ -72,4 +72,43 @@ async function uploadCampaignCover(campaignId, file) {
   return { data };
 }
 
-export default { post, signupUser, loginUser, getUser, createCampaign, uploadCampaignCover };
+async function getMyCampaigns({ limit = 4, offset = 0 } = {}) {
+  const url = buildUrl(`/api/campaigns/mine?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}`);
+  const res = await fetch(url, {
+    method: "GET",
+    credentials: "include",
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error(data?.error || data?.message || "Request failed");
+    err.response = { data };
+    throw err;
+  }
+  return { data };
+}
+
+async function getCampaign(id) {
+  const url = buildUrl(`/api/campaigns/${encodeURIComponent(id)}`);
+  const res = await fetch(url, {
+    method: "GET",
+    credentials: "include",
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error(data?.error || data?.message || "Request failed");
+    err.response = { data };
+    throw err;
+  }
+  return { data };
+}
+
+export default {
+  post,
+  signupUser,
+  loginUser,
+  getUser,
+  createCampaign,
+  uploadCampaignCover,
+  getMyCampaigns,
+  getCampaign,
+};
