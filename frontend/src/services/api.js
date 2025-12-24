@@ -49,4 +49,27 @@ async function getUser() {
   return { data };
 }
 
-export default { post, signupUser, loginUser, getUser };
+async function createCampaign(payload) {
+  return post("/api/campaigns/create", payload);
+}
+
+async function uploadCampaignCover(campaignId, file) {
+  const url = buildUrl(`/api/campaigns/${campaignId}/cover`);
+  const formData = new FormData();
+  formData.append("cover", file);
+
+  const res = await fetch(url, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error(data?.error || data?.message || "Request failed");
+    err.response = { data };
+    throw err;
+  }
+  return { data };
+}
+
+export default { post, signupUser, loginUser, getUser, createCampaign, uploadCampaignCover };
