@@ -17,6 +17,7 @@ export default function CampaignDetails() {
 
   const [campaign, setCampaign] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -90,7 +91,33 @@ export default function CampaignDetails() {
             ) : !campaign ? (
               <div className="text-sm text-gray-400">Not found</div>
             ) : (
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+              <div>
+                <div className="flex justify-end mb-4">
+                  <button
+                    type="button"
+                    disabled={isDeleting}
+                    onClick={async () => {
+                      if (!id) return;
+                      if (isDeleting) return;
+                      try {
+                        setIsDeleting(true);
+                        await api.deleteCampaign(id);
+                        toast.success('Campaign deleted');
+                        navigate('/dashboard/campaigns', { replace: true });
+                      } catch (err) {
+                        const msg = err?.response?.data?.error || err?.message || 'Failed to delete campaign';
+                        toast.error(msg);
+                      } finally {
+                        setIsDeleting(false);
+                      }
+                    }}
+                    className="text-sm font-semibold text-red-400 hover:text-red-300 transition-colors disabled:opacity-60"
+                  >
+                    Delete
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                 <div className="lg:col-span-2">
                   <div className="text-xs text-gray-400">ID</div>
                   <div className="text-sm break-all">{campaign.id}</div>
@@ -125,6 +152,7 @@ export default function CampaignDetails() {
                     <div className="mt-2 text-sm text-gray-400">No cover uploaded</div>
                   )}
                 </div>
+              </div>
               </div>
             )}
           </div>

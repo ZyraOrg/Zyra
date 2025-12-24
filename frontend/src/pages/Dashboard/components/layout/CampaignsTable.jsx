@@ -17,6 +17,13 @@ function formatTimeLeft(endDate) {
   return `${diffInDays} days left`;
 }
 
+function truncateEnd(value, maxChars) {
+  const str = String(value ?? '');
+  if (!maxChars || maxChars < 1) return str;
+  if (str.length <= maxChars) return str;
+  return `${str.slice(0, maxChars)}...`;
+}
+
 export default function CampaignsTable() {
   const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState([]);
@@ -84,7 +91,9 @@ export default function CampaignsTable() {
                       className="text-cyan-400 hover:text-cyan-300 transition-colors"
                       title="View campaign"
                     >
-                      {campaign.id}
+                        <span className="inline md:hidden">{truncateEnd(campaign.id, 8)}</span>
+                        <span className="hidden md:inline lg:hidden">{truncateEnd(campaign.id, 12)}</span>
+                      <span className="hidden lg:inline">{truncateEnd(campaign.id, 16)}</span>
                     </button>
                   </td>
                   <td className="py-3 lg:py-4 text-xs lg:text-sm">

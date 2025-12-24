@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import CreateCampaign from "./pages/Dashboard/CreateCampaign";
 import Campaigns from "./pages/Dashboard/Campaigns";
 import CampaignDetails from "./pages/Dashboard/CampaignDetails";
+import Profile from "./pages/Dashboard/Profile";
 
 import Navbar from "./components/Navbar/Navbar";
 import HeroSection from "./components/HeroSection/HeroSection";
@@ -49,6 +50,7 @@ function App() {
           <Route path="/dashboard/create-campaign" element={<CreateCampaign />} />
           <Route path="/dashboard/campaigns" element={<Campaigns />} />
           <Route path="/dashboard/campaigns/:id" element={<CampaignDetails />} />
+          <Route path="/dashboard/profile" element={<Profile />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route
             path="/"

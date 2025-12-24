@@ -1,12 +1,21 @@
-import { Menu } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import MegaphoneIcon from '../../../../assets/Megaphone2.svg?react';
 import api from '../../../../services/api';
+
+function truncateAddress(address) {
+  const str = String(address || '');
+  if (!str) return '';
+  if (str.length <= 12) return str;
+  return `${str.slice(0, 6)}...${str.slice(-4)}`;
+}
 
 export default function Header({ setIsMobileMenuOpen }) {
   const navigate = useNavigate();
   const [username, setUsername] = useState('User');
+  const [walletAddress, setWalletAddress] = useState('');
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -21,6 +30,78 @@ export default function Header({ setIsMobileMenuOpen }) {
 
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    const eth = typeof window !== 'undefined' ? window.ethereum : undefined;
+    if (!eth?.request) return;
+
+    // Always prefer the wallet's current state over any cached value.
+    // This ensures "Connect" re-queries the wallet after a disconnect.
+    (async () => {
+      try {
+        const accounts = await eth.request({ method: 'eth_accounts' });
+        const addr = Array.isArray(accounts) && accounts[0] ? accounts[0] : '';
+        setWalletAddress(addr);
+        try {
+          if (addr) window.localStorage.setItem('zyra_wallet_address', addr);
+          else window.localStorage.removeItem('zyra_wallet_address');
+        } catch {
+          // ignore
+        }
+      } catch {
+        // ignore
+      }
+    })();
+
+    if (!eth?.on) return;
+
+    const handleAccountsChanged = (accounts) => {
+      const next = Array.isArray(accounts) && accounts[0] ? accounts[0] : '';
+      setWalletAddress(next);
+      try {
+        if (next) window.localStorage.setItem('zyra_wallet_address', next);
+        else window.localStorage.removeItem('zyra_wallet_address');
+      } catch {
+        // ignore
+      }
+    };
+
+    eth.on('accountsChanged', handleAccountsChanged);
+    return () => {
+      try {
+        eth.removeListener('accountsChanged', handleAccountsChanged);
+      } catch {
+        // ignore
+      }
+    };
+  }, []);
+
+  const handleConnectWallet = async () => {
+    const eth = typeof window !== 'undefined' ? window.ethereum : undefined;
+    if (!eth?.request) {
+      toast.error('No EVM wallet found. Please install MetaMask.');
+      return;
+    }
+
+    try {
+      const accounts = await eth.request({ method: 'eth_requestAccounts' });
+      const addr = Array.isArray(accounts) && accounts[0] ? accounts[0] : '';
+      if (!addr) {
+        toast.error('No wallet address returned');
+        return;
+      }
+      setWalletAddress(addr);
+      try {
+        window.localStorage.setItem('zyra_wallet_address', addr);
+      } catch {
+        // ignore
+      }
+      toast.success('Wallet connected');
+    } catch (err) {
+      const msg = err?.message || 'Failed to connect wallet';
+      toast.error(msg);
+    }
+  };
 
   return (
     <header className="h-auto py-3 sm:h-20 sm:py-0 bg-[#010410]/80 backdrop-blur-sm sticky top-0 z-10">
@@ -44,12 +125,45 @@ export default function Header({ setIsMobileMenuOpen }) {
 
         {/* Buttons container */}
         <div className="flex items-center w-full gap-2 sm:gap-4 sm:w-auto">
-         <button className="flex sm:block px-2.5 sm:px-6 py-1.5 sm:py-2.5 flex-1 sm:flex-none sm:w-[213px] 
+          {walletAddress ? (
+            <div className="flex-1 sm:flex-none sm:w-[213px]">
+              <div
+                className="flex items-center justify-center gap-2 px-2.5 sm:px-6 py-1.5 sm:py-2.5 
+                   bg-[#13131A] text-white text-[11px] sm:text-sm font-semibold 
+                   rounded-md sm:rounded-lg border sm:border-2 border-[#0A36F7]"
+                title={walletAddress}
+              >
+                <span className="whitespace-nowrap">{truncateAddress(walletAddress)}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setWalletAddress('');
+                    try {
+                      window.localStorage.removeItem('zyra_wallet_address');
+                    } catch {
+                      // ignore
+                    }
+                  }}
+                  className="p-1 rounded hover:bg-white/10 transition-colors"
+                  aria-label="Disconnect wallet"
+                  title="Disconnect"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={handleConnectWallet}
+              className="flex sm:block px-2.5 sm:px-6 py-1.5 sm:py-2.5 flex-1 sm:flex-none sm:w-[213px] 
                    bg-[#13131A] text-white text-[11px] sm:text-sm font-semibold 
                    rounded-md sm:rounded-lg border sm:border-2 border-[#0A36F7]
-                   items-center justify-center hover:bg-[#1a1a24] transition-colors">
-  <span className="whitespace-nowrap">Connect wallet</span>
-</button>
+                   items-center justify-center hover:bg-[#1a1a24] transition-colors"
+            >
+              <span className="whitespace-nowrap">Connect wallet</span>
+            </button>
+          )}
 
 {/* Create Campaign - Gradient with icon before text (NOW SECOND) */}
 <button

@@ -1,14 +1,47 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { navItems } from '../../constants/dashboardData';
 import Logo from '../../../../assets/logo.png';
 import supabase from '../../../../lib/supabaseClient';
+import api from '../../../../services/api';
 
 export default function Sidebar() {
-  const [activeItem, setActiveItem] = useState('Dashboard');
+  const location = useLocation();
   const navigate = useNavigate();
+  const [username, setUsername] = useState('User');
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadUser() {
+      try {
+        const { data } = await api.getUser();
+        const name = data?.user?.name || data?.user?.username || data?.user?.email;
+        if (!cancelled && name) setUsername(name);
+      } catch {
+        // ignore
+      }
+    }
+    loadUser();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleNav = (item) => {
+    if (item.label === 'Dashboard') navigate('/dashboard');
+    if (item.label === 'Profile') navigate('/dashboard/profile');
+    if (item.label === 'Campaigns') navigate('/dashboard/campaigns');
+  };
+
+  const activeItem = (() => {
+    const path = location?.pathname || '';
+    if (path.startsWith('/dashboard/campaigns')) return 'Campaigns';
+    if (path.startsWith('/dashboard/profile')) return 'Profile';
+    if (path.startsWith('/dashboard')) return 'Dashboard';
+    return 'Dashboard';
+  })();
 
   const handleLogout = async () => {
     try {
@@ -37,7 +70,7 @@ export default function Sidebar() {
             <span className="text-sm font-semibold text-white">U</span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold truncate">User</p>
+            <p className="text-sm font-semibold truncate">{username}</p>
             <p className="text-xs text-gray-400 truncate">My Account</p>
           </div>
         </div>
@@ -52,7 +85,7 @@ export default function Sidebar() {
           return (
             <button
               key={item.label}
-              onClick={() => setActiveItem(item.label)}
+              onClick={() => handleNav(item)}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors w-full ${
                 isActive 
                   ? 'bg-[#13131A] text-white' 

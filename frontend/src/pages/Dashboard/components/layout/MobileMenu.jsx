@@ -1,12 +1,32 @@
 import { X, LogOut } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { navItems } from '../../constants/dashboardData';
 import Logo from '../../../../assets/logo.png';
 import supabase from '../../../../lib/supabaseClient';
+import api from '../../../../services/api';
 
 export default function MobileMenu({ isOpen, onClose, activeItem, setActiveItem }) {
   const navigate = useNavigate();
+  const [username, setUsername] = useState('User');
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadUser() {
+      try {
+        const { data } = await api.getUser();
+        const name = data?.user?.name || data?.user?.username || data?.user?.email;
+        if (!cancelled && name) setUsername(name);
+      } catch {
+        // ignore
+      }
+    }
+    if (isOpen) loadUser();
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen]);
 
   const handleLogout = async () => {
     try {
@@ -21,9 +41,12 @@ export default function MobileMenu({ isOpen, onClose, activeItem, setActiveItem 
     }
   };
 
-  const handleNavClick = (label) => {
-    setActiveItem(label);
+  const handleNavClick = (item) => {
+    setActiveItem(item.label);
     onClose();
+    if (item.label === 'Dashboard') navigate('/dashboard');
+    if (item.label === 'Profile') navigate('/dashboard/profile');
+    if (item.label === 'Campaigns') navigate('/dashboard/campaigns');
   };
 
   return (
@@ -61,7 +84,7 @@ export default function MobileMenu({ isOpen, onClose, activeItem, setActiveItem 
               <span className="text-sm font-semibold text-white">U</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold truncate text-white">User</p>
+              <p className="text-sm font-semibold truncate text-white">{username}</p>
               <p className="text-xs text-gray-400 truncate">My Account</p>
             </div>
           </div>
@@ -76,7 +99,7 @@ export default function MobileMenu({ isOpen, onClose, activeItem, setActiveItem 
             return (
               <button
                 key={item.label}
-                onClick={() => handleNavClick(item.label)}
+                onClick={() => handleNavClick(item)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors w-full ${
                   isActive 
                     ? 'bg-[#13131A] text-white' 

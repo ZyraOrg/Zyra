@@ -102,6 +102,53 @@ async function getCampaign(id) {
   return { data };
 }
 
+async function deleteCampaign(id) {
+  const url = buildUrl(`/api/campaigns/${encodeURIComponent(id)}`);
+  const res = await fetch(url, {
+    method: "DELETE",
+    credentials: "include",
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error(data?.error || data?.message || "Request failed");
+    err.response = { data };
+    throw err;
+  }
+  return { data };
+}
+
+async function getProfile() {
+  const url = buildUrl(`/api/profile`);
+  const res = await fetch(url, {
+    method: "GET",
+    credentials: "include",
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error(data?.error || data?.message || "Request failed");
+    err.response = { data };
+    throw err;
+  }
+  return { data };
+}
+
+async function saveProfile(payload) {
+  const url = buildUrl(`/api/profile`);
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(payload ?? {}),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error(data?.error || data?.message || "Request failed");
+    err.response = { data };
+    throw err;
+  }
+  return { data };
+}
+
 export default {
   post,
   signupUser,
@@ -111,4 +158,7 @@ export default {
   uploadCampaignCover,
   getMyCampaigns,
   getCampaign,
+  deleteCampaign,
+  getProfile,
+  saveProfile,
 };

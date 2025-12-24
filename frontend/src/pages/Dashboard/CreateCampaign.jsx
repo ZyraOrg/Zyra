@@ -7,6 +7,7 @@ import api from '../../services/api';
 export default function CreateCampaign() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const termsScrollRef = useRef(null);
   const [campaignForm, setCampaignForm] = useState({
     name: "",
     objective: "",
@@ -16,6 +17,29 @@ export default function CreateCampaign() {
 
   const [coverFile, setCoverFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [termsCanAccept, setTermsCanAccept] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function ensureProfileComplete() {
+      try {
+        const { data } = await api.getProfile();
+        if (cancelled) return;
+        if (!data?.isComplete) {
+          toast.error('Please complete your profile before creating a campaign');
+          navigate('/dashboard/profile', { replace: true });
+        }
+      } catch {
+        // If profile fetch fails due to auth, dashboard guard will handle elsewhere.
+      }
+    }
+
+    ensureProfileComplete();
+    return () => {
+      cancelled = true;
+    };
+  }, [navigate]);
 
   const coverPreviewUrl = useMemo(() => {
     if (!coverFile) return "";
@@ -28,8 +52,7 @@ export default function CreateCampaign() {
     };
   }, [coverPreviewUrl]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const submitCampaign = async () => {
     if (isSubmitting) return;
 
     if (!coverFile) {
@@ -60,6 +83,34 @@ export default function CreateCampaign() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+
+    try {
+      const { data } = await api.getProfile();
+      if (!data?.isComplete) {
+        toast.error('Please complete your profile before creating a campaign');
+        navigate('/dashboard/profile');
+        return;
+      }
+    } catch {
+      // ignore
+    }
+
+    if (!coverFile) {
+      toast.error('Please upload a cover image');
+      return;
+    }
+
+    setTermsCanAccept(false);
+    setShowTerms(true);
+    requestAnimationFrame(() => {
+      const el = termsScrollRef.current;
+      if (el) el.scrollTop = 0;
+    });
   };
 
   return (
@@ -222,13 +273,95 @@ export default function CreateCampaign() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black font-semibold hover:opacity-90 transition-opacity"
+              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black font-semibold hover:opacity-90 transition-opacity disabled:opacity-60"
             >
-              {isSubmitting ? 'Creating…' : 'Create campaign'}
+              {isSubmitting ? (
+                <span className="inline-flex items-center justify-center">
+                  <span className="w-4 h-4 border-2 border-black/60 border-t-black rounded-full animate-spin" />
+                </span>
+              ) : (
+                'Create campaign'
+              )}
             </button>
           </div>
         </form>
       </div>
+
+      {showTerms ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div
+            className="absolute inset-0 bg-[#010410]/70 backdrop-blur-sm"
+            onClick={() => setShowTerms(false)}
+          />
+
+          <div className="relative w-full max-w-2xl bg-[#010410] rounded-xl border border-gray-800/30 overflow-hidden">
+            <div className="p-4 sm:p-6 border-b border-[#1E1E2D]">
+              <h3 className="text-base sm:text-lg font-semibold">Terms & legal consent</h3>
+              <p className="mt-1 text-xs sm:text-sm text-gray-400">
+                Scroll to the bottom to enable Accept.
+              </p>
+            </div>
+
+            <div
+              ref={termsScrollRef}
+              className="p-4 sm:p-6 max-h-[55vh] overflow-y-auto text-sm text-gray-200 space-y-4"
+              onScroll={(e) => {
+                const el = e.currentTarget;
+                const isAtBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 8;
+                if (isAtBottom) setTermsCanAccept(true);
+              }}
+            >
+              <p>
+                By creating a campaign on Zyra, you confirm that you understand and agree to the
+                following terms and consents.
+              </p>
+              <p>
+                You are responsible for the accuracy of your campaign information, the lawful use
+                of funds raised, and compliance with all applicable laws and platform rules.
+              </p>
+              <p>
+                You confirm that you have the right to raise funds for the stated purpose and that
+                your campaign does not infringe on the rights of any person or organization.
+              </p>
+              <p>
+                You consent to Zyra processing your campaign data and displaying your campaign
+                publicly, including your campaign name, objective, cover image, and fundraising goal.
+              </p>
+              <p>
+                You acknowledge that transactions may be irreversible and that Zyra may take action
+                (including pausing or removing campaigns) to protect users and platform integrity.
+              </p>
+              <p>
+                You confirm you have read all the text above. Scroll to the end to enable the Accept
+                button.
+              </p>
+              <div className="h-6" />
+            </div>
+
+            <div className="p-4 sm:p-6 border-t border-[#1E1E2D] flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setShowTerms(false)}
+                className="w-full sm:w-auto px-6 py-3 rounded-lg bg-[#13131A] text-white font-semibold border border-[#1a2b6b] hover:bg-[#1a1a24] transition-colors"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                disabled={!termsCanAccept || isSubmitting}
+                onClick={async () => {
+                  setShowTerms(false);
+                  await submitCampaign();
+                }}
+                className="w-full sm:w-auto px-6 py-3 rounded-lg bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black font-semibold hover:opacity-90 transition-opacity disabled:opacity-60"
+              >
+                Accept
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
