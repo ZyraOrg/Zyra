@@ -22,12 +22,13 @@ export default function DashboardHome() {
     fetchUser();
   }, []);
 
+  
   return (
     <>
       {/* Mobile Welcome Text - ONLY SHOWS ON MOBILE */}
       <div className="mb-4 lg:hidden">
         <h1 className="text-lg font-semibold">
-          Hi, <span className="bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] bg-clip-text text-transparent">Welcome {username}</span>
+          Hi, <span className="bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] bg-clip-text text-transparent">{username}</span>
         </h1>
       </div>
 
