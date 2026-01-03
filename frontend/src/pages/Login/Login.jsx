@@ -57,10 +57,11 @@ export const Login = () => {
     }
     try {
       setIsSubmitting(true);
+      const redirectTo = `${window.location.origin}/auth/callback`;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${SITE_URL}/auth/callback`,
+          redirectTo,
         },
       });
       if (error) throw error;
