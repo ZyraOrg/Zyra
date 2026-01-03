@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zyra</title>
+    <script>
+      // SPA fallback for static hosts (e.g. GitHub Pages).
+      // When a deep link like /auth/callback#access_token=... is requested,
+      // the host serves this 404.html. Preserve the full URL (including hash)
+      // and redirect to / so index.html can restore it before the app boots.
+      (function () {
+        try {
+          var fullUrl = window.location.pathname + window.location.search + window.location.hash;
+          sessionStorage.setItem("spa_redirect", fullUrl);
+        } catch (e) {
+          // ignore
+        }
+
+        // Always go to the app entry.
+        window.location.replace("/");
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

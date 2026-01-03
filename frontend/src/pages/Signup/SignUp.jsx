@@ -3,7 +3,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SignupBg from "../../assets/signup.png";
 import Logo from "../../assets/logo4.png";
-import { BsApple, BsGoogle, BsTwitterX } from "react-icons/bs";
+import { FcGoogle } from "react-icons/fc";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
@@ -84,10 +84,11 @@ export default function ZyraSignUp() {
     }
     try {
       setIsSubmitting(true);
+      const redirectTo = `${window.location.origin}/auth/callback`;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${SITE_URL}/auth/callback`,
+          redirectTo,
         },
       });
       if (error) throw error;
@@ -268,44 +269,38 @@ export default function ZyraSignUp() {
         </form>
 
         {/* Social Login */}
-        <div className="mt-6">
-          <div className="flex items-center gap-4 text-sm text-gray-500">
-            <div
-              className="flex-1 h-px bg-gray-700"
-              data-aos="fade-up" data-aos-delay="400"
-            ></div>
-            <span data-aos="fade-up" data-aos-delay="400">
-              or sign up with
-            </span>
-            <div
-              className="flex-1 h-px bg-gray-700"
-              data-aos="fade-up" data-aos-delay="400"
-            ></div>
-          </div>
+<div className="mt-6">
+  {/* Divider */}
+  <div className="flex items-center gap-4 text-sm text-gray-500">
+    <div
+      className="flex-1 h-px bg-gray-700"
+      data-aos="fade-up"
+      data-aos-delay="400"
+    ></div>
+    <span data-aos="fade-up" data-aos-delay="400">
+      or
+    </span>
+    <div
+      className="flex-1 h-px bg-gray-700"
+      data-aos="fade-up"
+      data-aos-delay="400"
+    ></div>
+  </div>
 
-          <div
-            className="flex items-center justify-center gap-2 mt-5"          
-          >
-            <button
-              type="button"
-              onClick={handleGoogleSignup}
-              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl disabled:opacity-60 cursor-pointer"
-              disabled={isSubmitting}
-            >
-              <BsGoogle className="w-5 h-5 text-black" />
-            </button>
-            <button
-              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl cursor-pointer"             
-            >
-              <BsTwitterX className="w-5 h-5 text-black" />
-            </button>
-            <button
-              className="flex items-center justify-center bg-white w-9 h-9 rounded-xl cursor-pointer"            
-            >
-              <BsApple className="w-5 h-5 text-black" />
-            </button>
-          </div>
-        </div>
+  {/* Google Button */}
+  <div className="flex items-center justify-center mt-5">
+    <button
+      type="button"
+      onClick={handleGoogleSignup}
+      className="flex items-center justify-center gap-2 bg-white text-black text-sm font-medium w-52 h-9 rounded-[20px] shadow-md hover:bg-gray-100 transition disabled:opacity-60"
+      disabled={isSubmitting}
+    >
+      <FcGoogle className="w-4 h-4" />
+      <span>Continue with Google</span>
+    </button>
+  </div>
+</div>
+
 
         <div className="mt-6 text-center text-gray-400">
           Already have an account?{" "}

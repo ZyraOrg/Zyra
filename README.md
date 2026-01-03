@@ -7,9 +7,9 @@ Starting from Africa and scaling globally, Zyra enables secure, verifiable suppo
 
 🌍 Website: www.zyra.fund
 
-🐦 Twitter (X): @ZyraApp
+🐦 Twitter (X): https://x.com/ZyraApp
 
-💬 Telegram: t.me/ZyraApp
+💬 Telegram: https://t.me/ZyraApp
 
 
 ✨ Overview

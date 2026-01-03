@@ -153,7 +153,7 @@ const FooterSection = () => {
           data-aos-delay="1000"
           data-aos-offset="20"
         >
-          2025 Zyra. All rights reserved. Built on Base
+          2025 Zyra. All rights reserved.
         </p>
       </div>
     </main>

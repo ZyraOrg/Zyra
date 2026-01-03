@@ -6,6 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zyra</title>
     <script>
+      // GitHub Pages (and other static hosts) serve 404.html for deep links.
+      // If we were redirected here from 404.html, restore the original URL
+      // before the app boots so React Router can match the route.
+      (function () {
+        try {
+          var redirect = sessionStorage.getItem("spa_redirect");
+          if (redirect) {
+            sessionStorage.removeItem("spa_redirect");
+            window.history.replaceState(null, "", redirect);
+          }
+        } catch (e) {
+          // ignore
+        }
+      })();
+    </script>
+    <script>
       // If Supabase redirects back to the site root with an auth hash
       // (e.g. https://site/#access_token=...), forward it to /auth/callback
       // while preserving the hash so the SDK can process it.
@@ -23,8 +39,8 @@
         }
       })();
     </script>
-    <script type="module" crossorigin src="/assets/index-BftrWtjQ.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-UCMTnyJc.css">
+    <script type="module" crossorigin src="/assets/index-C3vGceXa.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BtX_nyhy.css">
   </head>
   <body>
     <div id="root"></div>
