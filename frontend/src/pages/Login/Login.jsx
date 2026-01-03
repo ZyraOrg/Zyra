@@ -219,7 +219,7 @@ export const Login = () => {
                 data-aos="fade-up"
                 data-aos-delay="300"
               ></div>
-              <span data-aos="fade-u" data-aos-delay="300">
+              <span data-aos="fade-up" data-aos-delay="300">
                 or
               </span>
               <div

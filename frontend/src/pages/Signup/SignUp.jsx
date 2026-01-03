@@ -40,42 +40,43 @@ export default function ZyraSignUp() {
   const validate = () => {
     const newErrors = {};
     if (!formData.email.trim()) newErrors.email = "Please enter your email";
-    if (!formData.password.trim()) newErrors.password = "Please create a password";
+    if (!formData.password.trim())
+      newErrors.password = "Please create a password";
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
     return newErrors;
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  const validationErrors = validate();
-  if (Object.keys(validationErrors).length > 0) {
-    setErrors(validationErrors);
-    toast.error("Please fill in all required fields correctly");
-    return;
-  }
+    e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      toast.error("Please fill in all required fields correctly");
+      return;
+    }
 
-  setIsSubmitting(true);
-  try {
-    const res = await api.post("/api/signup", {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-    });
+    setIsSubmitting(true);
+    try {
+      const res = await api.post("/api/signup", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
 
-    toast.success(res.data.message || "Signup successful");
-    navigate("/login");
-  } catch (error) {
-    const err =
-      error.response?.data?.error ||
-      error.response?.data?.message ||
-      "Signup failed";
-    toast.error(err);
-    setErrors((prev) => ({ ...prev, server: err }));
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+      toast.success(res.data.message || "Signup successful");
+      navigate("/login");
+    } catch (error) {
+      const err =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Signup failed";
+      toast.error(err);
+      setErrors((prev) => ({ ...prev, server: err }));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleGoogleSignup = async () => {
     if (!isSupabaseConfigured || !supabase) {
@@ -237,16 +238,10 @@ export default function ZyraSignUp() {
               />
               <button
                 type="button"
-                onClick={() =>
-                  setShowConfirmPassword(!showConfirmPassword)
-                }
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-0 text-gray-400 -translate-y-1/2 top-1/2 hover:text-white"
               >
-                {showConfirmPassword ? (
-                  <Eye size={20} />
-                ) : (
-                  <EyeOff size={20} />
-                )}
+                {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
               </button>
             </div>
             {errors.confirmPassword && (
@@ -260,47 +255,46 @@ export default function ZyraSignUp() {
             type="submit"
             disabled={isSubmitting}
             className={`w-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] 
-             hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4 ${isSubmitting ? 'opacity-60 cursor-not-allowed' : ''}`}
-            data-aos="fade-up"
-            data-aos-duration="1000"
+             hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4 ${
+               isSubmitting ? "opacity-60 cursor-not-allowed" : ""
+             }`}
           >
-            {isSubmitting ? 'Signing up...' : 'Sign up'}
+            {isSubmitting ? "Signing up..." : "Sign up"}
           </button>
         </form>
 
         {/* Social Login */}
-<div className="mt-6">
-  {/* Divider */}
-  <div className="flex items-center gap-4 text-sm text-gray-500">
-    <div
-      className="flex-1 h-px bg-gray-700"
-      data-aos="fade-up"
-      data-aos-delay="400"
-    ></div>
-    <span data-aos="fade-up" data-aos-delay="400">
-      or
-    </span>
-    <div
-      className="flex-1 h-px bg-gray-700"
-      data-aos="fade-up"
-      data-aos-delay="400"
-    ></div>
-  </div>
+        <div className="mt-6">
+          {/* Divider */}
+          <div className="flex items-center gap-4 text-sm text-gray-500">
+            <div
+              className="flex-1 h-px bg-gray-700"
+              data-aos="fade-up"
+              data-aos-delay="400"
+            ></div>
+            <span data-aos="fade-up" data-aos-delay="400">
+              or
+            </span>
+            <div
+              className="flex-1 h-px bg-gray-700"
+              data-aos="fade-up"
+              data-aos-delay="400"
+            ></div>
+          </div>
 
-  {/* Google Button */}
-  <div className="flex items-center justify-center mt-5">
-    <button
-      type="button"
-      onClick={handleGoogleSignup}
-      className="flex items-center justify-center gap-2 bg-white text-black text-sm font-medium w-52 h-9 rounded-[20px] shadow-md hover:bg-gray-100 transition disabled:opacity-60"
-      disabled={isSubmitting}
-    >
-      <FcGoogle className="w-4 h-4" />
-      <span>Continue with Google</span>
-    </button>
-  </div>
-</div>
-
+          {/* Google Button */}
+          <div className="flex items-center justify-center mt-5">
+            <button
+              type="button"
+              onClick={handleGoogleSignup}
+              className="flex items-center justify-center gap-2 bg-white text-black text-sm font-medium w-52 h-9 rounded-[20px] shadow-md hover:bg-gray-100 transition disabled:opacity-60"
+              disabled={isSubmitting}
+            >
+              <FcGoogle className="w-4 h-4" />
+              <span>Continue with Google</span>
+            </button>
+          </div>
+        </div>
 
         <div className="mt-6 text-center text-gray-400">
           Already have an account?{" "}
