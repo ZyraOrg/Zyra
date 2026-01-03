@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import supabase, { isSupabaseConfigured } from "../lib/supabaseClient";
@@ -6,7 +6,6 @@ import api from "../services/api";
 
 export default function AuthCallback() {
   const navigate = useNavigate();
-  const [status, setStatus] = useState("Finishing sign-in...");
 
   useEffect(() => {
     let canceled = false;
@@ -26,7 +25,6 @@ export default function AuthCallback() {
         const session = data?.session;
         if (session?.user) {
           if (!canceled) {
-            setStatus("Establishing session...");
             try {
               await api.exchangeSupabaseSession({
                 accessToken: session.access_token,
@@ -44,7 +42,6 @@ export default function AuthCallback() {
           const { data: listener } = supabase.auth.onAuthStateChange((_event, sess) => {
             if (sess?.user && !canceled) {
               (async () => {
-                setStatus("Establishing session...");
                 try {
                   await api.exchangeSupabaseSession({
                     accessToken: sess.access_token,
@@ -70,8 +67,6 @@ export default function AuthCallback() {
         console.error("OAuth callback error:", err);
         toast.error(err?.message || "Authentication failed");
         navigate("/login", { replace: true });
-      } finally {
-        if (!canceled) setStatus("");
       }
     }
 
@@ -83,10 +78,11 @@ export default function AuthCallback() {
 
   return (
     <div className="min-h-[60vh] grid place-items-center text-white">
-      <div className="text-center">
-        <div className="animate-pulse mb-3">🔐</div>
-        <p className="text-lg">{status || "You are being redirected..."}</p>
-      </div>
+      <div
+        className="h-10 w-10 rounded-full border-4 border-white/20 border-t-white animate-spin"
+        aria-label="Signing you in"
+        role="status"
+      />
     </div>
   );
 }
