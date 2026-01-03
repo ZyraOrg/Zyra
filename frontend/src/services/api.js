@@ -15,7 +15,7 @@ async function post(path, body) {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     const err = new Error(data?.error || data?.message || "Request failed");
-    err.response = { data };
+    err.response = { status: res.status, data };
     throw err;
   }
   return { data };
@@ -38,15 +38,22 @@ async function getUser() {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     const err = new Error(data?.error || data?.message || "Request failed");
-    err.response = { data };
+    err.response = { status: res.status, data };
     throw err;
   }
   if (data?.authenticated === false) {
     const err = new Error("Unauthorized");
-    err.response = { data };
+    err.response = { status: 401, data };
     throw err;
   }
   return { data };
+}
+
+async function exchangeSupabaseSession({ accessToken, expiresIn } = {}) {
+  return post("/api/oauth/exchange", {
+    access_token: accessToken,
+    expires_in: expiresIn,
+  });
 }
 
 async function createCampaign(payload) {
@@ -66,7 +73,7 @@ async function uploadCampaignCover(campaignId, file) {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     const err = new Error(data?.error || data?.message || "Request failed");
-    err.response = { data };
+    err.response = { status: res.status, data };
     throw err;
   }
   return { data };
@@ -81,7 +88,7 @@ async function getMyCampaigns({ limit = 4, offset = 0 } = {}) {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     const err = new Error(data?.error || data?.message || "Request failed");
-    err.response = { data };
+    err.response = { status: res.status, data };
     throw err;
   }
   return { data };
@@ -96,7 +103,7 @@ async function getCampaign(id) {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     const err = new Error(data?.error || data?.message || "Request failed");
-    err.response = { data };
+    err.response = { status: res.status, data };
     throw err;
   }
   return { data };
@@ -111,7 +118,7 @@ async function deleteCampaign(id) {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     const err = new Error(data?.error || data?.message || "Request failed");
-    err.response = { data };
+    err.response = { status: res.status, data };
     throw err;
   }
   return { data };
@@ -126,7 +133,7 @@ async function getProfile() {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     const err = new Error(data?.error || data?.message || "Request failed");
-    err.response = { data };
+    err.response = { status: res.status, data };
     throw err;
   }
   return { data };
@@ -143,7 +150,7 @@ async function saveProfile(payload) {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     const err = new Error(data?.error || data?.message || "Request failed");
-    err.response = { data };
+    err.response = { status: res.status, data };
     throw err;
   }
   return { data };
@@ -153,6 +160,7 @@ export default {
   post,
   signupUser,
   loginUser,
+  exchangeSupabaseSession,
   getUser,
   createCampaign,
   uploadCampaignCover,

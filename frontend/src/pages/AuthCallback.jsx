@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import supabase, { isSupabaseConfigured } from "../lib/supabaseClient";
+import api from "../services/api";
 
 export default function AuthCallback() {
   const navigate = useNavigate();
@@ -25,6 +26,16 @@ export default function AuthCallback() {
         const session = data?.session;
         if (session?.user) {
           if (!canceled) {
+            setStatus("Establishing session...");
+            try {
+              await api.exchangeSupabaseSession({
+                accessToken: session.access_token,
+                expiresIn: session.expires_in,
+              });
+            } catch (e) {
+              console.error("Session exchange failed:", e);
+              // If exchange fails, the dashboard will redirect to login anyway.
+            }
             toast.success("Signed in with Google");
             navigate("/dashboard", { replace: true });
           }
@@ -32,8 +43,19 @@ export default function AuthCallback() {
           // Wait briefly for potential auth state change
           const { data: listener } = supabase.auth.onAuthStateChange((_event, sess) => {
             if (sess?.user && !canceled) {
-              toast.success("Signed in with Google");
-              navigate("/dashboard", { replace: true });
+              (async () => {
+                setStatus("Establishing session...");
+                try {
+                  await api.exchangeSupabaseSession({
+                    accessToken: sess.access_token,
+                    expiresIn: sess.expires_in,
+                  });
+                } catch (e) {
+                  console.error("Session exchange failed:", e);
+                }
+                toast.success("Signed in with Google");
+                navigate("/dashboard", { replace: true });
+              })();
             }
           });
           setTimeout(() => {
