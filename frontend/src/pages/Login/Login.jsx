@@ -204,9 +204,6 @@ export const Login = () => {
                          hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4 ${
                            isSubmitting ? "opacity-60 cursor-not-allowed" : ""
                          }`}
-              data-aos="fade-up"
-              data-aos-duration="1000"
-              data-aos-delay="0"
             >
               {isSubmitting ? "Logging in..." : "Login"}
             </button>
