@@ -4,6 +4,33 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import MegaphoneIcon from '../../../../assets/Megaphone2.svg?react';
 import api from '../../../../services/api';
+import EthereumProvider from '@walletconnect/ethereum-provider';
+
+let wcProviderPromise;
+
+function getWalletConnectProjectId() {
+  return (
+    (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_WALLETCONNECT_PROJECT_ID) ||
+    ''
+  );
+}
+
+function getWalletConnectProvider({ showQrModal }) {
+  if (!wcProviderPromise) {
+    const projectId = getWalletConnectProjectId();
+    if (!projectId) {
+      return Promise.resolve(null);
+    }
+
+    wcProviderPromise = EthereumProvider.init({
+      projectId,
+      chains: [1],
+      optionalChains: [1],
+      showQrModal: Boolean(showQrModal),
+    });
+  }
+  return wcProviderPromise;
+}
 
 function truncateAddress(address) {
   const str = String(address || '');
@@ -16,6 +43,7 @@ export default function Header({ setIsMobileMenuOpen }) {
   const navigate = useNavigate();
   const [username, setUsername] = useState('User');
   const [walletAddress, setWalletAddress] = useState('');
+  const [walletProvider, setWalletProvider] = useState('');
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -58,6 +86,7 @@ export default function Header({ setIsMobileMenuOpen }) {
     const handleAccountsChanged = (accounts) => {
       const next = Array.isArray(accounts) && accounts[0] ? accounts[0] : '';
       setWalletAddress(next);
+      setWalletProvider(next ? 'injected' : '');
       try {
         if (next) window.localStorage.setItem('zyra_wallet_address', next);
         else window.localStorage.removeItem('zyra_wallet_address');
@@ -76,26 +105,94 @@ export default function Header({ setIsMobileMenuOpen }) {
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    // Best-effort WalletConnect auto-reconnect (if a WC session exists)
+    (async () => {
+      try {
+        const provider = await getWalletConnectProvider({ showQrModal: false });
+        if (cancelled || !provider) return;
+
+        if (provider.connected) {
+          const accounts = provider.accounts;
+          const addr = Array.isArray(accounts) && accounts[0] ? accounts[0] : '';
+          if (addr) {
+            setWalletAddress(addr);
+            setWalletProvider('walletconnect');
+          }
+        }
+
+        provider.on('accountsChanged', (accounts) => {
+          const addr = Array.isArray(accounts) && accounts[0] ? accounts[0] : '';
+          setWalletAddress(addr);
+          setWalletProvider(addr ? 'walletconnect' : '');
+        });
+
+        provider.on('disconnect', () => {
+          setWalletAddress('');
+          setWalletProvider('');
+        });
+      } catch {
+        // ignore
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const handleConnectWallet = async () => {
     const eth = typeof window !== 'undefined' ? window.ethereum : undefined;
-    if (!eth?.request) {
-      toast.error('No EVM wallet found. Please install MetaMask.');
+
+    // Prefer injected provider when present
+    if (eth?.request) {
+      try {
+        const accounts = await eth.request({ method: 'eth_requestAccounts' });
+        const addr = Array.isArray(accounts) && accounts[0] ? accounts[0] : '';
+        if (!addr) {
+          toast.error('No wallet address returned');
+          return;
+        }
+        setWalletAddress(addr);
+        setWalletProvider('injected');
+        try {
+          window.localStorage.setItem('zyra_wallet_address', addr);
+        } catch {
+          // ignore
+        }
+        toast.success('Wallet connected');
+      } catch (err) {
+        const msg = err?.message || 'Failed to connect wallet';
+        toast.error(msg);
+      }
+      return;
+    }
+
+    // Fallback to WalletConnect
+    const projectId = getWalletConnectProjectId();
+    if (!projectId) {
+      toast.error('WalletConnect is not configured');
       return;
     }
 
     try {
-      const accounts = await eth.request({ method: 'eth_requestAccounts' });
+      const provider = await getWalletConnectProvider({ showQrModal: true });
+      if (!provider) {
+        toast.error('WalletConnect is not available');
+        return;
+      }
+
+      const accounts = await provider.enable();
       const addr = Array.isArray(accounts) && accounts[0] ? accounts[0] : '';
       if (!addr) {
         toast.error('No wallet address returned');
         return;
       }
+
       setWalletAddress(addr);
-      try {
-        window.localStorage.setItem('zyra_wallet_address', addr);
-      } catch {
-        // ignore
-      }
+      setWalletProvider('walletconnect');
       toast.success('Wallet connected');
     } catch (err) {
       const msg = err?.message || 'Failed to connect wallet';
@@ -137,12 +234,24 @@ export default function Header({ setIsMobileMenuOpen }) {
                 <button
                   type="button"
                   onClick={() => {
-                    setWalletAddress('');
-                    try {
-                      window.localStorage.removeItem('zyra_wallet_address');
-                    } catch {
-                      // ignore
-                    }
+                    (async () => {
+                      try {
+                        if (walletProvider === 'walletconnect') {
+                          const provider = await getWalletConnectProvider({ showQrModal: false });
+                          await provider?.disconnect?.();
+                        }
+                      } catch {
+                        // ignore
+                      } finally {
+                        setWalletAddress('');
+                        setWalletProvider('');
+                        try {
+                          window.localStorage.removeItem('zyra_wallet_address');
+                        } catch {
+                          // ignore
+                        }
+                      }
+                    })();
                   }}
                   className="p-1 rounded hover:bg-white/10 transition-colors"
                   aria-label="Disconnect wallet"

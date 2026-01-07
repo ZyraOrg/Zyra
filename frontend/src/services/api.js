@@ -1,14 +1,35 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://zyraapi.vercel.app";
 
+// Optional: If the browser blocks cross-site cookies, fall back to Bearer auth
+// using the Supabase client session (works well for Google OAuth).
+import supabase, { isSupabaseConfigured } from "../lib/supabaseClient";
+
 function buildUrl(path) {
   return `${BASE_URL || ""}${path}`;
 }
 
+async function maybeAddSupabaseAuthHeaders(headers) {
+  try {
+    if (!isSupabaseConfigured || !supabase) return headers;
+    const { data } = await supabase.auth.getSession();
+    const accessToken = data?.session?.access_token;
+    if (!accessToken) return headers;
+
+    // Don't overwrite an explicit Authorization header.
+    if (headers && Object.prototype.hasOwnProperty.call(headers, "Authorization")) return headers;
+
+    return { ...(headers || {}), Authorization: `Bearer ${accessToken}` };
+  } catch {
+    return headers;
+  }
+}
+
 async function post(path, body) {
   const url = buildUrl(path);
+  const headers = await maybeAddSupabaseAuthHeaders({ "Content-Type": "application/json" });
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     credentials: "include",
     body: JSON.stringify(body ?? {}),
   });
@@ -31,8 +52,10 @@ async function loginUser(formData) {
 
 async function getUser() {
   const url = buildUrl("/api/user");
+  const headers = await maybeAddSupabaseAuthHeaders(undefined);
   const res = await fetch(url, {
     method: "GET",
+    headers,
     credentials: "include",
   });
   const data = await res.json().catch(() => ({}));
@@ -65,9 +88,12 @@ async function uploadCampaignCover(campaignId, file) {
   const formData = new FormData();
   formData.append("cover", file);
 
+  const headers = await maybeAddSupabaseAuthHeaders(undefined);
+
   const res = await fetch(url, {
     method: "POST",
     credentials: "include",
+    headers,
     body: formData,
   });
   const data = await res.json().catch(() => ({}));
@@ -81,8 +107,10 @@ async function uploadCampaignCover(campaignId, file) {
 
 async function getMyCampaigns({ limit = 4, offset = 0 } = {}) {
   const url = buildUrl(`/api/campaigns/mine?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}`);
+  const headers = await maybeAddSupabaseAuthHeaders(undefined);
   const res = await fetch(url, {
     method: "GET",
+    headers,
     credentials: "include",
   });
   const data = await res.json().catch(() => ({}));
@@ -96,8 +124,10 @@ async function getMyCampaigns({ limit = 4, offset = 0 } = {}) {
 
 async function getCampaign(id) {
   const url = buildUrl(`/api/campaigns/${encodeURIComponent(id)}`);
+  const headers = await maybeAddSupabaseAuthHeaders(undefined);
   const res = await fetch(url, {
     method: "GET",
+    headers,
     credentials: "include",
   });
   const data = await res.json().catch(() => ({}));
@@ -111,8 +141,10 @@ async function getCampaign(id) {
 
 async function deleteCampaign(id) {
   const url = buildUrl(`/api/campaigns/${encodeURIComponent(id)}`);
+  const headers = await maybeAddSupabaseAuthHeaders(undefined);
   const res = await fetch(url, {
     method: "DELETE",
+    headers,
     credentials: "include",
   });
   const data = await res.json().catch(() => ({}));
@@ -126,8 +158,10 @@ async function deleteCampaign(id) {
 
 async function getProfile() {
   const url = buildUrl(`/api/profile`);
+  const headers = await maybeAddSupabaseAuthHeaders(undefined);
   const res = await fetch(url, {
     method: "GET",
+    headers,
     credentials: "include",
   });
   const data = await res.json().catch(() => ({}));
@@ -141,9 +175,10 @@ async function getProfile() {
 
 async function saveProfile(payload) {
   const url = buildUrl(`/api/profile`);
+  const headers = await maybeAddSupabaseAuthHeaders({ "Content-Type": "application/json" });
   const res = await fetch(url, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers,
     credentials: "include",
     body: JSON.stringify(payload ?? {}),
   });
