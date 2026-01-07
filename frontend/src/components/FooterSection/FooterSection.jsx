@@ -86,23 +86,29 @@ const FooterSection = () => {
             <h1 className="text-lg font-semibold">Legal</h1>
             <div className="flex flex-col gap-2 font-semibold text-gray-400 text-md">
               <a
-                href="/"
+                href="/Terms.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-gray-300"
                 data-aos="slide-left"
                 data-aos-delay="800"
               >
-                Terms
+                Terms of Service
               </a>
               <a
-                href="/"
+                href="/privacy.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-gray-300"
                 data-aos="slide-left"
                 data-aos-delay="900"
               >
-                Privacy
+                Privacy Policy
               </a>
               <a
-                href="/"
+                href="/security.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-gray-300"
                 data-aos="slide-left"
                 data-aos-delay="1000"
