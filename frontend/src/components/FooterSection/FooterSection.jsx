@@ -18,6 +18,8 @@ const FooterSection = () => {
     });
   }, []);
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <main className="pb-5 md:space-y-9 pt-15 md:pt-20">
       <div className="w-full h-1 border border-primary"></div>
@@ -159,7 +161,7 @@ const FooterSection = () => {
           data-aos-delay="1000"
           data-aos-offset="20"
         >
-          2025 Zyra. All rights reserved.
+          <span>{currentYear}</span> Zyra. All rights reserved.
         </p>
       </div>
     </main>
