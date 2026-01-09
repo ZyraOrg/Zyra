@@ -25,7 +25,7 @@ export default function StatsCards() {
               >
                 <Icon className="w-3 h-3 text-white" />
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 ">
                 <h3 className="text-sm font-bold leading-tight truncate mb-[1px]">
                   {stat.value}
                 </h3>
