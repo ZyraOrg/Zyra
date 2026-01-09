@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, X, FileText, Video, Image as ImageIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../../services/api';
 
@@ -15,10 +15,20 @@ export default function CreateCampaign() {
     endDate: "",
   });
 
-  const [coverFile, setCoverFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [termsCanAccept, setTermsCanAccept] = useState(false);
+
+  const ACCEPTED_FILE_TYPES = {
+    'image/*': ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'],
+    'video/*': ['.mp4', '.webm', '.ogg', '.mov'],
+    'application/pdf': ['.pdf'],
+    'application/msword': ['.doc'],
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+    'application/vnd.ms-excel': ['.xls'],
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -41,22 +51,83 @@ export default function CreateCampaign() {
     };
   }, [navigate]);
 
-  const coverPreviewUrl = useMemo(() => {
-    if (!coverFile) return "";
-    return URL.createObjectURL(coverFile);
-  }, [coverFile]);
-
   useEffect(() => {
     return () => {
-      if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
+      files.forEach((file) => {
+        if (file.previewUrl) {
+          URL.revokeObjectURL(file.previewUrl);
+        }
+      });
     };
-  }, [coverPreviewUrl]);
+  }, [files]);
+
+  const getFileType = (file) => {
+    if (file.type.startsWith('image/')) return 'image';
+    if (file.type.startsWith('video/')) return 'video';
+    if (file.type === 'application/pdf') return 'pdf';
+    return 'document';
+  };
+
+  const getFileIcon = (type) => {
+    switch (type) {
+      case 'image':
+        return <ImageIcon className="w-8 h-8" />;
+      case 'video':
+        return <Video className="w-8 h-8" />;
+      case 'pdf':
+      case 'document':
+        return <FileText className="w-8 h-8" />;
+      default:
+        return <FileText className="w-8 h-8" />;
+    }
+  };
+
+  const handleFileSelect = (e) => {
+    const selectedFiles = Array.from(e.target.files || []);
+    
+    if (files.length + selectedFiles.length > 10) {
+      toast.error('Maximum 10 files allowed');
+      return;
+    }
+
+    const newFiles = selectedFiles.map((file) => {
+      const type = getFileType(file);
+      let previewUrl = null;
+
+      if (type === 'image') {
+        previewUrl = URL.createObjectURL(file);
+      }
+
+      return {
+        file,
+        type,
+        previewUrl,
+        id: Math.random().toString(36).substr(2, 9),
+      };
+    });
+
+    setFiles((prev) => [...prev, ...newFiles]);
+    
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const removeFile = (id) => {
+    setFiles((prev) => {
+      const fileToRemove = prev.find((f) => f.id === id);
+      if (fileToRemove?.previewUrl) {
+        URL.revokeObjectURL(fileToRemove.previewUrl);
+      }
+      return prev.filter((f) => f.id !== id);
+    });
+  };
 
   const submitCampaign = async () => {
     if (isSubmitting) return;
 
-    if (!coverFile) {
-      toast.error('Please upload a cover image');
+    if (files.length < 3) {
+      toast.error('Please upload at least 3 documents/files');
       return;
     }
 
@@ -72,9 +143,11 @@ export default function CreateCampaign() {
       const campaignId = created?.campaign?.id;
       if (!campaignId) throw new Error('Campaign was created but no id was returned');
 
-      await api.uploadCampaignCover(campaignId, coverFile);
+      // Upload all files at once using the new API function
+      const filesToUpload = files.map(fileObj => fileObj.file);
+      await api.uploadCampaignDocuments(campaignId, filesToUpload);
 
-      toast.success('Campaign created');
+      toast.success('Campaign created successfully!');
       navigate('/dashboard');
     } catch (error) {
       console.error('Create campaign error:', error);
@@ -100,8 +173,8 @@ export default function CreateCampaign() {
       // ignore
     }
 
-    if (!coverFile) {
-      toast.error('Please upload a cover image');
+    if (files.length < 3) {
+      toast.error('Please upload at least 3 documents/files');
       return;
     }
 
@@ -135,59 +208,86 @@ export default function CreateCampaign() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Cover image */}
+          {/* Documents Upload */}
           <div className="bg-[#13131A] rounded-xl p-6 sm:p-8 border border-[#1a2b6b]">
             <label className="block text-sm font-semibold text-gray-200 mb-3">
-              Cover image
+              Upload documents (minimum 3 required)
             </label>
+            <p className="text-xs text-gray-400 mb-4">
+              Supported: Images, Videos, PDFs, Documents. Max 10 files.
+            </p>
 
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="w-full rounded-xl border border-[#1a2b6b] bg-[#010410] overflow-hidden focus:outline-none"
+              className="w-full rounded-xl border-2 border-dashed border-[#1a2b6b] bg-[#010410] py-8 hover:border-[#0A36F7] transition-colors focus:outline-none"
             >
-              <div className="relative h-40 sm:h-48">
-                {coverPreviewUrl ? (
-                  <img
-                    src={coverPreviewUrl}
-                    alt="Cover preview"
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="absolute inset-0 grid place-items-center text-gray-400">
-                    <span className="text-base sm:text-lg">Upload cover image</span>
-                  </div>
-                )}
-
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+              <div className="flex flex-col items-center gap-2 text-gray-400">
+                <FileText className="w-10 h-10" />
+                <span className="text-base font-medium">Click to upload files</span>
+                <span className="text-xs">
+                  {files.length}/10 files uploaded (min. 3 required)
+                </span>
               </div>
             </button>
 
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              multiple
+              accept={Object.keys(ACCEPTED_FILE_TYPES).join(',')}
               className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0] || null;
-                setCoverFile(file);
-              }}
+              onChange={handleFileSelect}
             />
 
-            {coverFile && (
-              <div className="mt-3 flex items-center justify-between gap-3">
-                <p className="text-sm text-gray-400 truncate">{coverFile.name}</p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCoverFile(null);
-                    if (fileInputRef.current) fileInputRef.current.value = '';
-                  }}
-                  className="text-sm font-semibold text-gray-300 hover:text-white transition-colors"
-                >
-                  Remove
-                </button>
+            {/* File List */}
+            {files.length > 0 && (
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {files.map((fileObj) => (
+                  <div
+                    key={fileObj.id}
+                    className="relative group bg-[#010410] rounded-lg border border-[#1a2b6b] overflow-hidden"
+                  >
+                    {fileObj.type === 'image' && fileObj.previewUrl ? (
+                      <div className="relative h-32">
+                        <img
+                          src={fileObj.previewUrl}
+                          alt={fileObj.file.name}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      </div>
+                    ) : (
+                      <div className="h-32 flex items-center justify-center text-gray-400">
+                        {getFileIcon(fileObj.type)}
+                      </div>
+                    )}
+
+                    <div className="p-3">
+                      <p className="text-sm text-gray-200 truncate">
+                        {fileObj.file.name}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {(fileObj.file.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => removeFile(fileObj.id)}
+                      className="absolute top-2 right-2 p-1.5 rounded-full bg-red-500/90 hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
               </div>
+            )}
+
+            {files.length < 3 && (
+              <p className="mt-4 text-sm text-yellow-500">
+                ⚠️ Please upload at least {3 - files.length} more file{3 - files.length !== 1 ? 's' : ''}
+              </p>
             )}
           </div>
 
@@ -325,7 +425,7 @@ export default function CreateCampaign() {
               </p>
               <p>
                 You consent to Zyra processing your campaign data and displaying your campaign
-                publicly, including your campaign name, objective, cover image, and fundraising goal.
+                publicly, including your campaign name, objective, files, and fundraising goal.
               </p>
               <p>
                 You acknowledge that transactions may be irreversible and that Zyra may take action
