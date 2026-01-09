@@ -105,6 +105,33 @@ async function uploadCampaignCover(campaignId, file) {
   return { data };
 }
 
+// NEW FUNCTION: Upload multiple campaign documents
+async function uploadCampaignDocuments(campaignId, files) {
+  const url = buildUrl(`/api/campaigns/${campaignId}/documents`);
+  const formData = new FormData();
+  
+  // Append all files to FormData
+  files.forEach((file, index) => {
+    formData.append('documents', file);
+  });
+
+  const headers = await maybeAddSupabaseAuthHeaders(undefined);
+
+  const res = await fetch(url, {
+    method: "POST",
+    credentials: "include",
+    headers,
+    body: formData,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error(data?.error || data?.message || "Request failed");
+    err.response = { status: res.status, data };
+    throw err;
+  }
+  return { data };
+}
+
 async function getMyCampaigns({ limit = 4, offset = 0 } = {}) {
   const url = buildUrl(`/api/campaigns/mine?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}`);
   const headers = await maybeAddSupabaseAuthHeaders(undefined);
@@ -199,6 +226,7 @@ export default {
   getUser,
   createCampaign,
   uploadCampaignCover,
+  uploadCampaignDocuments, // NEW
   getMyCampaigns,
   getCampaign,
   deleteCampaign,

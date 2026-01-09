@@ -18,9 +18,6 @@ export default function Profile() {
 		foundation_name: '',
 		country: '',
 		receiving_wallet_address: '',
-		tiktok_url: '',
-		instagram_url: '',
-		youtube_url: '',
 	});
 
 	useEffect(() => {
@@ -36,9 +33,6 @@ export default function Profile() {
 						foundation_name: profile.foundation_name || '',
 						country: profile.country || '',
 						receiving_wallet_address: profile.receiving_wallet_address || '',
-						tiktok_url: profile.tiktok_url || '',
-						instagram_url: profile.instagram_url || '',
-						youtube_url: profile.youtube_url || '',
 					});
 				}
 			} catch (err) {
@@ -67,9 +61,6 @@ export default function Profile() {
 				foundation_name: form.foundation_name,
 				country: form.country,
 				receiving_wallet_address: form.receiving_wallet_address,
-				tiktok_url: form.tiktok_url,
-				instagram_url: form.instagram_url,
-				youtube_url: form.youtube_url,
 			});
 			toast.success('Profile saved');
 		} catch (err) {
@@ -151,48 +142,6 @@ export default function Profile() {
 										required
 										type="text"
 										placeholder="0x..."
-										className="w-full rounded-lg border border-[#1a2b6b] bg-[#010410] px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#0A36F7] transition-colors"
-									/>
-								</div>
-
-								<div>
-									<label className="block text-sm font-semibold text-gray-200 mb-2">
-										TikTok link
-									</label>
-									<input
-										value={form.tiktok_url}
-										onChange={(e) => setForm((p) => ({ ...p, tiktok_url: e.target.value }))}
-										required
-										type="url"
-										placeholder="https://tiktok.com/@..."
-										className="w-full rounded-lg border border-[#1a2b6b] bg-[#010410] px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#0A36F7] transition-colors"
-									/>
-								</div>
-
-								<div>
-									<label className="block text-sm font-semibold text-gray-200 mb-2">
-										Instagram link
-									</label>
-									<input
-										value={form.instagram_url}
-										onChange={(e) => setForm((p) => ({ ...p, instagram_url: e.target.value }))}
-										required
-										type="url"
-										placeholder="https://instagram.com/..."
-										className="w-full rounded-lg border border-[#1a2b6b] bg-[#010410] px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#0A36F7] transition-colors"
-									/>
-								</div>
-
-								<div>
-									<label className="block text-sm font-semibold text-gray-200 mb-2">
-										YouTube link
-									</label>
-									<input
-										value={form.youtube_url}
-										onChange={(e) => setForm((p) => ({ ...p, youtube_url: e.target.value }))}
-										required
-										type="url"
-										placeholder="https://youtube.com/..."
 										className="w-full rounded-lg border border-[#1a2b6b] bg-[#010410] px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#0A36F7] transition-colors"
 									/>
 								</div>
