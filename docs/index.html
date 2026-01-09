@@ -1,14 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark" style="background: #010415">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zyra</title>
+
+    <style>
+      html,
+      body {
+        background-color: #010415;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+
     <script>
-      // GitHub Pages (and other static hosts) serve 404.html for deep links.
-      // If we were redirected here from 404.html, restore the original URL
-      // before the app boots so React Router can match the route.
       (function () {
         try {
           var redirect = sessionStorage.getItem("spa_redirect");
@@ -16,33 +23,32 @@
             sessionStorage.removeItem("spa_redirect");
             window.history.replaceState(null, "", redirect);
           }
-        } catch (e) {
-          // ignore
-        }
+        } catch (e) {}
       })();
     </script>
+
     <script>
-      // If Supabase redirects back to the site root with an auth hash
-      // (e.g. https://site/#access_token=...), forward it to /auth/callback
-      // while preserving the hash so the SDK can process it.
       (function () {
         try {
           var hash = window.location.hash || "";
-          if (hash.indexOf("access_token=") !== -1 || hash.indexOf("refresh_token=") !== -1) {
+          if (
+            hash.indexOf("access_token=") !== -1 ||
+            hash.indexOf("refresh_token=") !== -1
+          ) {
             var path = window.location.pathname || "/";
             if (!/\/auth\/callback\/?$/.test(path)) {
               window.location.replace("/auth/callback" + hash);
             }
           }
-        } catch (e) {
-          // ignore
-        }
+        } catch (e) {}
       })();
     </script>
-    <script type="module" crossorigin src="/assets/index-8GQeq9Tb.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-B59EvcXk.css">
+    <script type="module" crossorigin src="/assets/index-BPMsORjg.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BiH6AZ9z.css">
   </head>
+
   <body>
-    <div id="root"></div>
+    <div id="root"></div>
+
   </body>
 </html>
