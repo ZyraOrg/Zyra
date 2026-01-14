@@ -100,7 +100,7 @@ export default function WalletPayments() {
   return (
     <div>
       <h1 className="text-lg md:text-2xl font-bold mb-6 p-4 md:p-6 bg-[#010410] rounded-sm">
-        Wallet & <span className="text-secondary">payments</span>
+        Wallet & <span className="text-secondary"></span>
       </h1>
 
       <div className="space-y-1 text-sm md:text-base">
