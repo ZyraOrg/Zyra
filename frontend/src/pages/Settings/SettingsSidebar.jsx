@@ -1,59 +1,40 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import {  useLocation, useNavigate } from "react-router-dom";
+import { ArrowLeft, LogOut } from "lucide-react";
 import toast from "react-hot-toast";
-import { navItems } from "../../constants/dashboardData";
-import Logo from "../../../../assets/logo.png";
-import supabase from "../../../../lib/supabaseClient";
-import api from "../../../../services/api";
+import { settingsnavItems } from "../Dashboard/constants/dashboardData";
+import Logo from "../../assets/logo.png";
+import supabase from "../../lib/supabaseClient";
+import useAuthStore from "../../store/useAuthStore";
 
-export default function Sidebar() {
+export default function SettingsSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [username, setUsername] = useState("User");
+  const { user } = useAuthStore();
 
-  useEffect(() => {
-    let cancelled = false;
-    async function loadUser() {
-      try {
-        const { data } = await api.getUser();
-        const name =
-          data?.user?.name || data?.user?.username || data?.user?.email;
-        if (!cancelled && name) setUsername(name);
-      } catch {
-        // ignore
-      }
-    }
-    loadUser();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const username = user?.name || user?.username || user?.email || "User";
 
   const handleNav = (item) => {
-    if (item.label === "Dashboard") navigate("/dashboard");
-    if (item.label === "Profile") navigate("/dashboard/profile");
-    if (item.label === "Campaigns") navigate("/dashboard/campaigns");
-    if (item.label === "Settings") navigate("/settings");
+    if (item.href) {
+      navigate(item.href);
+    }
   };
 
   const activeItem = (() => {
     const path = location?.pathname || "";
-    if (path.startsWith("/dashboard/campaigns")) return "Campaigns";
-    if (path.startsWith("/dashboard/profile")) return "Profile";
-    if (path.startsWith("/dashboard")) return "Dashboard";
-    return "Dashboard";
+    if (path === "/settings/wallet") return "Wallet & Payments";
+    if (path === "/settings/notification") return "Notification";
+    if (path === "/settings/privacy") return "Privacy & Security";
+    if (path === "/settings/support") return "Support & Legal";
+    if (path === "/settings") return "Account Info";
+    return "";
   })();
-
-  const handleSettings = () => {
-    navigate("/settings");
-  };
 
   const handleLogout = async () => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
 
+      useAuthStore.getState().logout();
       toast.success("Logged out successfully");
       navigate("/login", { replace: true });
     } catch (err) {
@@ -69,23 +50,29 @@ export default function Sidebar() {
         <img src={Logo} alt="ZYRA Logo" className="w-auto h-40 -ml-8" />
       </div>
 
-      {/* User Profile */}
-      <div className="px-4 py-6">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500">
-            <span className="text-sm font-semibold text-white">U</span>
-          </div>
+      <div className="px-4 py-2">
+        <div className="flex items-center gap-3 bg-background p-4 rounded-sm">
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="flex items-center justify-center flex-shrink-0 w-7 h-7 rounded-full border-2 text-white/80 border-white/80 hover:border-secondary hover:text-secondary transition-colors duration-100"
+          >
+            <ArrowLeft />
+          </button>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold truncate">{username}</p>
+            <p className="text-md font-semibold truncate">Settings</p>
             <p className="text-xs text-gray-400 truncate">My Account</p>
           </div>
         </div>
       </div>
 
-      {/* Navigation */}
+      {/* Main Navigation */}
       <nav className="flex-1 px-4 py-6 space-y-2">
-        {navItems
-          .filter((item) => item.label !== "Settings")
+        {settingsnavItems
+          .filter(
+            (item) =>
+              item.label !== "Privacy & Security" &&
+              item.label !== "Support & Legal"
+          )
           .map((item) => {
             const Icon = item.icon;
             const isActive = activeItem === item.label;
@@ -107,10 +94,14 @@ export default function Sidebar() {
           })}
       </nav>
 
-      {/* Settings & Logout */}
-      <div className="px-4 pb-4 space-y-2">
-        {navItems
-          .filter((item) => item.label === "Settings")
+      {/* Privacy & Support */}
+      <div className="px-4 space-y-2">
+        {settingsnavItems
+          .filter(
+            (item) =>
+              item.label === "Privacy & Security" ||
+              item.label === "Support & Legal"
+          )
           .map((item) => {
             const Icon = item.icon;
             const isActive = activeItem === item.label;
@@ -118,7 +109,7 @@ export default function Sidebar() {
             return (
               <button
                 key={item.label}
-                onClick={handleSettings}
+                onClick={() => handleNav(item)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors w-full ${
                   isActive
                     ? "bg-[#13131A] text-white"
@@ -130,7 +121,10 @@ export default function Sidebar() {
               </button>
             );
           })}
+      </div>
 
+      {/* Logout */}
+      <div className="mt-5 px-4 py-4">
         <button
           onClick={handleLogout}
           className="flex items-center w-full gap-3 px-4 py-3 text-gray-400 transition-colors rounded-lg hover:bg-[#13131A]"
