@@ -1,4 +1,4 @@
-import { X, LogOut } from "lucide-react";
+import { X, LogOut, ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
