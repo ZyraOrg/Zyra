@@ -18,6 +18,12 @@ import FAQSection from "./components/FAQSection/FAQSection";
 import FooterSection from "./components/FooterSection/FooterSection";
 import HowItWorksSection from "./components/HowItWorksSection/HowItWorksSection";
 import WhyChooseZyraSection from "./components/WhyChooseZyraSection/WhyChooseZyraSection";
+import SettingsLayout from "./pages/Settings/SettingsLayout";
+import AccountInfo from "./pages/Settings/pages/AccountInfo";
+import WalletPayments from "./pages/Settings/pages/WalletPayments";
+import Notifications from "./pages/Settings/pages/Notifications";
+import Privacy from "./pages/Settings/pages/Privacy";
+import Support from "./pages/Settings/pages/Support";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,10 +53,23 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/create-campaign" element={<CreateCampaign />} />
+          <Route
+            path="/dashboard/create-campaign"
+            element={<CreateCampaign />}
+          />
           <Route path="/dashboard/campaigns" element={<Campaigns />} />
-          <Route path="/dashboard/campaigns/:id" element={<CampaignDetails />} />
+          <Route
+            path="/dashboard/campaigns/:id"
+            element={<CampaignDetails />}
+          />
           <Route path="/dashboard/profile" element={<Profile />} />
+          <Route path="/settings" element={<SettingsLayout />}>
+            <Route index element={<AccountInfo />} />
+            <Route path="wallet" element={<WalletPayments />} />
+            <Route path="notification" element={<Notifications />} />
+            <Route path="privacy" element={<Privacy />} />
+            <Route path="support" element={<Support />} />
+          </Route>
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route
             path="/"
