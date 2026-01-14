@@ -85,7 +85,7 @@ export default function Privacy() {
         Privacy & <span className="text-secondary">security</span>
       </h1>
 
-      <div className="space-y-1 text-sm md:text-md">
+      <div className="space-y-1 text-sm md:text-base">
         {/* Password Section */}
         <div className="flex items-center justify-between p-4 md:p-6 bg-[#010410] rounded-sm">
           <div>

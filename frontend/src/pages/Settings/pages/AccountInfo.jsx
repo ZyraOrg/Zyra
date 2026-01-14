@@ -108,7 +108,7 @@ export default function AccountInfo() {
         Account <span className="text-secondary">Info</span>
       </h1>
 
-      <div className="space-y-1 text-sm md:text-md">
+      <div className="space-y-1 text-sm md:text-base">
         {/* Full Name */}
         <div className="flex items-center justify-between p-4 md:p-6 bg-[#010410] rounded-sm">
           <span className="text-white font-semibold">Full name</span>

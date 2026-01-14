@@ -103,7 +103,7 @@ export default function WalletPayments() {
         Wallet & <span className="text-secondary">payments</span>
       </h1>
 
-      <div className="space-y-1 text-sm md:text-md">
+      <div className="space-y-1 text-sm md:text-base">
         {/* Connected Wallet */}
         <div className="flex items-center justify-between p-4 md:p-6 bg-[#010410] rounded-sm">
           <span className="text-white font-semibold">Connected Wallet</span>
