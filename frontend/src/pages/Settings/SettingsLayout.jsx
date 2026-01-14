@@ -29,7 +29,7 @@ export default function SettingsLayout() {
   if (isCheckingAuth) {
     return (
       <div className="min-h-screen bg-[#010415]">
-        <LoadingSpinner message="Verifying authentication..." />
+        <LoadingSpinner message="Loading..." />
       </div>
     );
   }
