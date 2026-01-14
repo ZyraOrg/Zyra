@@ -100,7 +100,7 @@ export default function MobileMenu({
         </div>
 
         {/* Navigation - All items including Settings */}
-        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+        <nav className="flex-1 overflow-y-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeItem === item.label;
