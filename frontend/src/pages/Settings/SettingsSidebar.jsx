@@ -50,20 +50,7 @@ export default function SettingsSidebar() {
         <img src={Logo} alt="ZYRA Logo" className="w-auto h-40 -ml-8" />
       </div>
 
-      <div className="px-4 py-2">
-        <div className="flex items-center gap-3 bg-background p-4 rounded-sm">
-          <button
-            onClick={() => navigate("/dashboard")}
-            className="flex items-center justify-center flex-shrink-0 w-7 h-7 rounded-full border-2 text-white/80 border-white/80 hover:border-secondary hover:text-secondary transition-colors duration-100"
-          >
-            <ArrowLeft />
-          </button>
-          <div className="flex-1 min-w-0">
-            <p className="text-md font-semibold truncate">Settings</p>
-            <p className="text-xs text-gray-400 truncate">My Account</p>
-          </div>
-        </div>
-      </div>
+    
 
       {/* Main Navigation */}
       <nav className="flex-1 px-4 py-6 space-y-2">

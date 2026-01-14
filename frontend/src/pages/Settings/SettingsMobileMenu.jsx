@@ -1,27 +1,28 @@
-import { X, LogOut } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
-import { settingsnavItems } from '../Dashboard/constants/dashboardData';
-import Logo from '../../assets/logo.png';
-import supabase from '../../lib/supabaseClient';
-import useAuthStore from '../../store/useAuthStore';
+import { X, LogOut } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { settingsnavItems } from "../Dashboard/constants/dashboardData";
+import Logo from "../../assets/logo.png";
+import supabase from "../../lib/supabaseClient";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function SettingsMobileMenu({ isOpen, onClose }) {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const [activeItem, setActiveItem] = useState('');
+  const [activeItem, setActiveItem] = useState("");
 
-  const username = user?.name || user?.username || user?.email || 'User';
+  const username = user?.name || user?.username || user?.email || "User";
 
   useEffect(() => {
     if (isOpen) {
       const path = window.location.pathname;
-      if (path === '/settings/wallet') setActiveItem('Wallet & Payments');
-      else if (path === '/settings/notification') setActiveItem('Notification');
-      else if (path === '/settings/privacy') setActiveItem('Privacy & Security');
-      else if (path === '/settings/support') setActiveItem('Support & Legal');
-      else if (path === '/settings') setActiveItem('Account Info');
+      if (path === "/settings/wallet") setActiveItem("Wallet & Payments");
+      else if (path === "/settings/notification") setActiveItem("Notification");
+      else if (path === "/settings/privacy")
+        setActiveItem("Privacy & Security");
+      else if (path === "/settings/support") setActiveItem("Support & Legal");
+      else if (path === "/settings") setActiveItem("Account Info");
     }
   }, [isOpen]);
 
@@ -31,11 +32,11 @@ export default function SettingsMobileMenu({ isOpen, onClose }) {
       if (error) throw error;
 
       useAuthStore.getState().logout();
-      toast.success('Logged out successfully');
-      navigate('/login', { replace: true });
+      toast.success("Logged out successfully");
+      navigate("/login", { replace: true });
     } catch (err) {
-      console.error('Logout error:', err);
-      toast.error(err?.message || 'Failed to log out');
+      console.error("Logout error:", err);
+      toast.error(err?.message || "Failed to log out");
     }
   };
 
@@ -61,7 +62,7 @@ export default function SettingsMobileMenu({ isOpen, onClose }) {
       <aside
         className={`fixed top-0 left-0 h-full w-72 bg-[#010410] z-50
                     flex flex-col transform transition-transform duration-300 ease-in-out
-                    ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                    ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         {/* Menu Header with Logo & Close Button */}
         <div className="flex items-center justify-between h-20 px-4 border-b border-gray-800">
@@ -75,14 +76,16 @@ export default function SettingsMobileMenu({ isOpen, onClose }) {
           </button>
         </div>
 
-        {/* User Profile */}
-        <div className="px-4 py-6 border-b border-gray-800">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500">
-              <span className="text-sm font-semibold text-white">U</span>
-            </div>
+        <div className="px-4 py-2">
+          <div className="flex items-center gap-3 bg-background p-4 rounded-sm">
+            <button
+              onClick={() => navigate("/dashboard")}
+              className="flex items-center justify-center flex-shrink-0 w-7 h-7 rounded-full border-2 text-white/80 border-white/80 hover:border-secondary hover:text-secondary transition-colors duration-100"
+            >
+              <ArrowLeft />
+            </button>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold truncate text-white">{username}</p>
+              <p className="text-md font-semibold truncate">Settings</p>
               <p className="text-xs text-gray-400 truncate">My Account</p>
             </div>
           </div>
@@ -100,8 +103,8 @@ export default function SettingsMobileMenu({ isOpen, onClose }) {
                 onClick={() => handleNavClick(item)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors w-full ${
                   isActive
-                    ? 'bg-[#13131A] text-white'
-                    : 'text-gray-400 hover:bg-[#13131A] hover:text-white'
+                    ? "bg-[#13131A] text-white"
+                    : "text-gray-400 hover:bg-[#13131A] hover:text-white"
                 }`}
               >
                 <Icon className="flex-shrink-0 w-5 h-5" />
