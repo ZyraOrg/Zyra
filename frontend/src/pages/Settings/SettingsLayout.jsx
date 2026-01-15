@@ -35,7 +35,7 @@ export default function SettingsLayout() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#010415] text-white">
+    <div className="flex h-screen bg-[#010415] text-white">
       {/* Desktop Sidebar - Always visible on lg+ */}
       <Sidebar />
 

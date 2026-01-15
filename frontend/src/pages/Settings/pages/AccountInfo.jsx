@@ -176,7 +176,7 @@ export default function AccountInfo() {
             <button
               onClick={handleSave}
               disabled={loading}
-              className="px-15 py-[1px] bg-gradient-to-r from-primary to-secondary text-black rounded-sm shadow-md shadow-primary hover:opacity-90 transition-opacity font-semibold text-sm"
+              className="px-15 py-[1px] bg-gradient-to-r from-primary to-secondary text-black rounded-sm shadow-md shadow-primary hover:opacity-90 transition-opacity font-semibold border-2 border-white hover:border-secondary text-sm"
             >
               {loading ? "Saving..." : "Save Changes"}
             </button>
@@ -184,7 +184,7 @@ export default function AccountInfo() {
         ) : (
           <button
             onClick={handleEdit}
-            className="px-15 py-[1px] bg-gradient-to-r from-primary to-secondary text-black rounded-sm shadow-md shadow-primary hover:opacity-90 transition-opacity font-semibold text-sm"
+            className="px-15 py-[1px] bg-gradient-to-r from-primary to-secondary text-black rounded-sm shadow-md shadow-primary hover:opacity-90 transition-opacity font-semibold text-sm border-2 border-white hover:border-secondary"
           >
             Edit Info
           </button>

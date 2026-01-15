@@ -80,7 +80,7 @@ export default function SettingsSidebar() {
       </nav>
 
       {/* Privacy & Support */}
-      <div className="px-4 space-y-2">
+      <div className="flex-1 px-4 space-y-2">
         {settingsnavItems
           .filter(
             (item) =>
@@ -112,7 +112,7 @@ export default function SettingsSidebar() {
       <div className="mt-5 px-4 py-4">
         <button
           onClick={handleLogout}
-          className="flex items-center w-full gap-3 px-4 py-3 text-gray-400 transition-colors rounded-lg hover:bg-[#13131A]"
+          className="flex items-center w-full gap-3 px-4 py-3 text-red-400 transition-colors rounded-lg hover:bg-[#13131A]"
         >
           <LogOut className="flex-shrink-0 w-5 h-5" />
           <span className="text-sm font-medium">Log out</span>

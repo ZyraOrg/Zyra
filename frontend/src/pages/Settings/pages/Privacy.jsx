@@ -129,7 +129,7 @@ export default function Privacy() {
         <button
           onClick={handleSaveChanges}
           disabled={loading}
-          className="px-15 py-[1px] bg-gradient-to-r from-primary to-secondary text-black rounded-sm shadow-md shadow-primary hover:opacity-90 transition-opacity font-semibold text-sm disabled:opacity-50"
+          className="px-15 py-[1px] bg-gradient-to-r from-primary to-secondary text-black rounded-sm shadow-md shadow-primary hover:opacity-90 transition-opacity font-semibold text-sm border-2 border-white hover:border-secondary disabled:opacity-50"
         >
           {loading ? "Saving..." : "Save changes"}
         </button>
@@ -213,7 +213,7 @@ export default function Privacy() {
               <button
                 onClick={handlePasswordChange}
                 disabled={loading}
-                className="flex-1 text-sm md:text-md px-4 py-2 bg-gradient-to-r from-primary to-secondary text-black rounded-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="flex-1 text-sm md:text-md px-4 py-2 bg-gradient-to-r from-primary to-secondary text-black rounded-sm font-semibold hover:opacity-90 transition-opacity border-2 border-white hover:border-secondary disabled:opacity-50"
               >
                 {loading ? "Changing..." : "Change Password"}
               </button>

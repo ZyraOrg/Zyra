@@ -126,7 +126,7 @@ export default function WalletPayments() {
         <button
           onClick={handleConnectWallet}
           disabled={loading || isConnected}
-          className="px-15 py-[1px] bg-gradient-to-r from-primary to-secondary text-black rounded-sm shadow-md shadow-primary hover:opacity-90 transition-opacity font-semibold text-sm disabled:opacity-50"
+          className="px-15 py-[1px] bg-gradient-to-r from-primary to-secondary text-black rounded-sm shadow-md shadow-primary hover:opacity-90 transition-opacity font-semibold text-sm border-2 border-white hover:border-secondary disabled:opacity-50"
         >
           {loading ? "Connecting..." : "Connect new wallet"}
         </button>
