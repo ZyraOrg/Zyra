@@ -1,4 +1,4 @@
-import {  useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, LogOut } from "lucide-react";
 import toast from "react-hot-toast";
 import { settingsnavItems } from "../Dashboard/constants/dashboardData";
@@ -22,7 +22,7 @@ export default function SettingsSidebar() {
   const activeItem = (() => {
     const path = location?.pathname || "";
     if (path === "/settings/wallet") return "Wallet & Payments";
-    if (path === "/settings/notification") return "Notification";
+
     if (path === "/settings/privacy") return "Privacy & Security";
     if (path === "/settings/support") return "Support & Legal";
     if (path === "/settings") return "Account Info";
@@ -49,8 +49,6 @@ export default function SettingsSidebar() {
       <div className="flex items-center h-20 px-4">
         <img src={Logo} alt="ZYRA Logo" className="w-auto h-40 -ml-8" />
       </div>
-
-    
 
       {/* Main Navigation */}
       <nav className="flex-1 px-4 py-6 space-y-2">

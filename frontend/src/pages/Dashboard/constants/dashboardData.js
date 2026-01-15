@@ -12,7 +12,6 @@ import MegaphoneIcon from "../../../assets/megaphone.svg?react";
 import Trans1 from "../../../assets/tran1.png";
 import Trans2 from "../../../assets/tran2.png";
 import Trans3 from "../../../assets/tran3.png";
-import { IoNotificationsOutline } from "react-icons/io5";
 import { MdOutlinePrivacyTip } from "react-icons/md";
 import { HiOutlineSupport } from "react-icons/hi";
 import { LiaInfoSolid } from "react-icons/lia";
@@ -27,11 +26,7 @@ export const navItems = [
 export const settingsnavItems = [
   { icon: LiaInfoSolid, label: "Account Info", href: "/settings" },
   { icon: Wallet, label: "Wallet & Payments", href: "/settings/wallet" },
-  {
-    icon: IoNotificationsOutline,
-    label: "Notification",
-    href: "#",
-  },
+
   {
     icon: MdOutlinePrivacyTip,
     label: "Privacy & Security",

@@ -18,7 +18,6 @@ export default function SettingsMobileMenu({ isOpen, onClose }) {
     if (isOpen) {
       const path = window.location.pathname;
       if (path === "/settings/wallet") setActiveItem("Wallet & Payments");
-      else if (path === "/settings/notification") setActiveItem("Notification");
       else if (path === "/settings/privacy")
         setActiveItem("Privacy & Security");
       else if (path === "/settings/support") setActiveItem("Support & Legal");

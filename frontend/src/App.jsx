@@ -21,7 +21,6 @@ import WhyChooseZyraSection from "./components/WhyChooseZyraSection/WhyChooseZyr
 import SettingsLayout from "./pages/Settings/SettingsLayout";
 import AccountInfo from "./pages/Settings/pages/AccountInfo";
 import WalletPayments from "./pages/Settings/pages/WalletPayments";
-import Notifications from "./pages/Settings/pages/Notifications";
 import Privacy from "./pages/Settings/pages/Privacy";
 import Support from "./pages/Settings/pages/Support";
 
@@ -66,7 +65,7 @@ function App() {
           <Route path="/settings" element={<SettingsLayout />}>
             <Route index element={<AccountInfo />} />
             <Route path="wallet" element={<WalletPayments />} />
-            <Route path="notification" element={<Notifications />} />
+
             <Route path="privacy" element={<Privacy />} />
             <Route path="support" element={<Support />} />
           </Route>
