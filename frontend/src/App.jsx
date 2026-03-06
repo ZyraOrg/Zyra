@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 
@@ -23,6 +23,7 @@ import AccountInfo from "./pages/Settings/pages/AccountInfo";
 import WalletPayments from "./pages/Settings/pages/WalletPayments";
 import Privacy from "./pages/Settings/pages/Privacy";
 import Support from "./pages/Settings/pages/Support";
+import { useUser } from "./hooks/useUser";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,6 +33,44 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+// Must be inside BrowserRouter so useLocation works
+function RouterContent() {
+  useUser();
+
+  return (
+    <Routes>
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dashboard/create-campaign" element={<CreateCampaign />} />
+      <Route path="/dashboard/campaigns" element={<Campaigns />} />
+      <Route path="/dashboard/campaigns/:id" element={<CampaignDetails />} />
+      <Route path="/dashboard/profile" element={<Profile />} />
+      <Route path="/settings" element={<SettingsLayout />}>
+        <Route index element={<AccountInfo />} />
+        <Route path="wallet" element={<WalletPayments />} />
+        <Route path="privacy" element={<Privacy />} />
+        <Route path="support" element={<Support />} />
+      </Route>
+      <Route path="/auth/callback" element={<AuthCallback />} />
+      <Route
+        path="/"
+        element={
+          <>
+            <Navbar />
+            <HeroSection />
+            <WhyChooseZyraSection />
+            <ExploreSection />
+            <HowItWorksSection />
+            <FAQSection />
+            <FooterSection />
+          </>
+        }
+      />
+    </Routes>
+  );
+}
 
 function App() {
   return (
@@ -48,43 +87,7 @@ function App() {
         }}
       />
       <BrowserRouter>
-        <Routes>
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route
-            path="/dashboard/create-campaign"
-            element={<CreateCampaign />}
-          />
-          <Route path="/dashboard/campaigns" element={<Campaigns />} />
-          <Route
-            path="/dashboard/campaigns/:id"
-            element={<CampaignDetails />}
-          />
-          <Route path="/dashboard/profile" element={<Profile />} />
-          <Route path="/settings" element={<SettingsLayout />}>
-            <Route index element={<AccountInfo />} />
-            <Route path="wallet" element={<WalletPayments />} />
-
-            <Route path="privacy" element={<Privacy />} />
-            <Route path="support" element={<Support />} />
-          </Route>
-          <Route path="/auth/callback" element={<AuthCallback />} />
-          <Route
-            path="/"
-            element={
-              <>
-                <Navbar />
-                <HeroSection />
-                <WhyChooseZyraSection />
-                <ExploreSection />
-                <HowItWorksSection />
-                <FAQSection />
-                <FooterSection />
-              </>
-            }
-          />
-        </Routes>
+        <RouterContent />
       </BrowserRouter>
     </QueryClientProvider>
   );
