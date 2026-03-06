@@ -4,7 +4,6 @@ import { LogOut } from "lucide-react";
 import toast from "react-hot-toast";
 import { navItems } from "../../constants/dashboardData";
 import Logo from "../../../../assets/logo.png";
-import supabase from "../../../../lib/supabaseClient";
 import api from "../../../../services/api";
 
 export default function Sidebar() {
@@ -51,14 +50,11 @@ export default function Sidebar() {
 
   const handleLogout = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-
+      await api.logout();
       toast.success("Logged out successfully");
-      navigate("/login", { replace: true });
-    } catch (err) {
-      console.error("Logout error:", err);
-      toast.error(err?.message || "Failed to log out");
+      navigate("/", { replace: true });
+    } catch {
+      toast.error("Failed to log out");
     }
   };
 

@@ -3,13 +3,11 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SignupBg from "../../assets/signup.png";
 import Logo from "../../assets/logo4.png";
-import { FcGoogle } from "react-icons/fc";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
-import supabase, { isSupabaseConfigured } from "../../lib/supabaseClient";
 import api from "../../services/api";
-import { SITE_URL } from "../../config";
+import GoogleLoginButton from "../../components/GoogleLoginButton";
 
 export default function ZyraSignUp() {
   const navigate = useNavigate();
@@ -31,17 +29,13 @@ export default function ZyraSignUp() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const validate = () => {
     const newErrors = {};
     if (!formData.email.trim()) newErrors.email = "Please enter your email";
-    if (!formData.password.trim())
-      newErrors.password = "Please create a password";
+    if (!formData.password.trim()) newErrors.password = "Please create a password";
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
     return newErrors;
@@ -58,19 +52,11 @@ export default function ZyraSignUp() {
 
     setIsSubmitting(true);
     try {
-      const res = await api.post("/api/signup", {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      });
-
-      toast.success(res.data.message || "Signup successful");
+      const res = await api.signup(formData.name, formData.email, formData.password, formData.confirmPassword);
+      toast.success(res.data.message || "Account created successfully");
       navigate("/login");
     } catch (error) {
-      const err =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        "Signup failed";
+      const err = error.response?.data?.error || "Signup failed";
       toast.error(err);
       setErrors((prev) => ({ ...prev, server: err }));
     } finally {
@@ -78,97 +64,41 @@ export default function ZyraSignUp() {
     }
   };
 
-  const handleGoogleSignup = async () => {
-    if (!isSupabaseConfigured || !supabase) {
-      toast.error("Google sign up not configured");
-      return;
-    }
-    try {
-      setIsSubmitting(true);
-      const redirectTo = `${window.location.origin}/auth/callback`;
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo,
-        },
-      });
-      if (error) throw error;
-      // Redirect happens automatically
-    } catch (err) {
-      console.error("Google OAuth error:", err);
-      toast.error(err?.message || "Google sign up failed");
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <div className="h-[100dvh] bg-background flex justify-center overflow-hidden">
-      {/* Left Side - Image */}
       <div
         className="hidden md:flex relative w-full md:w-1/2 h-[100dvh] items-center justify-center"
         data-aos="fade-right"
       >
-        <img
-          src={SignupBg}
-          alt="Signup Background"
-          className="object-cover w-full h-full"
-        />
+        <img src={SignupBg} alt="Signup Background" className="object-cover w-full h-full" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/40" />
-
         <div className="absolute inset-0 z-40 flex-col justify-between hidden px-12 py-12 text-white md:flex">
           <div className="-mt-8" data-aos="fade-down" data-aos-duration="1000">
             <img src={Logo} alt="ZYRA" />
           </div>
           <div className="flex flex-col justify-center">
-            <h1
-              className="mb-6 text-5xl font-bold leading-13"
-              data-aos="fade-down"
-              data-aos-duration="1000"
-            >
+            <h1 className="mb-6 text-5xl font-bold leading-13" data-aos="fade-down" data-aos-duration="1000">
               Create Your <span className="text-secondary">Zyra</span> Account
             </h1>
-            <p
-              className="max-w-md text-lg font-medium leading-snug"
-              data-aos="fade-up"
-              data-aos-duration="900"
-            >
-              Sign up to create campaigns, donate securely, and track every
-              transaction on-chain.
+            <p className="max-w-md text-lg font-medium leading-snug" data-aos="fade-up" data-aos-duration="900">
+              Sign up to create campaigns, donate securely, and track every transaction on-chain.
             </p>
           </div>
           <div></div>
         </div>
       </div>
 
-      {/* Right Side - Form */}
       <div className="relative flex flex-col justify-center w-full max-w-md p-8 bg-background rounded-2xl md:max-w-full md:w-1/2">
-        {/* Mobile */}
         <div className="mb-8 text-center md:hidden">
-          <h1
-            className="mb-4 text-3xl font-bold text-white"
-            data-aos="fade-down"
-            data-aos-duration="1000"
-            data-aos-delay="0"
-          >
+          <h1 className="mb-4 text-3xl font-bold text-white" data-aos="fade-down" data-aos-duration="1000">
             Create Your <span className="text-secondary">Zyra</span> Account
           </h1>
-          <p
-            className="text-sm text-gray-400"
-            data-aos="fade-down"
-            data-aos-duration="800"
-            data-aos-delay="0"
-          >
-            Sign up to create campaigns, donate securely, and track every
-            transaction on-chain.
+          <p className="text-sm text-gray-400" data-aos="fade-down" data-aos-duration="800">
+            Sign up to create campaigns, donate securely, and track every transaction on-chain.
           </p>
         </div>
 
-        <h2
-          className="hidden mb-8 text-2xl font-semibold text-white md:block"
-          data-aos="fade-down"
-          data-aos-duration="1500"
-          data-aos-delay="0"
-        >
+        <h2 className="hidden mb-8 text-2xl font-semibold text-white md:block" data-aos="fade-down" data-aos-duration="1500">
           Sign up now
         </h2>
 
@@ -196,9 +126,7 @@ export default function ZyraSignUp() {
               onChange={handleChange}
               className="w-full py-3 text-white placeholder-gray-500 transition border-b border-gray-600 bg-background focus:outline-none focus:border-secondary"
             />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-400">{errors.email}</p>
-            )}
+            {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email}</p>}
           </div>
           <div>
             <div className="relative">
@@ -212,17 +140,11 @@ export default function ZyraSignUp() {
                 onChange={handleChange}
                 className="w-full py-3 pr-10 text-white placeholder-gray-500 transition border-b border-gray-600 bg-background focus:outline-none focus:border-secondary"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-0 text-gray-400 -translate-y-1/2 top-1/2 hover:text-white"
-              >
+              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-0 text-gray-400 -translate-y-1/2 top-1/2 hover:text-white">
                 {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
               </button>
             </div>
-            {errors.password && (
-              <p className="mt-1 text-sm text-red-400">{errors.password}</p>
-            )}
+            {errors.password && <p className="mt-1 text-sm text-red-400">{errors.password}</p>}
           </div>
           <div>
             <div className="relative">
@@ -236,72 +158,36 @@ export default function ZyraSignUp() {
                 onChange={handleChange}
                 className="w-full py-3 pr-10 text-white placeholder-gray-500 transition bg-transparent border-b border-gray-600 focus:outline-none focus:border-secondary"
               />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-0 text-gray-400 -translate-y-1/2 top-1/2 hover:text-white"
-              >
+              <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-0 text-gray-400 -translate-y-1/2 top-1/2 hover:text-white">
                 {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
               </button>
             </div>
-            {errors.confirmPassword && (
-              <p className="mt-1 text-sm text-red-400">
-                {errors.confirmPassword}
-              </p>
-            )}
+            {errors.confirmPassword && <p className="mt-1 text-sm text-red-400">{errors.confirmPassword}</p>}
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] 
-             hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4 ${
-               isSubmitting ? "opacity-60 cursor-not-allowed" : ""
-             }`}
+            className={`w-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4 ${isSubmitting ? "opacity-60 cursor-not-allowed" : ""}`}
           >
             {isSubmitting ? "Signing up..." : "Sign up"}
           </button>
         </form>
 
-        {/* Social Login */}
         <div className="mt-6">
-          {/* Divider */}
           <div className="flex items-center gap-4 text-sm text-gray-500">
-            <div
-              className="flex-1 h-px bg-gray-700"
-              data-aos="fade-up"
-              data-aos-delay="400"
-            ></div>
-            <span data-aos="fade-up" data-aos-delay="400">
-              or
-            </span>
-            <div
-              className="flex-1 h-px bg-gray-700"
-              data-aos="fade-up"
-              data-aos-delay="400"
-            ></div>
+            <div className="flex-1 h-px bg-gray-700" data-aos="fade-up" data-aos-delay="400"></div>
+            <span data-aos="fade-up" data-aos-delay="400">or</span>
+            <div className="flex-1 h-px bg-gray-700" data-aos="fade-up" data-aos-delay="400"></div>
           </div>
-
-          {/* Google Button */}
           <div className="flex items-center justify-center mt-5">
-            <button
-              type="button"
-              onClick={handleGoogleSignup}
-              className="flex items-center justify-center gap-2 bg-white text-black text-sm font-medium w-52 h-9 rounded-[20px] shadow-md hover:bg-gray-100 transition disabled:opacity-60"
-              disabled={isSubmitting}
-            >
-              <FcGoogle className="w-4 h-4" />
-              <span>Continue with Google</span>
-            </button>
+            <GoogleLoginButton disabled={isSubmitting} />
           </div>
         </div>
 
         <div className="mt-6 text-center text-gray-400">
           Already have an account?{" "}
-          <button
-            onClick={() => navigate("/login")}
-            className="cursor-pointer text-secondary hover:scale-105"
-          >
+          <button onClick={() => navigate("/login")} className="cursor-pointer text-secondary hover:scale-105">
             Login
           </button>
         </div>

@@ -7,10 +7,8 @@ import logo4 from "../../assets/logo4.png";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
-import supabase, { isSupabaseConfigured } from "../../lib/supabaseClient";
 import api from "../../services/api";
-import { SITE_URL } from "../../config";
-import GoogleIcon from "../../assets/googleicon.png";
+import GoogleLoginButton from "../../components/GoogleLoginButton";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -29,14 +27,7 @@ export const Login = () => {
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      const res = await api.post("/api/login", {
-        email: data.email,
-        password: data.password,
-      });
-
-      // Confirm session exists before navigating.
-      await api.getUser();
-
+      const res = await api.login(data.email, data.password);
       toast.success(res.data.message || "Login successful");
       navigate("/dashboard");
     } catch (error) {
@@ -46,29 +37,6 @@ export const Login = () => {
         "Login failed";
       toast.error(err);
     } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    if (!isSupabaseConfigured || !supabase) {
-      toast.error("Google login not configured");
-      return;
-    }
-    try {
-      setIsSubmitting(true);
-      const redirectTo = `${window.location.origin}/auth/callback`;
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo,
-        },
-      });
-      if (error) throw error;
-      // Redirect happens automatically
-    } catch (err) {
-      console.error("Google OAuth error:", err);
-      toast.error(err?.message || "Google login failed");
       setIsSubmitting(false);
     }
   };
@@ -140,7 +108,6 @@ export const Login = () => {
             className="hidden mb-8 text-2xl font-semibold text-white md:block mt-15"
             data-aos="fade-down"
             data-aos-duration="1500"
-            data-aos-delay="0"
           >
             Login now
           </h2>
@@ -200,7 +167,7 @@ export const Login = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full bg-gradient-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] 
+              className={`w-full bg-linear-to-r from-[#0A36F7] to-[#91F2F9] text-black text-[1.2rem] font-bold py-3 rounded-[10px] 
                          hover:opacity-90 hover:shadow-[0_0_20px_rgba(145,242,249,0.5)] transition-all mt-4 ${
                            isSubmitting ? "opacity-60 cursor-not-allowed" : ""
                          }`}
@@ -226,15 +193,7 @@ export const Login = () => {
               ></div>
             </div>
             <div className="flex items-center justify-center gap-2 mt-5">
-              <button
-                type="button"
-                onClick={handleGoogleLogin}
-                className="flex items-center justify-center bg-white text-black py-1 px-4 font-semibold text-sm rounded-xl disabled:opacity-60 gap-2 cursor-pointer shadow-2xl shadow-neutral-200 hover:shadow-[0_0_5px_rgba(145,242,249,0.2)]"
-                disabled={isSubmitting}
-              >
-                <img src={GoogleIcon} alt="google icon" className="w-5 h-5" />
-                <span> Continue with google</span>
-              </button>
+              <GoogleLoginButton disabled={isSubmitting} />
             </div>
           </div>
 
