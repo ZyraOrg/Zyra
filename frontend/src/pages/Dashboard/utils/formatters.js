@@ -7,6 +7,22 @@ export function formatCurrency(amount) {
   }).format(amount);
 }
 
+export function formatTimeLeft(endDate) {
+  if (!endDate) return '-';
+  const normalized = /^\d{4}-\d{2}-\d{2}$/.test(endDate) ? `${endDate}T23:59:59` : endDate;
+  const end = new Date(normalized);
+  if (Number.isNaN(end.getTime())) return '-';
+
+  const diffMs = end.getTime() - Date.now();
+  if (diffMs <= 0) return 'Ended';
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 60) return `${mins} mins left`;
+  const hours = Math.floor(diffMs / 3600000);
+  if (hours < 24) return `${hours} hours left`;
+  const days = Math.floor(diffMs / 86400000);
+  return `${days} days left`;
+}
+
 export function formatTime(date) {
   const now = new Date();
   const past = new Date(date);
