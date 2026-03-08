@@ -11,7 +11,10 @@ const signup = async (req, res) => {
     user_metadata: { name },
   });
 
-  if (error) return res.status(400).json({ error: error.message });
+  if (error) {
+    console.error('[signup] error:', error.message);
+    return res.status(400).json({ error: error.message });
+  }
 
   res.status(201).json({ message: 'Account created successfully', user: data.user });
 };
@@ -27,7 +30,10 @@ const googleLogin = async (req, res) => {
     },
   });
 
-  if (error) return res.status(400).json({ error: error.message });
+  if (error) {
+    console.error('[googleLogin] error:', error.message);
+    return res.status(400).json({ error: error.message });
+  }
 
   res.redirect(data.url);
 };
@@ -38,7 +44,10 @@ const googleCallback = async (req, res) => {
 
   const { code } = req.query;
 
-  if (!code) return res.redirect(`${process.env.FRONTEND_URL}/login?error=missing_code`);
+  if (!code) {
+    console.error('[callback] no code in query');
+    return res.redirect(`${process.env.FRONTEND_URL}/login?error=missing_code`);
+  }
 
   const client = createAuthClient(req);
 
@@ -73,7 +82,10 @@ const login = async (req, res) => {
 
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-  if (error) return res.status(401).json({ error: error.message });
+  if (error) {
+    console.error('[login] error:', error.message);
+    return res.status(401).json({ error: error.message });
+  }
 
   const isProduction = process.env.NODE_ENV === 'production';
   const cookieOptions = {
@@ -98,10 +110,16 @@ const login = async (req, res) => {
 const setSession = async (req, res) => {
   const { accessToken, refreshToken, expiresIn } = req.body;
 
-  if (!accessToken) return res.status(400).json({ error: 'Missing token' });
+  if (!accessToken) {
+    console.error('[setSession] missing access token');
+    return res.status(400).json({ error: 'Missing token' });
+  }
 
   const { data, error } = await supabase.auth.getUser(accessToken);
-  if (error || !data.user) return res.status(401).json({ error: 'Invalid token' });
+  if (error || !data.user) {
+    console.error('[setSession] invalid token:', error?.message);
+    return res.status(401).json({ error: 'Invalid token' });
+  }
 
   const isProduction = process.env.NODE_ENV === 'production';
   const cookieOptions = {
@@ -138,7 +156,9 @@ const getMe = async (req, res) => {
 const logout = async (req, res) => {
   res.clearCookie('access_token');
   res.clearCookie('refresh_token');
-  req.session.destroy();
+  req.session.destroy((err) => {
+    if (err) console.error('[logout] session destroy error:', err.message);
+  });
   res.json({ message: 'Logged out successfully' });
 };
 
