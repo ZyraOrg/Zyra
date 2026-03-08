@@ -46,23 +46,13 @@ const googleCallback = async (req, res) => {
 
   if (error) return res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
 
-  const cookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-  };
-
-  res.cookie('access_token', data.session.access_token, {
-    ...cookieOptions,
-    maxAge: data.session.expires_in * 1000,
+  const params = new URLSearchParams({
+    access_token: data.session.access_token,
+    refresh_token: data.session.refresh_token,
+    expires_in: data.session.expires_in,
   });
 
-  res.cookie('refresh_token', data.session.refresh_token, {
-    ...cookieOptions,
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  });
-
-  res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
+  res.redirect(`${process.env.FRONTEND_URL}/auth/callback?${params.toString()}`);
 };
 
 const login = async (req, res) => {
