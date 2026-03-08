@@ -9,6 +9,7 @@ import DonationChart from "./components/dashboard/DonationChart";
 import CampaignsTable from "./components/layout/CampaignsTable";
 import TransactionsList from "./components/dashboard/TransactionsList";
 import api from "../../services/api";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ export default function Dashboard() {
     };
   }, [navigate]);
 
-  if (isCheckingAuth) return null;
+  if (isCheckingAuth) return <div className="min-h-screen bg-[#010415]"><LoadingSpinner /></div>;
 
   return (
     <div className="flex min-h-screen bg-[#010415] text-white">

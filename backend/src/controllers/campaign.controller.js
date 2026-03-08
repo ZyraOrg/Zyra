@@ -1,6 +1,7 @@
 const { supabase } = require('../config/supabase');
 const CampaignModel = require('../models/campaign.model');
 const DocumentModel = require('../models/document.model');
+const devError = require('../utils/devError');
 
 const createCampaign = async (req, res) => {
   try {
@@ -8,7 +9,7 @@ const createCampaign = async (req, res) => {
     const campaign = await CampaignModel.create({ user_id: req.user.id, name, objective, goal_amount, end_date });
     res.status(201).json({ message: 'Campaign created', campaign });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    devError(res, 400, 'Failed to create campaign. Please try again.', err);
   }
 };
 
@@ -17,7 +18,7 @@ const getMyStats = async (req, res) => {
     const stats = await CampaignModel.getStatsByUser(req.user.id);
     res.json(stats);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    devError(res, 400, 'Failed to load stats. Please refresh.', err);
   }
 };
 
@@ -28,7 +29,7 @@ const getMyCampaigns = async (req, res) => {
     const result = await CampaignModel.findByUser(req.user.id, { limit, offset });
     res.json(result);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    devError(res, 400, 'Failed to load campaigns. Please refresh.', err);
   }
 };
 
@@ -36,8 +37,8 @@ const getCampaign = async (req, res) => {
   try {
     const campaign = await CampaignModel.findById(req.params.id);
     res.json({ campaign });
-  } catch {
-    res.status(404).json({ error: 'Campaign not found' });
+  } catch (err) {
+    devError(res, 404, 'Campaign not found.', err);
   }
 };
 
@@ -46,7 +47,7 @@ const deleteCampaign = async (req, res) => {
     await CampaignModel.deleteByIdAndUser(req.params.id, req.user.id);
     res.json({ message: 'Campaign deleted' });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    devError(res, 400, 'Failed to delete campaign. Please try again.', err);
   }
 };
 
@@ -61,7 +62,7 @@ const uploadCover = async (req, res) => {
     .from('campaigns')
     .upload(path, req.file.buffer, { contentType: req.file.mimetype, upsert: true });
 
-  if (uploadError) return res.status(400).json({ error: uploadError.message });
+  if (uploadError) return devError(res, 400, 'Failed to upload cover image. Please try again.', uploadError);
 
   const { data: { publicUrl } } = supabase.storage.from('campaigns').getPublicUrl(path);
 
@@ -69,7 +70,7 @@ const uploadCover = async (req, res) => {
     await CampaignModel.updateCover(id, req.user.id, publicUrl);
     res.json({ message: 'Cover uploaded', cover_url: publicUrl });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    devError(res, 400, 'Cover uploaded but failed to save. Please try again.', err);
   }
 };
 
@@ -98,7 +99,7 @@ const uploadDocuments = async (req, res) => {
       .from('campaigns')
       .upload(path, file.buffer, { contentType: file.mimetype });
 
-    if (uploadError) return res.status(400).json({ error: uploadError.message });
+    if (uploadError) return devError(res, 400, 'Failed to upload one or more files. Please try again.', uploadError);
 
     const { data: { publicUrl } } = supabase.storage.from('campaigns').getPublicUrl(path);
 
@@ -106,7 +107,7 @@ const uploadDocuments = async (req, res) => {
       const doc = await DocumentModel.create({ campaign_id: id, url: publicUrl, name: file.originalname });
       uploaded.push(doc);
     } catch (err) {
-      return res.status(400).json({ error: err.message });
+      return devError(res, 400, 'Files uploaded but failed to save records. Please try again.', err);
     }
   }
 

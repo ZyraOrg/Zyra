@@ -6,6 +6,7 @@ import MobileMenu from './components/layout/MobileMenu';
 import Header from './components/layout/Header';
 import api from '../../services/api';
 import { formatCurrency, formatTimeLeft } from './utils/formatters';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function truncateEnd(value, maxChars) {
 	const str = String(value ?? '');
@@ -94,7 +95,7 @@ export default function Campaigns() {
 		}
 	}
 
-	if (isCheckingAuth) return null;
+	if (isCheckingAuth) return <div className="min-h-screen bg-[#010415]"><LoadingSpinner /></div>;
 
 	return (
 		<div className="flex min-h-screen bg-[#010415] text-white">

@@ -6,6 +6,7 @@ import MobileMenu from './components/layout/MobileMenu';
 import Header from './components/layout/Header';
 import api from '../../services/api';
 import { formatCurrency } from './utils/formatters';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 export default function CampaignDetails() {
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ export default function CampaignDetails() {
     };
   }, [id, isCheckingAuth, navigate]);
 
-  if (isCheckingAuth) return null;
+  if (isCheckingAuth) return <div className="min-h-screen bg-[#010415]"><LoadingSpinner /></div>;
 
   return (
     <div className="flex min-h-screen bg-[#010415] text-white">
@@ -87,7 +88,7 @@ export default function CampaignDetails() {
 
           <div className="bg-[#010410] rounded-xl p-4 lg:p-6 border lg:border-0 border-gray-800/30">
             {isLoading ? (
-              <div className="text-sm text-gray-400">Loading...</div>
+              <LoadingSpinner />
             ) : !campaign ? (
               <div className="text-sm text-gray-400">Not found</div>
             ) : (

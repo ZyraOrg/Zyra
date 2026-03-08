@@ -17,6 +17,7 @@ const CampaignModel = {
       .from('campaigns')
       .select('*', { count: 'exact' })
       .eq('user_id', user_id)
+      .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
 
@@ -29,6 +30,7 @@ const CampaignModel = {
       .from('campaigns')
       .select('*, documents(*)')
       .eq('id', id)
+      .is('deleted_at', null)
       .single();
 
     if (error) throw error;
@@ -38,7 +40,7 @@ const CampaignModel = {
   async deleteByIdAndUser(id, user_id) {
     const { error } = await supabase
       .from('campaigns')
-      .delete()
+      .update({ deleted_at: new Date() })
       .eq('id', id)
       .eq('user_id', user_id);
 
@@ -49,7 +51,8 @@ const CampaignModel = {
     const { data, error, count } = await supabase
       .from('campaigns')
       .select('raised, goal_amount', { count: 'exact' })
-      .eq('user_id', user_id);
+      .eq('user_id', user_id)
+      .is('deleted_at', null);
 
     if (error) throw error;
 

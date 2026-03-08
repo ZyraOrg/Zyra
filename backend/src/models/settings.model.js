@@ -6,7 +6,7 @@ const SettingsModel = {
       .from('profiles')
       .select('anonymous_donation')
       .eq('id', user_id)
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
     return data;

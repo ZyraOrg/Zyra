@@ -8,6 +8,7 @@ import Header from './components/layout/Header';
 import api from '../../services/api';
 import { COUNTRIES } from './constants/countries';
 import WalletAddressInput, { validateWalletAddress } from './components/ui/WalletAddressInput';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 export default function Profile() {
 	const navigate = useNavigate();
@@ -94,7 +95,7 @@ export default function Profile() {
 
 					<form onSubmit={save} className="bg-[#010410] rounded-xl p-4 lg:p-6 border lg:border-0 border-gray-800/30 space-y-5">
 						{isLoading ? (
-							<div className="text-sm text-gray-400">Loading...</div>
+							<LoadingSpinner />
 						) : (
 							<>
 								<div>
