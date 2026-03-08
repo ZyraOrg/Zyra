@@ -40,6 +40,7 @@ export default {
   login: (email, password) => request('POST', '/api/auth/login', { email, password }),
   logout: () => request('POST', '/api/auth/logout'),
   createCampaign: (payload) => request('POST', '/api/campaigns/create', payload),
+  getCampaignStats: () => request('GET', '/api/campaigns/stats'),
   getMyCampaigns: ({ limit = 4, offset = 0 } = {}) =>
     request('GET', `/api/campaigns/mine?limit=${limit}&offset=${offset}`),
   getCampaign: (id) => request('GET', `/api/campaigns/${encodeURIComponent(id)}`),
@@ -51,6 +52,10 @@ export default {
     formData.append('cover', file);
     return uploadFile(`/api/campaigns/${campaignId}/cover`, formData);
   },
+  getTransactions: ({ limit = 10, offset = 0 } = {}) => request('GET', `/api/transactions?limit=${limit}&offset=${offset}`),
+  getSettings: () => request('GET', '/api/settings'),
+  updateSettings: (payload) => request('PUT', '/api/settings', payload),
+  changePassword: (current_password, new_password) => request('POST', '/api/settings/change-password', { current_password, new_password }),
   uploadCampaignDocuments: (campaignId, files) => {
     const formData = new FormData();
     files.forEach((file) => formData.append('documents', file));
