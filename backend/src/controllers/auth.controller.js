@@ -64,10 +64,11 @@ const login = async (req, res) => {
 
   if (error) return res.status(401).json({ error: error.message });
 
+  const isProduction = process.env.NODE_ENV === 'production';
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
   };
 
   res.cookie('access_token', data.session.access_token, {
@@ -91,10 +92,11 @@ const setSession = async (req, res) => {
   const { data, error } = await supabase.auth.getUser(accessToken);
   if (error || !data.user) return res.status(401).json({ error: 'Invalid token' });
 
+  const isProduction = process.env.NODE_ENV === 'production';
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
   };
 
   res.cookie('access_token', accessToken, {
