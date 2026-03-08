@@ -65,8 +65,6 @@ const HeroSection = () => {
 
           <div className="flex flex-col items-center gap-4 mt-0 sm:flex-row md:items-start">
             <button
-              data-aos="slide-right"
-              data-aos-duration="1000"
               className="px-10 py-5 min-w-[220px] rounded-full text-black font-roboto font-extrabold text-lg 
                          bg-gradient-to-r from-[#0A36F7] to-[#91F2F9]
                          shadow-[0_0_20px_rgba(145,242,249,0.5)]
@@ -78,8 +76,6 @@ const HeroSection = () => {
             </button>
 
             <button
-              data-aos="slide-left"
-              data-aos-duration="1000"
               onClick={() => navigate("/signup")}
               className="flex items-center justify-center gap-2 w-[166px] h-[42px] md:w-[220px] md:h-[70px] rounded-full border-2 border-[#91F2F9] font-roboto font-bold text-base md:text-lg text-[#91F2F9] shadow-[0_0_10px_rgba(145,242,249,0.4)] hover:shadow-[0_0_25px_rgba(145,242,249,0.7)] active:shadow-[inset_0_0_10px_rgba(145,242,249,0.6)] transition-all duration-300 ease-out cursor-pointer"
             >
