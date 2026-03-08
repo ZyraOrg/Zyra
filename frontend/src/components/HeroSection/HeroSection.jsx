@@ -60,7 +60,7 @@ const HeroSection = () => {
             data-aos-delay="600"
           >
             Every donation traced, every beneficiary <br />
-            verified. The future of crowdfunding is Zyra
+            verified. The future ofcrowdfunding is Zyra
           </h2>
 
           <div className="flex flex-col items-center gap-4 mt-0 sm:flex-row md:items-start">
