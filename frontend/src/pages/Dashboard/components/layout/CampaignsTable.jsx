@@ -1,21 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../../services/api';
-import { formatCurrency } from '../../utils/formatters';
-
-function formatTimeLeft(endDate) {
-  if (!endDate) return '-';
-  const end = new Date(endDate);
-  if (Number.isNaN(end.getTime())) return '-';
-
-  const diffInMinutes = Math.floor((end.getTime() - Date.now()) / 60000);
-  if (diffInMinutes <= 0) return 'Ended';
-  if (diffInMinutes < 60) return `${diffInMinutes} mins left`;
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  if (diffInHours < 24) return `${diffInHours} hours left`;
-  const diffInDays = Math.floor(diffInHours / 24);
-  return `${diffInDays} days left`;
-}
+import { formatCurrency, formatTimeLeft } from '../../utils/formatters';
 
 function truncateEnd(value, maxChars) {
   const str = String(value ?? '');

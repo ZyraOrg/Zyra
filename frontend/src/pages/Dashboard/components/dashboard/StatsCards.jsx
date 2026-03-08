@@ -1,12 +1,21 @@
+import { useQuery } from '@tanstack/react-query';
 import { statsConfig } from "../../constants/dashboardData";
 import { formatCurrency } from "../../utils/formatters";
+import api from "../../../../services/api";
 
 export default function StatsCards() {
-  const stats = statsConfig.map((stat) => ({
-    ...stat,
-    value:
-      typeof stat.value === "number" ? formatCurrency(stat.value) : stat.value,
-  }));
+  const { data } = useQuery({
+    queryKey: ['campaign-stats'],
+    queryFn: () => api.getCampaignStats().then((r) => r.data),
+  });
+
+  const values = [
+    formatCurrency(data?.total_raised ?? 0),
+    formatCurrency(data?.total_raised ?? 0),
+    data?.total_campaigns ?? 0,
+  ];
+
+  const stats = statsConfig.map((stat, i) => ({ ...stat, value: values[i] }));
 
   return (
     <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-6">
@@ -18,7 +27,7 @@ export default function StatsCards() {
             key={stat.title}
             className="bg-[#010410] rounded-xl p-2 lg:p-5 border lg:border-0 border-gray-800/30"
           >
-            {/* Mobile Layout: Icon Left, Text Right (Horizontal) */}
+            {/* Mobile Layout */}
             <div className="flex items-center gap-2 lg:hidden">
               <div
                 className={`w-6 h-6 rounded-md ${stat.iconColor} flex items-center justify-center flex-shrink-0`}
@@ -35,7 +44,7 @@ export default function StatsCards() {
               </div>
             </div>
 
-            {/* Desktop Layout: Horizontal */}
+            {/* Desktop Layout */}
             <div className="hidden lg:flex items-center gap-4">
               <div
                 className={`w-12 h-12 rounded-lg ${stat.iconColor} flex items-center justify-center flex-shrink-0`}
