@@ -22,17 +22,14 @@ const googleLogin = async (req, res) => {
   const { data, error } = await client.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${process.env.BACKEND_URL}/api/auth/callback`,
+      redirectTo: `${process.env.FRONTEND_URL}/auth/callback`,
       skipBrowserRedirect: true,
     },
   });
 
   if (error) return res.status(400).json({ error: error.message });
 
-  req.session.save((err) => {
-    if (err) return res.status(500).json({ error: 'Session error' });
-    res.redirect(data.url);
-  });
+  res.redirect(data.url);
 };
 
 const googleCallback = async (req, res) => {
