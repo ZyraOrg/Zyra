@@ -36,6 +36,9 @@ const googleLogin = async (req, res) => {
 };
 
 const googleCallback = async (req, res) => {
+  console.log('[callback] query:', req.query);
+  console.log('[callback] session keys:', Object.keys(req.session || {}));
+
   const { code } = req.query;
 
   if (!code) return res.redirect(`${process.env.FRONTEND_URL}/login?error=missing_code`);
@@ -44,6 +47,7 @@ const googleCallback = async (req, res) => {
 
   const { data, error } = await client.auth.exchangeCodeForSession(code);
 
+  console.log('[callback] exchange error:', error?.message);
   if (error) return res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
 
   const cookieOptions = {
