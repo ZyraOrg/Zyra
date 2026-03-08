@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth.routes');
 const campaignRoutes = require('./routes/campaign.routes');
 const profileRoutes = require('./routes/profile.routes');
 const settingsRoutes = require('./routes/settings.routes');
+const transactionRoutes = require('./routes/transaction.routes');
 const { notFound, errorHandler } = require('./middleware/error.middleware');
 
 const app = express();
@@ -38,6 +39,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/campaigns', campaignRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Zyra API is running' });
