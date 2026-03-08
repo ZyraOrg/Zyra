@@ -16,8 +16,7 @@ export default function Sidebar() {
     async function loadUser() {
       try {
         const { data } = await api.getUser();
-        const name =
-          data?.user?.name || data?.user?.username || data?.user?.email;
+        const name = data?.user?.name || data?.user?.email;
         if (!cancelled && name) setUsername(name);
       } catch {
         // ignore

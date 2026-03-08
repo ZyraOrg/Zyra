@@ -3,28 +3,32 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "./SettingsSidebar";
 import SettingsMobileMenu from "./SettingsMobileMenu";
 import Header from "../Dashboard/components/layout/Header";
-import useAuthStore from "../../store/useAuthStore";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import api from "../../services/api";
+import toast from "react-hot-toast";
 
 export default function SettingsLayout() {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const { isCheckingAuth, checkAuth } = useAuthStore();
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
 
-    const performAuthCheck = async () => {
-      await checkAuth(navigate);
-    };
+    async function checkSession() {
+      try {
+        await api.getUser();
+        if (!cancelled) setIsCheckingAuth(false);
+      } catch {
+        if (cancelled) return;
+        toast.error("Please log in to continue");
+        navigate("/login", { replace: true });
+      }
+    }
 
-    performAuthCheck();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [navigate, checkAuth]);
+    checkSession();
+    return () => { cancelled = true; };
+  }, [navigate]);
 
   if (isCheckingAuth) {
     return (
@@ -36,10 +40,8 @@ export default function SettingsLayout() {
 
   return (
     <div className="flex h-screen bg-[#010415] text-white">
-      {/* Desktop Sidebar - Always visible on lg+ */}
       <Sidebar />
 
-      {/* Mobile Menu - Only toggles on mobile/tablet */}
       <SettingsMobileMenu
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}

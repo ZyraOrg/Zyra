@@ -21,8 +21,8 @@ export default function Privacy() {
   const loadPrivacySettings = async () => {
     setIsLoadingData(true);
     try {
-      const { data } = await api.getProfile();
-      setAnonymousDonation(data?.anonymousDonation || false);
+      const { data } = await api.getSettings();
+      setAnonymousDonation(data?.settings?.anonymous_donation || false);
     } catch (err) {
       console.error("Error loading privacy settings:", err);
     } finally {
@@ -33,9 +33,7 @@ export default function Privacy() {
   const handleSaveChanges = async () => {
     setLoading(true);
     try {
-      await api.saveProfile({
-        anonymousDonation,
-      });
+      await api.updateSettings({ anonymous_donation: anonymousDonation });
 
       toast.success("Privacy settings updated successfully");
     } catch (err) {
@@ -59,7 +57,7 @@ export default function Privacy() {
 
     setLoading(true);
     try {
-      // Implement password change API call here
+      await api.changePassword(passwordForm.currentPassword, passwordForm.newPassword);
       toast.success("Password changed successfully");
       setShowPasswordModal(false);
       setPasswordForm({

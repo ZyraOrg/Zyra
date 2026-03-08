@@ -24,16 +24,20 @@ export default function AccountInfo() {
   const loadUserData = async () => {
     // setIsLoadingData(true);
     try {
-      const { data } = await api.getUser();
-      const userData = data?.user || {};
+      const [{ data: authData }, { data: profileData }] = await Promise.all([
+        api.getUser(),
+        api.getProfile(),
+      ]);
+      const userData = authData?.user || {};
+      const profile = profileData?.profile || {};
 
       setFormData({
-        fullName: userData?.name || userData?.username || "",
+        fullName: userData?.name || "",
         email: userData?.email || "",
-        phoneNumber: userData?.phone || userData?.phoneNumber || "",
-        role: userData?.role || "Donor",
-        dateJoined: userData?.createdAt
-          ? formatDate(userData.createdAt)
+        phoneNumber: profile?.phone || "",
+        role: "Donor",
+        dateJoined: userData?.created_at
+          ? formatDate(userData.created_at)
           : formatDate(new Date()),
       });
     } catch (err) {
@@ -77,9 +81,6 @@ export default function AccountInfo() {
         name: formData.fullName,
         phone: formData.phoneNumber,
       });
-
-      // Update auth store
-      useAuthStore.getState().checkAuth();
 
       toast.success("Account information updated successfully");
       setIsEditing(false);
