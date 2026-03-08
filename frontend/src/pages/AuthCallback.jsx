@@ -12,19 +12,13 @@ export default function AuthCallback() {
     if (called.current) return;
     called.current = true;
 
-    const params = new URLSearchParams(window.location.search);
+    const hash = window.location.hash;
+    const params = new URLSearchParams(hash.slice(1));
     const accessToken = params.get("access_token");
     const refreshToken = params.get("refresh_token");
     const expiresIn = params.get("expires_in");
-    const error = params.get("error");
 
     window.history.replaceState(null, "", window.location.pathname);
-
-    if (error) {
-      toast.error("Authentication failed");
-      navigate("/login", { replace: true });
-      return;
-    }
 
     if (!accessToken) {
       toast.error("Authentication failed");
