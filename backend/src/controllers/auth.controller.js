@@ -121,7 +121,15 @@ const setSession = async (req, res) => {
 };
 
 const getMe = async (req, res) => {
-  res.json({ user: req.user });
+  const { id, email, created_at, user_metadata } = req.user;
+  res.json({
+    user: {
+      id,
+      email,
+      name: user_metadata?.name || null,
+      created_at,
+    },
+  });
 };
 
 const logout = async (req, res) => {

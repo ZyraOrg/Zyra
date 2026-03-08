@@ -1,29 +1,30 @@
-const { supabase } = require('../config/supabase');
+const ProfileModel = require('../models/profile.model');
 
 const getProfile = async (req, res) => {
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', req.user.id)
-    .single();
-
-  if (error) return res.status(404).json({ error: 'Profile not found' });
-
-  res.json({ user: data });
+  try {
+    const profile = await ProfileModel.findById(req.user.id);
+    res.json({ profile, isComplete: ProfileModel.isComplete(profile) });
+  } catch {
+    res.status(404).json({ error: 'Profile not found' });
+  }
 };
 
 const updateProfile = async (req, res) => {
-  const { name, bio, avatar_url } = req.body;
+  const { foundation_name, country, receiving_wallet_address, name, phone } = req.body;
 
-  const { data, error } = await supabase
-    .from('profiles')
-    .upsert({ id: req.user.id, name, bio, avatar_url, updated_at: new Date() })
-    .select()
-    .single();
+  const fields = {};
+  if (foundation_name !== undefined) fields.foundation_name = foundation_name;
+  if (country !== undefined) fields.country = country;
+  if (receiving_wallet_address !== undefined) fields.receiving_wallet_address = receiving_wallet_address;
+  if (name !== undefined) fields.name = name;
+  if (phone !== undefined) fields.phone = phone;
 
-  if (error) return res.status(400).json({ error: error.message });
-
-  res.json({ message: 'Profile updated', user: data });
+  try {
+    const profile = await ProfileModel.upsert(req.user.id, fields);
+    res.json({ message: 'Profile updated', profile, isComplete: ProfileModel.isComplete(profile) });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 };
 
 module.exports = { getProfile, updateProfile };
