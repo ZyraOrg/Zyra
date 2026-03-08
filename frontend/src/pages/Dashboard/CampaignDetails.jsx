@@ -142,9 +142,9 @@ export default function CampaignDetails() {
 
                 <div>
                   <div className="text-xs text-gray-400">Cover</div>
-                  {campaign.cover_image_url ? (
+                  {campaign.cover_url ? (
                     <img
-                      src={campaign.cover_image_url}
+                      src={campaign.cover_url}
                       alt="Campaign cover"
                       className="mt-2 w-full rounded-lg border border-gray-800/30 object-cover max-h-56"
                     />

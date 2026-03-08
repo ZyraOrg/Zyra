@@ -12,7 +12,7 @@ export default function DashboardHome() {
     const fetchUser = async () => {
       try {
         const { data } = await api.getUser();
-        const name = data?.user?.name || data?.user?.username || data?.user?.email;
+        const name = data?.user?.name || data?.user?.email;
         if (name) setUsername(name);
       } catch (error) {
         console.error('Failed to fetch user:', error);
