@@ -54,9 +54,8 @@ const CampaignModel = {
     if (error) throw error;
 
     const total_raised = (data || []).reduce((sum, c) => sum + Number(c.raised || 0), 0);
-    const total_goal = (data || []).reduce((sum, c) => sum + Number(c.goal_amount || 0), 0);
 
-    return { total_campaigns: count || 0, total_raised, total_goal };
+    return { total_campaigns: count || 0, total_raised };
   },
 
   async updateCover(id, user_id, cover_url) {
