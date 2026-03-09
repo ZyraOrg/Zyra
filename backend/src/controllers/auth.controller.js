@@ -1,5 +1,14 @@
 const { supabase, createAuthClient } = require('../config/supabase');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
+const cookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? 'none' : 'lax',
+  ...(isProduction && { domain: '.zyra.fund' }),
+};
+
 const signup = async (req, res) => {
   const { name, email, password } = req.body;
   // confirmPassword is validated by Zod before reaching here, no need to handle it
@@ -56,12 +65,6 @@ const googleCallback = async (req, res) => {
   console.log('[callback] exchange error:', error?.message);
   if (error) return res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
 
-  const cookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-  };
-
   res.cookie('access_token', data.session.access_token, {
     ...cookieOptions,
     maxAge: data.session.expires_in * 1000,
@@ -86,13 +89,6 @@ const login = async (req, res) => {
     console.error('[login] error:', error.message);
     return res.status(401).json({ error: error.message });
   }
-
-  const isProduction = process.env.NODE_ENV === 'production';
-  const cookieOptions = {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? 'none' : 'lax',
-  };
 
   res.cookie('access_token', data.session.access_token, {
     ...cookieOptions,
@@ -121,13 +117,6 @@ const setSession = async (req, res) => {
     return res.status(401).json({ error: 'Invalid token' });
   }
 
-  const isProduction = process.env.NODE_ENV === 'production';
-  const cookieOptions = {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? 'none' : 'lax',
-  };
-
   res.cookie('access_token', accessToken, {
     ...cookieOptions,
     maxAge: (expiresIn || 3600) * 1000,
@@ -154,8 +143,9 @@ const getMe = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  res.clearCookie('access_token');
-  res.clearCookie('refresh_token');
+  const clearOptions = isProduction ? { domain: '.zyra.fund' } : {};
+  res.clearCookie('access_token', clearOptions);
+  res.clearCookie('refresh_token', clearOptions);
   req.session.destroy((err) => {
     if (err) console.error('[logout] session destroy error:', err.message);
   });
