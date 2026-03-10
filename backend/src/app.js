@@ -50,6 +50,10 @@ app.get("/", (req, res) => {
   res.json({ message: "Zyra API is running" });
 });
 
+app.get("/ping", (req, res) => {
+  res.status(200).send("Server awake");
+});
+
 app.use(notFound);
 app.use(errorHandler);
 
