@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/ping", (req, res) => {
-  res.status(200).send("Server awake");
+  res.status(200).send("Server is awake");
 });
 
 app.use(notFound);

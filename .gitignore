@@ -3,3 +3,10 @@ node_modules
 supabase_tables.sql
 
 # /backend
+.env
+
+# /frontend env (do not commit)
+frontend/.env
+frontend/.env.local
+frontend/.env.production
+frontend/.env.development

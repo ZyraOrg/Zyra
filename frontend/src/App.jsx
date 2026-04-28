@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { WagmiProvider } from "wagmi";
 import { Toaster } from "react-hot-toast";
+import { wagmiConfig } from "./config/appkit";
 
 import { Login } from "./pages/Login/Login";
 import SignUp from "./pages/Signup/SignUp";
@@ -74,22 +76,24 @@ function RouterContent() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 4000,
-          style: {
-            background: "#010415",
-            color: "#fff",
-            border: "1px solid #0ea5e9",
-          },
-        }}
-      />
-      <BrowserRouter>
-        <RouterContent />
-      </BrowserRouter>
-    </QueryClientProvider>
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: "#010415",
+              color: "#fff",
+              border: "1px solid #0ea5e9",
+            },
+          }}
+        />
+        <BrowserRouter>
+          <RouterContent />
+        </BrowserRouter>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }
 
