@@ -10,7 +10,7 @@ const FAQSection = () => {
     {
       question: "What is Zyra?",
       answer:
-        "Zyra is a donations-facilitation platform built for Africa. It helps individuals and communities raise funds for medical, educational, or social needs, while enabling donors worldwide to give in crypto or fiat with full transparency.",
+        "Zyra is a donation-facilitation platform built for Africa. It helps individuals and communities raise funds for medical, educational, or social needs, while enabling donors worldwide to give in crypto or fiat with full transparency.",
     },
     {
       question: "How does Zyra ensure transparency and trust?",
