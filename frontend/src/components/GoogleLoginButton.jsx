@@ -2,8 +2,12 @@ import GoogleIcon from "../assets/googleicon.png";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
-export default function GoogleLoginButton({ disabled }) {
+export default function GoogleLoginButton({ disabled, onClick }) {
   const handleGoogleLogin = () => {
+    if (onClick) {
+      onClick();
+      return;
+    }
     window.location.href = `${API_URL}/api/auth/google`;
   };
 

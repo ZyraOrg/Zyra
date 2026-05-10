@@ -25,6 +25,10 @@ export const Login = () => {
   }, []);
 
   const onSubmit = async (data) => {
+    if (data.email !== import.meta.env.VITE_DEMO_EMAIL || data.password !== import.meta.env.VITE_DEMO_PASSWORD) {
+      toast.error("In development");
+      return;
+    }
     setIsSubmitting(true);
     try {
       const res = await api.login(data.email, data.password);
@@ -126,6 +130,7 @@ export const Login = () => {
                   },
                 })}
                 type="email"
+                autoComplete="off"
                 placeholder="Your Email"
                 className="w-full py-3 placeholder-gray-500 transition border-b border-gray-600 bg-background focus:outline-none focus:border-secondary"
               />
@@ -146,6 +151,7 @@ export const Login = () => {
                     required: "Password is required",
                   })}
                   type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
                   placeholder="Enter Password"
                   className="w-full py-3 pr-10 text-white placeholder-gray-500 transition border-b border-gray-600 bg-background focus:outline-none focus:border-secondary"
                 />
@@ -193,14 +199,14 @@ export const Login = () => {
               ></div>
             </div>
             <div className="flex items-center justify-center gap-2 mt-5">
-              <GoogleLoginButton disabled={isSubmitting} />
+              <GoogleLoginButton disabled={isSubmitting} onClick={() => toast.error("In development")} />
             </div>
           </div>
 
           <div className="mt-6 text-center text-gray-400">
             Don't have an account?{" "}
             <button
-              onClick={() => navigate("/signup")}
+              onClick={() => toast.error("In development")}
               className="cursor-pointer text-secondary hover:scale-105"
             >
               Sign up

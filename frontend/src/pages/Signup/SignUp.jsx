@@ -43,6 +43,8 @@ export default function ZyraSignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    toast.error("In development");
+    return;
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -181,7 +183,7 @@ export default function ZyraSignUp() {
             <div className="flex-1 h-px bg-gray-700" data-aos="fade-up" data-aos-delay="400"></div>
           </div>
           <div className="flex items-center justify-center mt-5">
-            <GoogleLoginButton disabled={isSubmitting} />
+            <GoogleLoginButton disabled={isSubmitting} onClick={() => toast.error("In development")} />
           </div>
         </div>
 
