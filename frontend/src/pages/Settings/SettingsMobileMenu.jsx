@@ -1,18 +1,18 @@
 import { X, LogOut, ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { settingsnavItems } from "../Dashboard/constants/dashboardData";
 import Logo from "../../assets/logo.png";
-import supabase from "../../lib/supabaseClient";
-import useAuthStore from "../../store/useAuthStore";
+// import supabase from "../../lib/supabaseClient";
+// import useAuthStore from "../../store/useAuthStore";
 
 export default function SettingsMobileMenu({ isOpen, onClose }) {
   const navigate = useNavigate();
-  const { user } = useAuthStore();
+  // const { user } = useAuthStore();
   const [activeItem, setActiveItem] = useState("");
 
-  const username = user?.name || user?.username || user?.email || "User";
+  // const username = user?.name || user?.username || user?.email || "User";
 
   useEffect(() => {
     if (isOpen) {
@@ -25,18 +25,13 @@ export default function SettingsMobileMenu({ isOpen, onClose }) {
     }
   }, [isOpen]);
 
-  const handleLogout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-
-      useAuthStore.getState().logout();
-      toast.success("Logged out successfully");
-      navigate("/login", { replace: true });
-    } catch (err) {
-      console.error("Logout error:", err);
-      toast.error(err?.message || "Failed to log out");
-    }
+  const handleLogout = () => {
+    // const { error } = await supabase.auth.signOut();
+    // if (error) throw error;
+    // useAuthStore.getState().logout();
+    // toast.success("Logged out successfully");
+    // navigate("/login", { replace: true });
+    navigate("/", { replace: true });
   };
 
   const handleNavClick = (item) => {

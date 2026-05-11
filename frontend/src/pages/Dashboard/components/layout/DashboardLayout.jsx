@@ -10,9 +10,9 @@ export default function DashboardLayout() {
   return (
     <div className="flex min-h-screen bg-[#010415] text-white">
       <Sidebar />
-      <MobileMenu 
-        isOpen={isMobileMenuOpen} 
-        setIsOpen={setIsMobileMenuOpen}
+      <MobileMenu
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
       />
 
       <div className="flex-1 lg:ml-64">

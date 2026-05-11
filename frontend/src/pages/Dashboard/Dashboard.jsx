@@ -10,14 +10,18 @@ import CampaignsTable from "./components/layout/CampaignsTable";
 import TransactionsList from "./components/dashboard/TransactionsList";
 import api from "../../services/api";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Dashboard");
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(!user);
 
   useEffect(() => {
+    if (user) return; // already have a persisted user, skip check
+
     let cancelled = false;
 
     async function checkSession() {
@@ -26,8 +30,7 @@ export default function Dashboard() {
         if (!cancelled) setIsCheckingAuth(false);
       } catch (err) {
         if (cancelled) return;
-        const status = err?.response?.data ? err?.response?.status : undefined;
-        // If backend responds 401/403, force user back to login.
+        // const status = err?.response?.data ? err?.response?.status : undefined;
         toast.error("Please log in to continue");
         navigate("/login", { replace: true });
       }
@@ -37,7 +40,7 @@ export default function Dashboard() {
     return () => {
       cancelled = true;
     };
-  }, [navigate]);
+  }, [navigate, user]);
 
   if (isCheckingAuth) return <div className="min-h-screen bg-[#010415]"><LoadingSpinner /></div>;
 
