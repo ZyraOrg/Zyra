@@ -7,6 +7,7 @@ import Header from './components/layout/Header';
 import api from '../../services/api';
 import { formatCurrency } from './utils/formatters';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import useAuthStore from '../../store/useAuthStore';
 
 export default function CampaignDetails() {
   const navigate = useNavigate();
@@ -14,13 +15,16 @@ export default function CampaignDetails() {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState('Campaigns');
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const { user } = useAuthStore();
+  const [isCheckingAuth, setIsCheckingAuth] = useState(!user);
 
   const [campaign, setCampaign] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
+    if (user) { setIsCheckingAuth(false); return; }
+
     let cancelled = false;
 
     async function checkSession() {
@@ -38,7 +42,7 @@ export default function CampaignDetails() {
     return () => {
       cancelled = true;
     };
-  }, [navigate]);
+  }, [navigate, user]);
 
   useEffect(() => {
     let cancelled = false;

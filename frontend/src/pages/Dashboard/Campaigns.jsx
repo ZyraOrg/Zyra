@@ -7,6 +7,8 @@ import Header from './components/layout/Header';
 import api from '../../services/api';
 import { formatCurrency, formatTimeLeft } from './utils/formatters';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import useAuthStore from '../../store/useAuthStore';
+import useAuthStore from '../../store/useAuthStore';
 
 function truncateEnd(value, maxChars) {
 	const str = String(value ?? '');
@@ -17,9 +19,10 @@ function truncateEnd(value, maxChars) {
 
 export default function Campaigns() {
 	const navigate = useNavigate();
+	const { user } = useAuthStore();
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [activeItem, setActiveItem] = useState('Campaigns');
-	const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+	const [isCheckingAuth, setIsCheckingAuth] = useState(!user);
 
 	const [campaigns, setCampaigns] = useState([]);
 	const [offset, setOffset] = useState(0);
@@ -30,6 +33,8 @@ export default function Campaigns() {
 	const limit = 10;
 
 	useEffect(() => {
+		if (user) { setIsCheckingAuth(false); return; }
+
 		let cancelled = false;
 
 		async function checkSession() {
@@ -47,7 +52,7 @@ export default function Campaigns() {
 		return () => {
 			cancelled = true;
 		};
-	}, [navigate]);
+	}, [navigate, user]);
 
 	useEffect(() => {
 		let cancelled = false;
