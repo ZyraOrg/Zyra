@@ -6,13 +6,17 @@ import Header from "../Dashboard/components/layout/Header";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import api from "../../services/api";
 import toast from "react-hot-toast";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function SettingsLayout() {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(!user);
 
   useEffect(() => {
+    if (user) return; // already have a persisted user, skip check
+
     let cancelled = false;
 
     async function checkSession() {
@@ -28,7 +32,7 @@ export default function SettingsLayout() {
 
     checkSession();
     return () => { cancelled = true; };
-  }, [navigate]);
+  }, [navigate, user]);
 
   if (isCheckingAuth) {
     return (

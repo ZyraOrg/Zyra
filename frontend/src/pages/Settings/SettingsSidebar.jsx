@@ -11,7 +11,7 @@ export default function SettingsSidebar() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
 
-  const username = user?.name || user?.username || user?.email || "User";
+  // const username = user?.name || user?.username || user?.email || "User";
 
   const handleNav = (item) => {
     if (item.href) {
@@ -29,18 +29,13 @@ export default function SettingsSidebar() {
     return "";
   })();
 
-  const handleLogout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-
-      useAuthStore.getState().logout();
-      toast.success("Logged out successfully");
-      navigate("/login", { replace: true });
-    } catch (err) {
-      console.error("Logout error:", err);
-      toast.error(err?.message || "Failed to log out");
-    }
+  const handleLogout = () => {
+    // const { error } = await supabase.auth.signOut();
+    // if (error) throw error;
+    // useAuthStore.getState().logout();
+    // toast.success("Logged out successfully");
+    // navigate("/login", { replace: true });
+    navigate("/", { replace: true });
   };
 
   return (

@@ -47,14 +47,15 @@ export default function Sidebar() {
     navigate("/settings");
   };
 
-  const handleLogout = async () => {
-    try {
-      await api.logout();
-      toast.success("Logged out successfully");
-      navigate("/", { replace: true });
-    } catch {
-      toast.error("Failed to log out");
-    }
+  const handleLogout = () => {
+    // try {
+    //   await api.logout();
+    //   toast.success("Logged out successfully");
+    //   navigate("/", { replace: true });
+    // } catch {
+    //   toast.error("Failed to log out");
+    // }
+    navigate("/", { replace: true });
   };
 
   return (

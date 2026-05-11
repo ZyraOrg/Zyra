@@ -10,11 +10,12 @@ import api from "../../../../services/api";
 export default function MobileMenu({
   isOpen,
   onClose,
-  activeItem,
-  setActiveItem,
+  // activeItem,   // not passed by DashboardLayout — managed locally below
+  // setActiveItem,
 }) {
   const navigate = useNavigate();
   const [username, setUsername] = useState("User");
+  const [activeItem, setActiveItem] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -34,17 +35,17 @@ export default function MobileMenu({
     };
   }, [isOpen]);
 
-  const handleLogout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-
-      toast.success("Logged out successfully");
-      navigate("/login", { replace: true });
-    } catch (err) {
-      console.error("Logout error:", err);
-      toast.error(err?.message || "Failed to log out");
-    }
+  const handleLogout = () => {
+    // try {
+    //   const { error } = await supabase.auth.signOut();
+    //   if (error) throw error;
+    //   toast.success("Logged out successfully");
+    //   navigate("/login", { replace: true });
+    // } catch (err) {
+    //   console.error("Logout error:", err);
+    //   toast.error(err?.message || "Failed to log out");
+    // }
+    navigate("/", { replace: true });
   };
 
   const handleNavClick = (item) => {
