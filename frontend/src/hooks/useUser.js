@@ -25,7 +25,8 @@ export const useUser = () => {
       return;
     }
     if (query.isSuccess) setUser(query.data?.data?.user ?? null);
-    if (query.isError) setUser(null);
+    // if (query.isError) setUser(null); // don't wipe persisted user on API failure
+    if (query.isError) setLoading(false);
     if (query.isPending) setLoading(true);
   }, [query.isSuccess, query.isError, query.isPending, isPublicRoute]);
 
