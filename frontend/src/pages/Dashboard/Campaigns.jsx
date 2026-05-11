@@ -8,7 +8,6 @@ import api from '../../services/api';
 import { formatCurrency, formatTimeLeft } from './utils/formatters';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import useAuthStore from '../../store/useAuthStore';
-import useAuthStore from '../../store/useAuthStore';
 
 function truncateEnd(value, maxChars) {
 	const str = String(value ?? '');
