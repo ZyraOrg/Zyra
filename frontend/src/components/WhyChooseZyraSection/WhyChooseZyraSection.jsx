@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Shield2Img from "../../assets/shield2.svg";
+import Shield2Img from "../../assets/Shield2.svg";
 import DocumentImg from "../../assets/Document.svg";
 import MulticulturalImg from "../../assets/Multicultural People.svg";
 
