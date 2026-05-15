@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { Toaster } from "react-hot-toast";
 import { wagmiConfig } from "./config/appkit";
+import NotFound from "./pages/NotFound";
 
 import { Login } from "./pages/Login/Login";
 import SignUp from "./pages/Signup/SignUp";
@@ -36,26 +37,28 @@ const queryClient = new QueryClient({
   },
 });
 
-// Must be inside BrowserRouter so useLocation works
 function RouterContent() {
   useUser();
 
   return (
     <Routes>
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/signup"    element={<SignUp />} />
+      <Route path="/login"     element={<Login />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
+
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/dashboard/create-campaign" element={<CreateCampaign />} />
-      <Route path="/dashboard/campaigns" element={<Campaigns />} />
-      <Route path="/dashboard/campaigns/:id" element={<CampaignDetails />} />
-      <Route path="/dashboard/profile" element={<Profile />} />
+      <Route path="/dashboard/campaigns"       element={<Campaigns />} />
+      <Route path="/dashboard/campaigns/:id"   element={<CampaignDetails />} />
+      <Route path="/dashboard/profile"         element={<Profile />} />
+
       <Route path="/settings" element={<SettingsLayout />}>
-        <Route index element={<AccountInfo />} />
+        <Route index         element={<AccountInfo />} />
         <Route path="wallet" element={<WalletPayments />} />
         <Route path="privacy" element={<Privacy />} />
         <Route path="support" element={<Support />} />
       </Route>
-      <Route path="/auth/callback" element={<AuthCallback />} />
+
       <Route
         path="/"
         element={
@@ -70,6 +73,9 @@ function RouterContent() {
           </>
         }
       />
+
+      {/* 404 — must be last */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
@@ -84,8 +90,8 @@ function App() {
             duration: 4000,
             style: {
               background: "#010415",
-              color: "#fff",
-              border: "1px solid #0ea5e9",
+              color:      "#fff",
+              border:     "1px solid #0ea5e9",
             },
           }}
         />
