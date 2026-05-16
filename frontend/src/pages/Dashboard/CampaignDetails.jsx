@@ -1,20 +1,20 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import toast from 'react-hot-toast';
-import Sidebar from './components/layout/Sidebar';
-import MobileMenu from './components/layout/MobileMenu';
-import Header from './components/layout/Header';
-import api from '../../services/api';
-import { formatCurrency } from './utils/formatters';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import useAuthStore from '../../store/useAuthStore';
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import Sidebar from "./components/layout/Sidebar";
+import MobileMenu from "./components/layout/MobileMenu";
+import Header from "./components/layout/Header";
+import api from "../../services/api";
+import { formatCurrency } from "./utils/formatters";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import useAuthStore from "../../store/useAuthStore";
 
 export default function CampaignDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState('Campaigns');
+  const [activeItem, setActiveItem] = useState("Campaigns");
   const { user } = useAuthStore();
   const [isCheckingAuth, setIsCheckingAuth] = useState(!user);
 
@@ -23,7 +23,10 @@ export default function CampaignDetails() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    if (user) { setIsCheckingAuth(false); return; }
+    if (user) {
+      setIsCheckingAuth(false);
+      return;
+    }
 
     let cancelled = false;
 
@@ -33,8 +36,8 @@ export default function CampaignDetails() {
         if (!cancelled) setIsCheckingAuth(false);
       } catch (err) {
         if (cancelled) return;
-        toast.error('Please log in to continue');
-        navigate('/login', { replace: true });
+        toast.error("Please log in to continue");
+        navigate("/login", { replace: true });
       }
     }
 
@@ -55,8 +58,8 @@ export default function CampaignDetails() {
         setCampaign(data?.campaign || null);
       } catch (err) {
         if (cancelled) return;
-        toast.error('Failed to load campaign');
-        navigate('/dashboard/campaigns', { replace: true });
+        toast.error("Failed to load campaign");
+        navigate("/dashboard/campaigns", { replace: true });
       } finally {
         if (!cancelled) setIsLoading(false);
       }
@@ -69,7 +72,12 @@ export default function CampaignDetails() {
     };
   }, [id, isCheckingAuth, navigate]);
 
-  if (isCheckingAuth) return <div className="min-h-screen bg-[#010415]"><LoadingSpinner /></div>;
+  if (isCheckingAuth)
+    return (
+      <div className="min-h-screen bg-[#010415]">
+        <LoadingSpinner />
+      </div>
+    );
 
   return (
     <div className="flex min-h-screen bg-[#010415] text-white">
@@ -107,10 +115,13 @@ export default function CampaignDetails() {
                       try {
                         setIsDeleting(true);
                         await api.deleteCampaign(id);
-                        toast.success('Campaign deleted');
-                        navigate('/dashboard/campaigns', { replace: true });
+                        toast.success("Campaign deleted");
+                        navigate("/dashboard/campaigns", { replace: true });
                       } catch (err) {
-                        const msg = err?.response?.data?.error || err?.message || 'Failed to delete campaign';
+                        const msg =
+                          err?.response?.data?.error ||
+                          err?.message ||
+                          "Failed to delete campaign";
                         toast.error(msg);
                       } finally {
                         setIsDeleting(false);
@@ -123,41 +134,53 @@ export default function CampaignDetails() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-                <div className="lg:col-span-2">
-                  <div className="text-xs text-gray-400">ID</div>
-                  <div className="text-sm break-all">{campaign.id}</div>
+                  <div className="lg:col-span-2">
+                    <div className="text-xs text-gray-400">ID</div>
+                    <div className="text-sm break-all">{campaign.id}</div>
 
-                  <div className="mt-4 text-xs text-gray-400">Name</div>
-                  <div className="text-base font-semibold">{campaign.name || '-'}</div>
-
-                  <div className="mt-4 text-xs text-gray-400">Objective</div>
-                  <div className="text-sm text-gray-200 whitespace-pre-wrap">{campaign.objective || '-'}</div>
-
-                  <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                      <div className="text-xs text-gray-400">Goal</div>
-                      <div className="text-sm">{formatCurrency(Number(campaign.goal_amount || 0))}</div>
+                    <div className="mt-4 text-xs text-gray-400">Name</div>
+                    <div className="text-base font-semibold">
+                      {campaign.name || "-"}
                     </div>
-                    <div>
-                      <div className="text-xs text-gray-400">End date</div>
-                      <div className="text-sm">{campaign.end_date ? new Date(campaign.end_date).toLocaleDateString() : '-'}</div>
+
+                    <div className="mt-4 text-xs text-gray-400">Objectiv</div>
+                    <div className="text-sm text-gray-200 whitespace-pre-wrap">
+                      {campaign.objective || "-"}
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                      <div>
+                        <div className="text-xs text-gray-400">Goal</div>
+                        <div className="text-sm">
+                          {formatCurrency(Number(campaign.goal_amount || 0))}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-400">End date</div>
+                        <div className="text-sm">
+                          {campaign.end_date
+                            ? new Date(campaign.end_date).toLocaleDateString()
+                            : "-"}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div>
-                  <div className="text-xs text-gray-400">Cover</div>
-                  {campaign.cover_url ? (
-                    <img
-                      src={campaign.cover_url}
-                      alt="Campaign cover"
-                      className="mt-2 w-full rounded-lg border border-gray-800/30 object-cover max-h-56"
-                    />
-                  ) : (
-                    <div className="mt-2 text-sm text-gray-400">No cover uploaded</div>
-                  )}
+                  <div>
+                    <div className="text-xs text-gray-400">Cover</div>
+                    {campaign.cover_url ? (
+                      <img
+                        src={campaign.cover_url}
+                        alt="Campaign cover"
+                        className="mt-2 w-full rounded-lg border border-gray-800/30 object-cover max-h-56"
+                      />
+                    ) : (
+                      <div className="mt-2 text-sm text-gray-400">
+                        No cover uploaded
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
               </div>
             )}
           </div>
