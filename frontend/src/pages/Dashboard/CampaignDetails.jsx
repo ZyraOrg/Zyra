@@ -16,36 +16,30 @@ export default function CampaignDetails() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Campaigns");
   const { user } = useAuthStore();
-  const [isCheckingAuth, setIsCheckingAuth] = useState(!user);
+  // const [isCheckingAuth, setIsCheckingAuth] = useState(!user);
+  const isCheckingAuth = false;
 
   const [campaign, setCampaign] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      setIsCheckingAuth(false);
-      return;
-    }
-
-    let cancelled = false;
-
-    async function checkSession() {
-      try {
-        await api.getUser();
-        if (!cancelled) setIsCheckingAuth(false);
-      } catch (err) {
-        if (cancelled) return;
-        toast.error("Please log in to continue");
-        navigate("/login", { replace: true });
-      }
-    }
-
-    checkSession();
-    return () => {
-      cancelled = true;
-    };
-  }, [navigate, user]);
+  // // Auth guard — re-enable when auth is wired up
+  // useEffect(() => {
+  //   if (user) { setIsCheckingAuth(false); return; }
+  //   let cancelled = false;
+  //   async function checkSession() {
+  //     try {
+  //       await api.getUser();
+  //       if (!cancelled) setIsCheckingAuth(false);
+  //     } catch (err) {
+  //       if (cancelled) return;
+  //       toast.error("Please log in to continue");
+  //       navigate("/login", { replace: true });
+  //     }
+  //   }
+  //   checkSession();
+  //   return () => { cancelled = true; };
+  // }, [navigate, user]);
 
   useEffect(() => {
     let cancelled = false;
@@ -143,7 +137,7 @@ export default function CampaignDetails() {
                       {campaign.name || "-"}
                     </div>
 
-                    <div className="mt-4 text-xs text-gray-400">Objectiv</div>
+                    <div className="mt-4 text-xs text-gray-400">Objective</div>
                     <div className="text-sm text-gray-200 whitespace-pre-wrap">
                       {campaign.objective || "-"}
                     </div>

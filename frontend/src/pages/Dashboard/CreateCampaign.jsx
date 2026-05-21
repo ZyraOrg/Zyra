@@ -43,14 +43,15 @@ export default function CreateCampaign() {
   useEffect(() => {
     let cancelled = false;
     async function checkAuthAndProfile() {
-      try {
-        await api.getUser();
-      } catch {
-        if (cancelled) return;
-        toast.error("Please log in to continue");
-        navigate("/login", { replace: true });
-        return;
-      }
+      // // Auth guard — re-enable when auth is wired up
+      // try {
+      //   await api.getUser();
+      // } catch {
+      //   if (cancelled) return;
+      //   toast.error("Please log in to continue");
+      //   navigate("/login", { replace: true });
+      //   return;
+      // }
       try {
         const { data } = await api.getProfile();
         if (cancelled) return;

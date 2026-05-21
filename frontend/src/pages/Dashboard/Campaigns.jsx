@@ -21,7 +21,8 @@ export default function Campaigns() {
 	const { user } = useAuthStore();
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [activeItem, setActiveItem] = useState('Campaigns');
-	const [isCheckingAuth, setIsCheckingAuth] = useState(!user);
+	// const [isCheckingAuth, setIsCheckingAuth] = useState(!user);
+	const isCheckingAuth = false;
 
 	const [campaigns, setCampaigns] = useState([]);
 	const [offset, setOffset] = useState(0);
@@ -31,27 +32,23 @@ export default function Campaigns() {
 
 	const limit = 10;
 
-	useEffect(() => {
-		if (user) { setIsCheckingAuth(false); return; }
-
-		let cancelled = false;
-
-		async function checkSession() {
-			try {
-				await api.getUser();
-				if (!cancelled) setIsCheckingAuth(false);
-			} catch (err) {
-				if (cancelled) return;
-				toast.error('Please log in to continue');
-				navigate('/login', { replace: true });
-			}
-		}
-
-		checkSession();
-		return () => {
-			cancelled = true;
-		};
-	}, [navigate, user]);
+	// // Auth guard — re-enable when auth is wired up
+	// useEffect(() => {
+	// 	if (user) { setIsCheckingAuth(false); return; }
+	// 	let cancelled = false;
+	// 	async function checkSession() {
+	// 		try {
+	// 			await api.getUser();
+	// 			if (!cancelled) setIsCheckingAuth(false);
+	// 		} catch (err) {
+	// 			if (cancelled) return;
+	// 			toast.error('Please log in to continue');
+	// 			navigate('/login', { replace: true });
+	// 		}
+	// 	}
+	// 	checkSession();
+	// 	return () => { cancelled = true; };
+	// }, [navigate, user]);
 
 	useEffect(() => {
 		let cancelled = false;

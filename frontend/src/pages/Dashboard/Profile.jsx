@@ -27,12 +27,13 @@ export default function Profile() {
 		queryFn: () => api.getProfile().then((r) => r.data),
 	});
 
-	useEffect(() => {
-		if (error) {
-			const status = error?.response?.status;
-			if (status === 401) navigate('/login', { replace: true });
-		}
-	}, [error, navigate]);
+	// // Auth guard — re-enable when auth is wired up
+	// useEffect(() => {
+	// 	if (error) {
+	// 		const status = error?.response?.status;
+	// 		if (status === 401) navigate('/login', { replace: true });
+	// 	}
+	// }, [error, navigate]);
 
 	// Populate form once when data first loads
 	useEffect(() => {

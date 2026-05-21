@@ -26,12 +26,12 @@ export const Login = () => {
   }, []);
 
   const onSubmit = async (data) => {
-    if (data.email !== import.meta.env.VITE_DEMO_EMAIL || data.password !== import.meta.env.VITE_DEMO_PASSWORD) {
-      toast.error("In development");
-      return;
-    }
+    // // Demo credentials check — re-enable when auth is wired up
+    // if (data.email !== import.meta.env.VITE_DEMO_EMAIL || data.password !== import.meta.env.VITE_DEMO_PASSWORD) {
+    //   toast.error("In development");
+    //   return;
+    // }
     setIsSubmitting(true);
-    // Bypass API login — set demo user directly to avoid cross-site cookie issues on mobile
     useAuthStore.getState().setUser({ id: 'demo', email: data.email, name: 'Demo User' });
     toast.success("Login successful");
     setIsSubmitting(false);

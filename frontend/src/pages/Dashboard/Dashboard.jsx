@@ -17,32 +17,27 @@ export default function Dashboard() {
   const { user } = useAuthStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Dashboard");
-  const [isCheckingAuth, setIsCheckingAuth] = useState(!user);
+  // const [isCheckingAuth, setIsCheckingAuth] = useState(!user);
 
-  useEffect(() => {
-    if (user) return; // already have a persisted user, skip check
+  // // Auth guard — re-enable when auth is wired up
+  // useEffect(() => {
+  //   if (user) return;
+  //   let cancelled = false;
+  //   async function checkSession() {
+  //     try {
+  //       await api.getUser();
+  //       if (!cancelled) setIsCheckingAuth(false);
+  //     } catch (err) {
+  //       if (cancelled) return;
+  //       toast.error("Please log in to continue");
+  //       navigate("/login", { replace: true });
+  //     }
+  //   }
+  //   checkSession();
+  //   return () => { cancelled = true; };
+  // }, [navigate, user]);
 
-    let cancelled = false;
-
-    async function checkSession() {
-      try {
-        await api.getUser();
-        if (!cancelled) setIsCheckingAuth(false);
-      } catch (err) {
-        if (cancelled) return;
-        // const status = err?.response?.data ? err?.response?.status : undefined;
-        toast.error("Please log in to continue");
-        navigate("/login", { replace: true });
-      }
-    }
-
-    checkSession();
-    return () => {
-      cancelled = true;
-    };
-  }, [navigate, user]);
-
-  if (isCheckingAuth) return <div className="min-h-screen bg-[#010415]"><LoadingSpinner /></div>;
+  // if (isCheckingAuth) return <div className="min-h-screen bg-[#010415]"><LoadingSpinner /></div>;
 
   return (
     <div className="flex min-h-screen bg-[#010415] text-white">
