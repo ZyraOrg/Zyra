@@ -49,7 +49,9 @@ const queryClient = new QueryClient({
 function RouterContent() {
   // useUser(); // 
 
-  <Route path="/admin" element={<Admin />}>
+  return (
+    <Routes>
+      <Route path="/admin" element={<Admin />}>
         <Route index                  element={<AdminHome />} />
         <Route path="users"           element={<Users />} />
         <Route path="campaigns"       element={<AdminCampaigns />} /> 
@@ -57,10 +59,7 @@ function RouterContent() {
         <Route path="moderation"      element={<Moderation />} />
         <Route path="settings"        element={<AdminSettings />} />
       </Route>
-
-
-  return (
-    <Routes>
+      
       <Route path="/signup"    element={<SignUp />} />
       <Route path="/login"     element={<Login />} />
       <Route path="/auth/callback" element={<AuthCallback />} />

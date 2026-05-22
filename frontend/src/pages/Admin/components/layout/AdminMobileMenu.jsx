@@ -25,19 +25,22 @@ export default function AdminMobileMenu({ isOpen, onClose }) {
     return "Overview";
   })();
 
-  if (!isOpen) return null;
-
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop with fade animation */}
       <div
-        className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+        className={`fixed inset-0 z-40 bg-black/60 lg:hidden transition-opacity duration-300 ${
+          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
         onClick={onClose}
       />
 
-      {/* Drawer */}
-      <div className="fixed left-0 top-0 h-full w-72 bg-[#010410] z-50 lg:hidden flex flex-col border-r border-gray-800">
-
+      {/* Drawer with slide animation */}
+      <div 
+        className={`fixed left-0 top-0 h-full w-72 bg-[#010410] z-50 lg:hidden flex flex-col border-r border-gray-800 transition-transform duration-300 ease-in-out ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
         {/* Header */}
         <div className="flex items-center justify-between h-20 px-6 border-b border-gray-800">
           <p className="text-sm font-bold text-white">
