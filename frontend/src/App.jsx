@@ -29,6 +29,7 @@ import Support from "./pages/Settings/pages/Support";
 // import { useUser } from "./hooks/useUser"; // <--- Commented out here
 
 import Admin from "./pages/Admin/Admin";
+import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminHome from "./pages/Admin/AdminHome";
 import Users from "./pages/Admin/pages/Users";
 // Renamed this import to avoid the conflict with Dashboard's Campaigns
@@ -51,10 +52,11 @@ function RouterContent() {
 
   return (
     <Routes>
+      <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin" element={<Admin />}>
         <Route index                  element={<AdminHome />} />
         <Route path="users"           element={<Users />} />
-        <Route path="campaigns"       element={<AdminCampaigns />} /> 
+        <Route path="campaigns"       element={<AdminCampaigns />} />
         <Route path="analytics"       element={<Analytics />} />
         <Route path="moderation"      element={<Moderation />} />
         <Route path="settings"        element={<AdminSettings />} />

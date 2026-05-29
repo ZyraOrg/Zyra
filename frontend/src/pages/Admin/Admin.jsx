@@ -1,48 +1,21 @@
-import { /*useEffect,*/ useState } from "react";
-import { Outlet /*, useNavigate*/ } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import AdminSidebar from "./components/layout/AdminSidebar";
 import AdminMobileMenu from "./components/layout/AdminMobileMenu";
-// import LoadingSpinner from "../../components/LoadingSpinner";
-// import api from "../../services/api";
-// import toast from "react-hot-toast";
-// import useAuthStore from "../../store/useAuthStore";
+import useAdminStore from "../../store/useAdminStore";
 
 export default function Admin() {
-  // const navigate = useNavigate();
-  // const { user } = useAuthStore();
-  
+  const navigate = useNavigate();
+  const { isAdmin } = useAdminStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
-  // const [isCheckingAuth, setIsCheckingAuth] = useState(!user);
 
-  /*
   useEffect(() => {
-    if (user) return;
-    let cancelled = false;
-    async function checkSession() {
-      try {
-        await api.getUser();
-        if (!cancelled) setIsCheckingAuth(false);
-      } catch {
-        if (cancelled) return;
-        toast.error("Please log in to continue");
-        navigate("/login", { replace: true });
-      }
+    if (!isAdmin) {
+      navigate("/admin/login", { replace: true });
     }
-    checkSession();
-    return () => { cancelled = true; };
-  }, [navigate, user]);
-  */
+  }, [isAdmin, navigate]);
 
-  /*
-  if (isCheckingAuth) {
-    return (
-      <div className="min-h-screen bg-[#010415]">
-        <LoadingSpinner message="Loading admin panel..." />
-      </div>
-    );
-  }
-  */
+  if (!isAdmin) return null;
 
   return (
     <div className="flex h-screen bg-[#010415] text-white overflow-hidden">

@@ -26,16 +26,19 @@ export const Login = () => {
   }, []);
 
   const onSubmit = async (data) => {
-    // // Demo credentials check — re-enable when auth is wired up
-    // if (data.email !== import.meta.env.VITE_DEMO_EMAIL || data.password !== import.meta.env.VITE_DEMO_PASSWORD) {
-    //   toast.error("In development");
-    //   return;
-    // }
+    if (
+      data.email !== import.meta.env.VITE_DEMO_EMAIL ||
+      data.password !== import.meta.env.VITE_DEMO_PASSWORD
+    ) {
+      toast.error("Still in development");
+      return;
+    }
     setIsSubmitting(true);
     useAuthStore.getState().setUser({ id: 'demo', email: data.email, name: 'Demo User' });
     toast.success("Login successful");
     setIsSubmitting(false);
     navigate("/dashboard");
+    // Real auth (re-enable when backend is wired up):
     // try {
     //   const res = await api.login(data.email, data.password);
     //   toast.success(res.data.message || "Login successful");

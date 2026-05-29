@@ -4,6 +4,7 @@ import { LogOut, LayoutDashboard, Users, Megaphone, BarChart3, ShieldCheck, Sett
 import toast from "react-hot-toast";
 import Logo from "../../../../assets/logo.png";
 import api from "../../../../services/api";
+import useAdminStore from "../../../../store/useAdminStore";
 
 const navItems = [
   { label: "Overview",   icon: LayoutDashboard, path: "/admin"            },
@@ -20,6 +21,7 @@ const bottomItems = [
 export default function AdminSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { adminLogout } = useAdminStore();
   const [username, setUsername] = useState("Admin");
 
   useEffect(() => {
@@ -49,7 +51,9 @@ export default function AdminSidebar() {
   })();
 
   const handleLogout = () => {
-    navigate("/", { replace: true });
+    adminLogout();
+    toast.success("Logged out");
+    navigate("/admin/login", { replace: true });
   };
 
   return (

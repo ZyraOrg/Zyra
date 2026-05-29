@@ -1,5 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { X, LayoutDashboard, Users, Megaphone, BarChart3, ShieldCheck, Settings, LogOut } from "lucide-react";
+import toast from "react-hot-toast";
+import useAdminStore from "../../../../store/useAdminStore";
 
 const navItems = [
   { label: "Overview",   icon: LayoutDashboard, path: "/admin"            },
@@ -13,6 +15,7 @@ const navItems = [
 export default function AdminMobileMenu({ isOpen, onClose }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { adminLogout } = useAdminStore();
 
   const activeLabel = (() => {
     const path = location?.pathname || "";
@@ -78,7 +81,7 @@ export default function AdminMobileMenu({ isOpen, onClose }) {
         {/* Logout */}
         <div className="px-4 pt-4 pb-6 border-t border-gray-800">
           <button
-            onClick={() => { navigate("/"); onClose(); }}
+            onClick={() => { adminLogout(); toast.success("Logged out"); navigate("/admin/login", { replace: true }); onClose(); }}
             className="flex items-center w-full gap-3 px-4 py-3 text-gray-400 rounded-lg hover:bg-[#13131A] hover:text-white transition-colors"
           >
             <LogOut className="flex-shrink-0 w-5 h-5" />
