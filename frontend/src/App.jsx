@@ -26,7 +26,16 @@ import AccountInfo from "./pages/Settings/pages/AccountInfo";
 import WalletPayments from "./pages/Settings/pages/WalletPayments";
 import Privacy from "./pages/Settings/pages/Privacy";
 import Support from "./pages/Settings/pages/Support";
-import { useUser } from "./hooks/useUser";
+// import { useUser } from "./hooks/useUser"; // <--- Commented out here
+
+import Admin from "./pages/Admin/Admin";
+import AdminHome from "./pages/Admin/AdminHome";
+import Users from "./pages/Admin/pages/Users";
+// Renamed this import to avoid the conflict with Dashboard's Campaigns
+import AdminCampaigns from "./pages/Admin/pages/Campaigns"; 
+import Analytics from "./pages/Admin/pages/Analytics";
+import Moderation from "./pages/Admin/pages/Moderation";
+import AdminSettings from "./pages/Admin/pages/AdminSettings";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,10 +47,19 @@ const queryClient = new QueryClient({
 });
 
 function RouterContent() {
-  useUser();
+  // useUser(); // 
 
   return (
     <Routes>
+      <Route path="/admin" element={<Admin />}>
+        <Route index                  element={<AdminHome />} />
+        <Route path="users"           element={<Users />} />
+        <Route path="campaigns"       element={<AdminCampaigns />} /> 
+        <Route path="analytics"       element={<Analytics />} />
+        <Route path="moderation"      element={<Moderation />} />
+        <Route path="settings"        element={<AdminSettings />} />
+      </Route>
+      
       <Route path="/signup"    element={<SignUp />} />
       <Route path="/login"     element={<Login />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
@@ -59,6 +77,7 @@ function RouterContent() {
         <Route path="support" element={<Support />} />
       </Route>
 
+      
       <Route
         path="/"
         element={
