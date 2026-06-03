@@ -26,7 +26,8 @@ import AccountInfo from "./pages/Settings/pages/AccountInfo";
 import WalletPayments from "./pages/Settings/pages/WalletPayments";
 import Privacy from "./pages/Settings/pages/Privacy";
 import Support from "./pages/Settings/pages/Support";
-// import { useUser } from "./hooks/useUser"; // <--- Commented out here
+import { useUser } from "./hooks/useUser";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import Admin from "./pages/Admin/Admin";
 import AdminLogin from "./pages/Admin/AdminLogin";
@@ -48,7 +49,7 @@ const queryClient = new QueryClient({
 });
 
 function RouterContent() {
-  // useUser(); // 
+  useUser();
 
   return (
     <Routes>
@@ -61,22 +62,24 @@ function RouterContent() {
         <Route path="moderation"      element={<Moderation />} />
         <Route path="settings"        element={<AdminSettings />} />
       </Route>
-      
-      <Route path="/signup"    element={<SignUp />} />
-      <Route path="/login"     element={<Login />} />
+
+      <Route path="/signup"        element={<SignUp />} />
+      <Route path="/login"         element={<Login />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
 
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/dashboard/create-campaign" element={<CreateCampaign />} />
-      <Route path="/dashboard/campaigns"       element={<Campaigns />} />
-      <Route path="/dashboard/campaigns/:id"   element={<CampaignDetails />} />
-      <Route path="/dashboard/profile"         element={<Profile />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard"                      element={<Dashboard />} />
+        <Route path="/dashboard/create-campaign"      element={<CreateCampaign />} />
+        <Route path="/dashboard/campaigns"            element={<Campaigns />} />
+        <Route path="/dashboard/campaigns/:id"        element={<CampaignDetails />} />
+        <Route path="/dashboard/profile"              element={<Profile />} />
 
-      <Route path="/settings" element={<SettingsLayout />}>
-        <Route index         element={<AccountInfo />} />
-        <Route path="wallet" element={<WalletPayments />} />
-        <Route path="privacy" element={<Privacy />} />
-        <Route path="support" element={<Support />} />
+        <Route path="/settings" element={<SettingsLayout />}>
+          <Route index          element={<AccountInfo />} />
+          <Route path="wallet"  element={<WalletPayments />} />
+          <Route path="privacy" element={<Privacy />} />
+          <Route path="support" element={<Support />} />
+        </Route>
       </Route>
 
       

@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import api from '../services/api';
 import useAuthStore from '../store/useAuthStore';
 
-const PUBLIC_ROUTES = ['/', '/login', '/signup', '/auth/callback'];
+const PUBLIC_ROUTES = ['/', '/login', '/signup', '/auth/callback', '/admin/login'];
 
 export const useUser = () => {
   const { setUser, setLoading } = useAuthStore();
