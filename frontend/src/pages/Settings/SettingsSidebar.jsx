@@ -1,16 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, LogOut } from "lucide-react";
 import toast from "react-hot-toast";
 import { settingsnavItems } from "../Dashboard/constants/dashboardData";
 import Logo from "../../assets/logo.png";
-import api from "../../services/api";
+import supabase from "../../lib/supabaseClient";
 import useAuthStore from "../../store/useAuthStore";
 
 export default function SettingsSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { user } = useAuthStore();
 
   // const username = user?.name || user?.username || user?.email || "User";
@@ -31,16 +29,13 @@ export default function SettingsSidebar() {
     return "";
   })();
 
-  const handleLogout = async () => {
-    try {
-      await api.logout();
-    } catch {
-      // proceed even if backend call fails
-    }
-    useAuthStore.getState().logout();
-    queryClient.removeQueries({ queryKey: ['user'] });
-    toast.success("Logged out successfully");
-    navigate("/login", { replace: true });
+  const handleLogout = () => {
+    // const { error } = await supabase.auth.signOut();
+    // if (error) throw error;
+    // useAuthStore.getState().logout();
+    // toast.success("Logged out successfully");
+    // navigate("/login", { replace: true });
+    navigate("/", { replace: true });
   };
 
   return (
