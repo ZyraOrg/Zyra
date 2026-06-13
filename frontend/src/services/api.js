@@ -61,4 +61,7 @@ export default {
     files.forEach((file) => formData.append('documents', file));
     return uploadFile(`/api/campaigns/${campaignId}/documents`, formData);
   },
+  // Public endpoint — fetches approved campaigns for the public campaigns page
+  getPublicCampaigns: ({ limit = 20, offset = 0 } = {}) =>
+    request('GET', `/api/campaigns/public?limit=${limit}&offset=${offset}`),
 };

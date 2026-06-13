@@ -38,6 +38,8 @@ import Analytics from "./pages/Admin/pages/Analytics";
 import Moderation from "./pages/Admin/pages/Moderation";
 import AdminSettings from "./pages/Admin/pages/AdminSettings";
 
+import PublicCampaigns from "./pages/Campaigns/PublicCampaigns";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -77,7 +79,10 @@ function RouterContent() {
         <Route path="wallet" element={<WalletPayments />} />
         <Route path="privacy" element={<Privacy />} />
         <Route path="support" element={<Support />} />
+
       </Route>
+
+      <Route path="/campaigns" element={<PublicCampaigns />} />
 
       
       <Route
