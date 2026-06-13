@@ -76,14 +76,15 @@ function RouterContent() {
         <Route path="/dashboard/campaigns/:id"        element={<CampaignDetails />} />
         <Route path="/dashboard/profile"              element={<Profile />} />
 
-      <Route path="/settings" element={<SettingsLayout />}>
-        <Route index         element={<AccountInfo />} />
-        <Route path="wallet" element={<WalletPayments />} />
-        <Route path="privacy" element={<Privacy />} />
-        <Route path="support" element={<Support />} />
-      </Route>
+        <Route path="/settings" element={<SettingsLayout />}>
+          <Route index         element={<AccountInfo />} />
+          <Route path="wallet" element={<WalletPayments />} />
+          <Route path="privacy" element={<Privacy />} />
+          <Route path="support" element={<Support />} />
+        </Route>
 
-      <Route path="/campaigns" element={<PublicCampaigns />} />
+        <Route path="/campaigns" element={<PublicCampaigns />} />
+      </Route>
 
       
       <Route
