@@ -1,11 +1,12 @@
 import { X, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { navItems } from "../../constants/dashboardData";
 import Logo from "../../../../assets/logo.png";
-import supabase from "../../../../lib/supabaseClient";
 import api from "../../../../services/api";
+import useAuthStore from "../../../../store/useAuthStore";
 
 export default function MobileMenu({
   isOpen,
@@ -14,6 +15,7 @@ export default function MobileMenu({
   // setActiveItem,
 }) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [username, setUsername] = useState("User");
   const [activeItem, setActiveItem] = useState("");
 
@@ -35,17 +37,16 @@ export default function MobileMenu({
     };
   }, [isOpen]);
 
-  const handleLogout = () => {
-    // try {
-    //   const { error } = await supabase.auth.signOut();
-    //   if (error) throw error;
-    //   toast.success("Logged out successfully");
-    //   navigate("/login", { replace: true });
-    // } catch (err) {
-    //   console.error("Logout error:", err);
-    //   toast.error(err?.message || "Failed to log out");
-    // }
-    navigate("/", { replace: true });
+  const handleLogout = async () => {
+    try {
+      await api.logout();
+    } catch {
+      // proceed even if backend call fails
+    }
+    useAuthStore.getState().logout();
+    queryClient.removeQueries({ queryKey: ['user'] });
+    toast.success("Logged out successfully");
+    navigate("/login", { replace: true });
   };
 
   const handleNavClick = (item) => {

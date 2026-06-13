@@ -26,6 +26,7 @@ export const Login = () => {
   }, []);
 
   const onSubmit = async (data) => {
+    // Only the test credentials are allowed in for now.
     if (
       data.email !== import.meta.env.VITE_DEMO_EMAIL ||
       data.password !== import.meta.env.VITE_DEMO_PASSWORD
@@ -34,24 +35,22 @@ export const Login = () => {
       return;
     }
     setIsSubmitting(true);
-    useAuthStore.getState().setUser({ id: 'demo', email: data.email, name: 'Demo User' });
-    toast.success("Login successful");
-    setIsSubmitting(false);
-    navigate("/dashboard");
-    // Real auth (re-enable when backend is wired up):
-    // try {
-    //   const res = await api.login(data.email, data.password);
-    //   toast.success(res.data.message || "Login successful");
-    //   navigate("/dashboard");
-    // } catch (error) {
-    //   const err =
-    //     error.response?.data?.error ||
-    //     error.response?.data?.message ||
-    //     "Login failed";
-    //   toast.error(err);
-    // } finally {
-    //   setIsSubmitting(false);
-    // }
+    try {
+      // Route the test credentials through the real backend so the
+      // access_token cookie gets set (required for protected routes).
+      const res = await api.login(data.email, data.password);
+      useAuthStore.getState().setUser(res.data.user);
+      toast.success(res.data.message || "Login successful");
+      navigate("/dashboard");
+    } catch (error) {
+      const err =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Login failed";
+      toast.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
