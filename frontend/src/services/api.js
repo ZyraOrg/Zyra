@@ -162,6 +162,7 @@ export const adminApi = {
   suspendUser: (id) => adminRequest('PUT', `/users/${encodeURIComponent(id)}/suspend`),
   activateUser: (id) => adminRequest('PUT', `/users/${encodeURIComponent(id)}/activate`),
   getCampaigns: (params) => adminRequest('GET', `/campaigns${buildQuery(params)}`),
+  getCampaign: (id) => adminRequest('GET', `/campaigns/${encodeURIComponent(id)}`),
   approveCampaign: (id) => adminRequest('PUT', `/campaigns/${encodeURIComponent(id)}/approve`),
   rejectCampaign: (id) => adminRequest('PUT', `/campaigns/${encodeURIComponent(id)}/reject`),
   getFlags: (filter) => adminRequest('GET', `/flags${buildQuery({ filter })}`),
