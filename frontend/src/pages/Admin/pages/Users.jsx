@@ -176,9 +176,7 @@ export default function Users() {
           </table>
         </div>
         <div className="flex items-center justify-between px-5 py-3 border-t border-gray-800/50">
-          <span className="text-xs text-gray-500">
-            Page {page}{total ? ` · ${total} total` : ""}
-          </span>
+          <span className="text-xs text-gray-500">Showing {users.length} of {total}</span>
           <div className="flex gap-2">
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
