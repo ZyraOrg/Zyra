@@ -2,6 +2,15 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 const TOKEN_KEY = 'zyra-token';
 const REFRESH_KEY = 'zyra-refresh';
 const SESSION_KEY = 'zyra-session';
+const ADMIN_TOKEN_KEY = 'zyra-admin-token';
+
+export function setAdminToken(token) {
+  if (token) localStorage.setItem(ADMIN_TOKEN_KEY, token);
+}
+
+export function clearAdminToken() {
+  localStorage.removeItem(ADMIN_TOKEN_KEY);
+}
 
 export function setTokens({ access_token, refresh_token, session_token } = {}) {
   if (access_token) localStorage.setItem(TOKEN_KEY, access_token);
@@ -115,15 +124,15 @@ async function uploadFile(path, formData, _retried = false) {
   return { data };
 }
 
-// --- Admin API ---------------------------------------------------------
-// Admin auth is cookie-based: useAdminStore.adminLogin sets the access_token
-// cookie, so these requests rely on `credentials: 'include'` and send no
-// Authorization header (which would otherwise carry a non-admin user token).
 async function adminRequest(method, path, body) {
+  const token = localStorage.getItem(ADMIN_TOKEN_KEY);
   const options = {
     method,
     credentials: 'include',
-    headers: body ? { 'Content-Type': 'application/json' } : {},
+    headers: {
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
   };
   if (body) options.body = JSON.stringify(body);
 

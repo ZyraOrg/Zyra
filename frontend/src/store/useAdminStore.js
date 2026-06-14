@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { setAdminToken, clearAdminToken } from '../services/api';
 
 const API = import.meta.env.VITE_API_BASE_URL;
 
@@ -16,9 +17,13 @@ const useAdminStore = create(
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data.error || 'Login failed');
+        setAdminToken(data.access_token);
         set({ isAdmin: true });
       },
-      adminLogout: () => set({ isAdmin: false }),
+      adminLogout: () => {
+        clearAdminToken();
+        set({ isAdmin: false });
+      },
     }),
     {
       name: 'zyra-admin-session',
