@@ -115,6 +115,53 @@ async function uploadFile(path, formData, _retried = false) {
   return { data };
 }
 
+// --- Admin API ---------------------------------------------------------
+// Admin auth is cookie-based: useAdminStore.adminLogin sets the access_token
+// cookie, so these requests rely on `credentials: 'include'` and send no
+// Authorization header (which would otherwise carry a non-admin user token).
+async function adminRequest(method, path, body) {
+  const options = {
+    method,
+    credentials: 'include',
+    headers: body ? { 'Content-Type': 'application/json' } : {},
+  };
+  if (body) options.body = JSON.stringify(body);
+
+  const res = await fetch(`${BASE_URL}/api/admin${path}`, options);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error(data?.error || data?.message || 'Request failed');
+    err.response = { status: res.status, data };
+    throw err;
+  }
+  return { data };
+}
+
+const buildQuery = (params = {}) => {
+  const qs = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null && value !== '') qs.append(key, value);
+  }
+  const str = qs.toString();
+  return str ? `?${str}` : '';
+};
+
+export const adminApi = {
+  getStats: () => adminRequest('GET', '/stats'),
+  getAnalytics: () => adminRequest('GET', '/analytics'),
+  getUsers: (params) => adminRequest('GET', `/users${buildQuery(params)}`),
+  suspendUser: (id) => adminRequest('PUT', `/users/${encodeURIComponent(id)}/suspend`),
+  activateUser: (id) => adminRequest('PUT', `/users/${encodeURIComponent(id)}/activate`),
+  getCampaigns: (params) => adminRequest('GET', `/campaigns${buildQuery(params)}`),
+  approveCampaign: (id) => adminRequest('PUT', `/campaigns/${encodeURIComponent(id)}/approve`),
+  rejectCampaign: (id) => adminRequest('PUT', `/campaigns/${encodeURIComponent(id)}/reject`),
+  getFlags: (filter) => adminRequest('GET', `/flags${buildQuery({ filter })}`),
+  resolveFlag: (id) => adminRequest('PUT', `/flags/${encodeURIComponent(id)}/resolve`),
+  dismissFlag: (id) => adminRequest('DELETE', `/flags/${encodeURIComponent(id)}`),
+  getSettings: () => adminRequest('GET', '/settings'),
+  updateSettings: (payload) => adminRequest('PUT', '/settings', payload),
+};
+
 export default {
   getUser: () => request('GET', '/api/auth/me'),
   signup: (name, email, password, confirmPassword) => request('POST', '/api/auth/signup', { name, email, password, confirmPassword }),

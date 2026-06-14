@@ -1,16 +1,12 @@
 import { useState } from "react";
 import { CheckCircle, XCircle, Clock, Search } from "lucide-react";
-
-const ALL_CAMPAIGNS = [
-  { id: 1, title: "Medical Aid for Ade",     organizer: "@emeka",  amount: "$4,200",  goal: "$10,000", status: "Pending",  date: "May 1, 2025"  },
-  { id: 2, title: "School Supplies Drive",   organizer: "@kwame",  amount: "$1,800",  goal: "$5,000",  status: "Approved", date: "Apr 28, 2025" },
-  { id: 3, title: "Flood Relief Lagos",      organizer: "@ngozi",  amount: "$12,500", goal: "$20,000", status: "Pending",  date: "May 5, 2025"  },
-  { id: 4, title: "Tech Skills for Youth",   organizer: "@fatima", amount: "$3,000",  goal: "$8,000",  status: "Rejected", date: "Apr 20, 2025" },
-  { id: 5, title: "Community Water Project", organizer: "@adaeze", amount: "$8,750",  goal: "$15,000", status: "Approved", date: "Apr 15, 2025" },
-  { id: 6, title: "Maternal Health Fund",    organizer: "@yemi",   amount: "$2,100",  goal: "$6,000",  status: "Pending",  date: "May 8, 2025"  },
-];
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { formatCurrency } from "../../Dashboard/utils/formatters";
+import { adminApi } from "../../../services/api";
 
 const FILTERS = ["All", "Pending", "Approved", "Rejected"];
+const PER_PAGE = 20;
 
 const STATUS_STYLES = {
   Pending:  "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20",
@@ -27,18 +23,34 @@ const STATUS_ICON = {
 export default function Campaigns() {
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
-  const [items,  setItems]  = useState(ALL_CAMPAIGNS);
+  const queryClient = useQueryClient();
 
-  const filtered = items.filter((c) => {
-    const matchFilter = filter === "All" || c.status === filter;
-    const matchSearch = c.title.toLowerCase().includes(search.toLowerCase()) || c.organizer.toLowerCase().includes(search.toLowerCase());
-    return matchFilter && matchSearch;
+  const apiFilter = filter === "All" ? "all" : filter.toLowerCase();
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin-campaigns", { filter: apiFilter, search }],
+    queryFn: () =>
+      adminApi
+        .getCampaigns({ filter: apiFilter, search, limit: PER_PAGE })
+        .then((r) => r.data),
+    placeholderData: keepPreviousData,
   });
 
-  function approve(id) { setItems((p) => p.map((c) => c.id === id ? { ...c, status: "Approved" } : c)); }
-  function reject(id)  { setItems((p) => p.map((c) => c.id === id ? { ...c, status: "Rejected" } : c)); }
-
+  const items   = data?.campaigns ?? [];
+  const total   = data?.total ?? items.length;
   const pending = items.filter((c) => c.status === "Pending").length;
+
+  const moderate = useMutation({
+    mutationFn: ({ id, action }) =>
+      action === "approve" ? adminApi.approveCampaign(id) : adminApi.rejectCampaign(id),
+    onSuccess: (_res, { action }) => {
+      toast.success(action === "approve" ? "Campaign approved" : "Campaign rejected");
+      queryClient.invalidateQueries({ queryKey: ["admin-campaigns"] });
+    },
+    onError: (err) => toast.error(err.message || "Action failed"),
+  });
+
+  const approve = (id) => moderate.mutate({ id, action: "approve" });
+  const reject  = (id) => moderate.mutate({ id, action: "reject" });
 
   return (
     <div className="space-y-6">
@@ -47,7 +59,7 @@ export default function Campaigns() {
           <h1 className="text-2xl font-bold sm:text-3xl">
             Campaigns <span className="text-secondary">Moderation</span>
           </h1>
-          <p className="mt-1 text-sm text-gray-400">{pending} pending review · {items.length} total</p>
+          <p className="mt-1 text-sm text-gray-400">{pending} pending review · {total} total</p>
         </div>
         {pending > 0 && (
           <span className="px-3 py-1.5 rounded-full text-sm font-medium bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">
@@ -84,10 +96,15 @@ export default function Campaigns() {
       </div>
 
       <div className="space-y-3">
-        {filtered.map((c) => {
-          const raised = parseFloat(c.amount.replace(/\D/g, ""));
-          const goal   = parseFloat(c.goal.replace(/\D/g, ""));
-          const pct    = Math.min(100, Math.round((raised / goal) * 100));
+        {items.length === 0 && (
+          <div className="bg-[#010410] border border-gray-800/50 rounded-xl p-16 text-center text-gray-500">
+            {isLoading ? "Loading…" : "No campaigns found"}
+          </div>
+        )}
+        {items.map((c) => {
+          const raised = Number(c.amount) || 0;
+          const goal   = Number(c.goal) || 0;
+          const pct    = goal ? Math.min(100, Math.round((raised / goal) * 100)) : 0;
           return (
             <div key={c.id} className="bg-[#010410] border border-gray-800/50 rounded-xl p-5 flex items-center justify-between flex-wrap gap-4 hover:border-gray-700 transition-colors">
               <div className="flex-1 min-w-0">
@@ -99,8 +116,8 @@ export default function Campaigns() {
                 </div>
                 <div className="flex flex-wrap gap-4 mb-2 text-sm text-gray-400">
                   <span>Organizer: <span className="text-secondary">{c.organizer}</span></span>
-                  <span>Raised: <span className="font-medium text-white">{c.amount}</span></span>
-                  <span>Goal: {c.goal}</span>
+                  <span>Raised: <span className="font-medium text-white">{formatCurrency(raised)}</span></span>
+                  <span>Goal: {formatCurrency(goal)}</span>
                   <span>Submitted: {c.date}</span>
                 </div>
                 <div className="flex items-center max-w-xs gap-2">
@@ -115,10 +132,10 @@ export default function Campaigns() {
               </div>
               {c.status === "Pending" && (
                 <div className="flex gap-2 shrink-0">
-                  <button onClick={() => approve(c.id)} className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500/20 text-sm font-medium transition-colors">
+                  <button onClick={() => approve(c.id)} disabled={moderate.isPending} className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500/20 text-sm font-medium transition-colors disabled:opacity-50">
                     <CheckCircle size={15} /> Approve
                   </button>
-                  <button onClick={() => reject(c.id)}  className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-red-500/10  text-red-400  hover:bg-red-500/20  text-sm font-medium transition-colors">
+                  <button onClick={() => reject(c.id)} disabled={moderate.isPending} className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-red-500/10  text-red-400  hover:bg-red-500/20  text-sm font-medium transition-colors disabled:opacity-50">
                     <XCircle    size={15} /> Reject
                   </button>
                 </div>

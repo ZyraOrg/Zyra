@@ -1,16 +1,9 @@
 import { useState } from "react";
-import { Search, MoreVertical, UserPlus } from "lucide-react";
-
-const ALL_USERS = [
-  { id: 1, name: "Adaeze Okafor",  email: "adaeze@mail.com",  role: "Donor",     status: "Active",    joined: "Jan 12, 2025", donations: "$1,240" },
-  { id: 2, name: "Emeka Nwosu",    email: "emeka@mail.com",   role: "Organizer", status: "Active",    joined: "Feb 3, 2025",  donations: "$8,400" },
-  { id: 3, name: "Fatima Al-Amin", email: "fatima@mail.com",  role: "Donor",     status: "Suspended", joined: "Mar 18, 2025", donations: "$320"   },
-  { id: 4, name: "Kwame Asante",   email: "kwame@mail.com",   role: "Organizer", status: "Active",    joined: "Apr 5, 2025",  donations: "$5,750" },
-  { id: 5, name: "Ngozi Dike",     email: "ngozi@mail.com",   role: "Donor",     status: "Active",    joined: "Apr 22, 2025", donations: "$890"   },
-  { id: 6, name: "Amara Osei",     email: "amara@mail.com",   role: "Donor",     status: "Active",    joined: "May 1, 2025",  donations: "$2,100" },
-  { id: 7, name: "Chidi Okeke",    email: "chidi@mail.com",   role: "Organizer", status: "Active",    joined: "May 8, 2025",  donations: "$14,200"},
-  { id: 8, name: "Yemi Adesanya",  email: "yemi@mail.com",    role: "Donor",     status: "Suspended", joined: "May 10, 2025", donations: "$0"     },
-];
+import { Search, MoreVertical, Ban, CheckCircle, UserPlus } from "lucide-react";
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { formatCurrency } from "../../Dashboard/utils/formatters";
+import { adminApi } from "../../../services/api";
 
 const STATUS_STYLES = {
   Active:    "bg-green-500/10 text-green-400 border border-green-500/20",
@@ -19,18 +12,50 @@ const STATUS_STYLES = {
 
 const ROLES    = ["All Roles",   "Donor", "Organizer"];
 const STATUSES = ["All Status",  "Active", "Suspended"];
+const PER_PAGE = 10;
+
+// Stable numeric seed for the avatar gradient (users have uuid string ids).
+const hueSeed = (id) =>
+  String(id).split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
 
 export default function Users() {
   const [search, setSearch] = useState("");
   const [role,   setRole]   = useState("All Roles");
   const [status, setStatus] = useState("All Status");
+  const [page,   setPage]   = useState(1);
+  const [menuFor, setMenuFor] = useState(null);
+  const queryClient = useQueryClient();
 
-  const filtered = ALL_USERS.filter((u) => {
-    const matchSearch = u.name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase());
-    const matchRole   = role   === "All Roles"  || u.role   === role;
-    const matchStatus = status === "All Status" || u.status === status;
-    return matchSearch && matchRole && matchStatus;
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin-users", { search, role, status, page }],
+    queryFn: () =>
+      adminApi
+        .getUsers({ search, role, status, page, per_page: PER_PAGE })
+        .then((r) => r.data),
+    placeholderData: keepPreviousData,
   });
+
+  const users   = data?.users ?? [];
+  const total   = data?.total ?? 0;
+  const hasMore = data?.hasMore ?? false;
+
+  const toggleStatus = useMutation({
+    mutationFn: ({ id, suspend }) =>
+      suspend ? adminApi.suspendUser(id) : adminApi.activateUser(id),
+    onSuccess: (_res, { suspend }) => {
+      toast.success(suspend ? "User suspended" : "User activated");
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+      setMenuFor(null);
+    },
+    onError: (err) => toast.error(err.message || "Action failed"),
+  });
+
+  // The server paginates before filtering by search/role/status, so reset to
+  // page 1 whenever a filter changes to avoid landing on an empty page.
+  const onFilterChange = (setter) => (value) => {
+    setter(value);
+    setPage(1);
+  };
 
   return (
     <div className="space-y-6">
@@ -41,7 +66,7 @@ export default function Users() {
           <h1 className="text-2xl font-bold sm:text-3xl">
             Users <span className="text-secondary">Management</span>
           </h1>
-          <p className="mt-1 text-sm text-gray-400">{ALL_USERS.length} total registered users</p>
+          <p className="mt-1 text-sm text-gray-400">{total} total registered users</p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-primary to-secondary text-black rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">
           <UserPlus size={15} /> Invite User
@@ -56,14 +81,14 @@ export default function Users() {
             type="text"
             placeholder="Search users..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => onFilterChange(setSearch)(e.target.value)}
             className="w-full bg-[#010410] text-white text-sm pl-9 pr-4 py-2.5 rounded-lg border border-gray-800 focus:outline-none focus:border-secondary placeholder:text-gray-600"
           />
         </div>
-        <select value={role}   onChange={(e) => setRole(e.target.value)}   className="bg-[#010410] text-white text-sm px-4 py-2.5 rounded-lg border border-gray-800 focus:outline-none focus:border-secondary">
+        <select value={role}   onChange={(e) => onFilterChange(setRole)(e.target.value)}   className="bg-[#010410] text-white text-sm px-4 py-2.5 rounded-lg border border-gray-800 focus:outline-none focus:border-secondary">
           {ROLES.map((r)    => <option key={r}>{r}</option>)}
         </select>
-        <select value={status} onChange={(e) => setStatus(e.target.value)} className="bg-[#010410] text-white text-sm px-4 py-2.5 rounded-lg border border-gray-800 focus:outline-none focus:border-secondary">
+        <select value={status} onChange={(e) => onFilterChange(setStatus)(e.target.value)} className="bg-[#010410] text-white text-sm px-4 py-2.5 rounded-lg border border-gray-800 focus:outline-none focus:border-secondary">
           {STATUSES.map((s) => <option key={s}>{s}</option>)}
         </select>
       </div>
@@ -83,15 +108,22 @@ export default function Users() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800/30">
-              {filtered.map((u) => (
+              {users.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-5 py-10 text-center text-gray-500">
+                    {isLoading ? "Loading…" : "No users found"}
+                  </td>
+                </tr>
+              )}
+              {users.map((u) => (
                 <tr key={u.id} className="hover:bg-white/[0.02] transition-colors">
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
                       <div
                         className="flex items-center justify-center w-8 h-8 text-xs font-bold text-white rounded-full shrink-0"
-                        style={{ background: `linear-gradient(135deg, hsl(${u.id * 47 % 360},70%,55%), hsl(${u.id * 91 % 360},70%,45%))` }}
+                        style={{ background: `linear-gradient(135deg, hsl(${hueSeed(u.id) * 47 % 360},70%,55%), hsl(${hueSeed(u.id) * 91 % 360},70%,45%))` }}
                       >
-                        {u.name.charAt(0)}
+                        {u.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
                         <p className="font-medium text-white">{u.name}</p>
@@ -105,12 +137,38 @@ export default function Users() {
                       {u.status}
                     </span>
                   </td>
-                  <td className="px-5 py-4 font-medium text-white">{u.donations}</td>
+                  <td className="px-5 py-4 font-medium text-white">{formatCurrency(u.donations ?? 0)}</td>
                   <td className="px-5 py-4 text-gray-400">{u.joined}</td>
                   <td className="px-5 py-4">
-                    <button className="text-gray-500 transition-colors hover:text-white">
-                      <MoreVertical size={15} />
-                    </button>
+                    <div className="relative flex justify-end">
+                      <button
+                        onClick={() => setMenuFor(menuFor === u.id ? null : u.id)}
+                        className="text-gray-500 transition-colors hover:text-white"
+                      >
+                        <MoreVertical size={15} />
+                      </button>
+                      {menuFor === u.id && (
+                        <div className="absolute right-0 z-10 mt-7 w-40 bg-[#0b0e1a] border border-gray-800 rounded-lg shadow-xl overflow-hidden">
+                          {u.status === "Suspended" ? (
+                            <button
+                              onClick={() => toggleStatus.mutate({ id: u.id, suspend: false })}
+                              disabled={toggleStatus.isPending}
+                              className="flex items-center w-full gap-2 px-3 py-2.5 text-xs text-green-400 hover:bg-white/5 disabled:opacity-50"
+                            >
+                              <CheckCircle size={13} /> Activate user
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => toggleStatus.mutate({ id: u.id, suspend: true })}
+                              disabled={toggleStatus.isPending}
+                              className="flex items-center w-full gap-2 px-3 py-2.5 text-xs text-red-400 hover:bg-white/5 disabled:opacity-50"
+                            >
+                              <Ban size={13} /> Suspend user
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -118,10 +176,24 @@ export default function Users() {
           </table>
         </div>
         <div className="flex items-center justify-between px-5 py-3 border-t border-gray-800/50">
-          <span className="text-xs text-gray-500">Showing {filtered.length} of {ALL_USERS.length}</span>
+          <span className="text-xs text-gray-500">
+            Page {page}{total ? ` · ${total} total` : ""}
+          </span>
           <div className="flex gap-2">
-            <button className="px-3 py-1.5 text-xs border border-gray-800 rounded-lg text-gray-400 hover:text-white transition-colors">← Prev</button>
-            <button className="px-3 py-1.5 text-xs border border-gray-800 rounded-lg text-gray-400 hover:text-white transition-colors">Next →</button>
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="px-3 py-1.5 text-xs border border-gray-800 rounded-lg text-gray-400 hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              ← Prev
+            </button>
+            <button
+              onClick={() => setPage((p) => p + 1)}
+              disabled={!hasMore}
+              className="px-3 py-1.5 text-xs border border-gray-800 rounded-lg text-gray-400 hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              Next →
+            </button>
           </div>
         </div>
       </div>

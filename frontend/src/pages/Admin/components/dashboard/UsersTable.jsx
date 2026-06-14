@@ -1,23 +1,29 @@
 import { useState } from "react";
 import { Search, MoreVertical } from "lucide-react";
-
-const USERS = [
-  { id: 1, name: "Adaeze Okafor",  email: "adaeze@mail.com",  role: "Donor",     status: "Active",    joined: "Jan 12, 2025" },
-  { id: 2, name: "Emeka Nwosu",    email: "emeka@mail.com",   role: "Organizer", status: "Active",    joined: "Feb 3, 2025"  },
-  { id: 3, name: "Fatima Al-Amin", email: "fatima@mail.com",  role: "Donor",     status: "Suspended", joined: "Mar 18, 2025" },
-  { id: 4, name: "Kwame Asante",   email: "kwame@mail.com",   role: "Organizer", status: "Active",    joined: "Apr 5, 2025"  },
-  { id: 5, name: "Ngozi Dike",     email: "ngozi@mail.com",   role: "Donor",     status: "Active",    joined: "Apr 22, 2025" },
-];
+import { useQuery } from "@tanstack/react-query";
+import { adminApi } from "../../../../services/api";
 
 const STATUS_STYLES = {
   Active:    "bg-green-500/10 text-green-400 border border-green-500/20",
   Suspended: "bg-red-500/10  text-red-400   border border-red-500/20",
 };
 
+// Stable numeric seed for the avatar gradient (users have uuid string ids).
+const hueSeed = (id) =>
+  String(id).split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+
 export default function UsersTable() {
   const [search, setSearch] = useState("");
 
-  const filtered = USERS.filter(
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin-users", "recent"],
+    queryFn: () => adminApi.getUsers({ per_page: 5 }).then((r) => r.data),
+  });
+
+  const users = data?.users ?? [];
+  const total = data?.total ?? users.length;
+
+  const filtered = users.filter(
     (u) =>
       u.name.toLowerCase().includes(search.toLowerCase()) ||
       u.email.toLowerCase().includes(search.toLowerCase())
@@ -56,15 +62,22 @@ export default function UsersTable() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-800/30">
+            {!isLoading && filtered.length === 0 && (
+              <tr>
+                <td colSpan={5} className="px-5 py-8 text-sm text-center text-gray-500">
+                  {isLoading ? "Loading…" : "No users found"}
+                </td>
+              </tr>
+            )}
             {filtered.map((u) => (
               <tr key={u.id} className="hover:bg-white/[0.02] transition-colors">
                 <td className="px-5 py-3">
                   <div className="flex items-center gap-3">
                     <div
                       className="flex items-center justify-center text-xs font-bold text-white rounded-full w-7 h-7 shrink-0"
-                      style={{ background: `linear-gradient(135deg, hsl(${u.id * 47 % 360},70%,55%), hsl(${u.id * 91 % 360},70%,45%))` }}
+                      style={{ background: `linear-gradient(135deg, hsl(${hueSeed(u.id) * 47 % 360},70%,55%), hsl(${hueSeed(u.id) * 91 % 360},70%,45%))` }}
                     >
-                      {u.name.charAt(0)}
+                      {u.name.charAt(0).toUpperCase()}
                     </div>
                     <div>
                       <p className="text-sm font-medium leading-tight text-white">{u.name}</p>
@@ -92,7 +105,7 @@ export default function UsersTable() {
 
       {/* Footer */}
       <div className="flex items-center justify-between px-5 py-3 border-t border-gray-800/50">
-        <span className="text-xs text-gray-500">{filtered.length} of {USERS.length} users</span>
+        <span className="text-xs text-gray-500">{filtered.length} of {total} users</span>
         <a href="/admin/users" className="text-xs text-secondary hover:underline">See all ›</a>
       </div>
     </div>

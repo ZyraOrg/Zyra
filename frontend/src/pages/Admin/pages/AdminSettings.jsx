@@ -1,6 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Save, Shield, Bell, Database, CreditCard } from "lucide-react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { adminApi } from "../../../services/api";
+
+// Maps the platform_settings row (snake_case columns) <-> the form state.
+const DEFAULTS = {
+  platform_fee: "3",
+  auto_approve: true,
+  maintenance_mode: false,
+  email_alerts: true,
+  fraud_alerts: true,
+  daily_report: false,
+  two_factor: true,
+  session_timeout: "30 minutes",
+  auto_backup: true,
+};
 
 function Toggle({ on, onToggle }) {
   return (
@@ -30,17 +45,28 @@ function SettingRow({ label, description, children }) {
 }
 
 export default function AdminSettings() {
-  const [fee,         setFee]         = useState("3");
-  const [autoApprove, setAutoApprove] = useState(true);
-  const [maintenance, setMaintenance] = useState(false);
-  const [emailAlerts, setEmailAlerts] = useState(true);
-  const [fraudAlerts, setFraudAlerts] = useState(true);
-  const [dailyReport, setDailyReport] = useState(false);
-  const [backupAuto,  setBackupAuto]  = useState(true);
+  const [form, setForm] = useState(DEFAULTS);
 
-  function handleSave() {
-    toast.success("Settings saved successfully");
-  }
+  const { data } = useQuery({
+    queryKey: ["admin-settings"],
+    queryFn: () => adminApi.getSettings().then((r) => r.data),
+  });
+
+  // Hydrate the form once settings arrive, keeping defaults for missing keys.
+  useEffect(() => {
+    if (data?.settings) {
+      setForm((prev) => ({ ...prev, ...DEFAULTS, ...data.settings }));
+    }
+  }, [data]);
+
+  const set = (key) => (value) => setForm((prev) => ({ ...prev, [key]: value }));
+  const toggle = (key) => () => setForm((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  const save = useMutation({
+    mutationFn: () => adminApi.updateSettings(form),
+    onSuccess: () => toast.success("Settings saved successfully"),
+    onError: (err) => toast.error(err.message || "Failed to save settings"),
+  });
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -63,8 +89,8 @@ export default function AdminSettings() {
             <div className="flex items-center gap-2">
               <input
                 type="number"
-                value={fee}
-                onChange={(e) => setFee(e.target.value)}
+                value={form.platform_fee}
+                onChange={(e) => set("platform_fee")(e.target.value)}
                 min="0" max="10"
                 className="w-16 bg-[#13131A] text-white text-sm px-3 py-1.5 rounded-lg border border-gray-700 focus:outline-none focus:border-secondary text-center"
               />
@@ -72,10 +98,10 @@ export default function AdminSettings() {
             </div>
           </SettingRow>
           <SettingRow label="Auto-approve Campaigns" description="Campaigns under $500 are automatically approved">
-            <Toggle on={autoApprove} onToggle={() => setAutoApprove((v) => !v)} />
+            <Toggle on={form.auto_approve} onToggle={toggle("auto_approve")} />
           </SettingRow>
           <SettingRow label="Maintenance Mode" description="Disable public access — only admins can log in">
-            <Toggle on={maintenance} onToggle={() => setMaintenance((v) => !v)} />
+            <Toggle on={form.maintenance_mode} onToggle={toggle("maintenance_mode")} />
           </SettingRow>
         </div>
       </section>
@@ -88,13 +114,13 @@ export default function AdminSettings() {
         </div>
         <div className="space-y-1">
           <SettingRow label="Email Alerts" description="Receive email on new campaign submissions">
-            <Toggle on={emailAlerts} onToggle={() => setEmailAlerts((v) => !v)} />
+            <Toggle on={form.email_alerts} onToggle={toggle("email_alerts")} />
           </SettingRow>
           <SettingRow label="Fraud Alerts" description="Immediate notification on suspicious activity">
-            <Toggle on={fraudAlerts} onToggle={() => setFraudAlerts((v) => !v)} />
+            <Toggle on={form.fraud_alerts} onToggle={toggle("fraud_alerts")} />
           </SettingRow>
           <SettingRow label="Daily Report" description="Receive platform summary every morning at 8am">
-            <Toggle on={dailyReport} onToggle={() => setDailyReport((v) => !v)} />
+            <Toggle on={form.daily_report} onToggle={toggle("daily_report")} />
           </SettingRow>
         </div>
       </section>
@@ -107,10 +133,14 @@ export default function AdminSettings() {
         </div>
         <div className="space-y-1">
           <SettingRow label="Two-Factor Auth" description="Require 2FA for all admin accounts">
-            <Toggle on={true} onToggle={() => {}} />
+            <Toggle on={form.two_factor} onToggle={toggle("two_factor")} />
           </SettingRow>
           <SettingRow label="Session Timeout" description="Auto-logout after inactivity">
-            <select className="bg-[#13131A] text-white text-sm px-3 py-1.5 rounded-lg border border-gray-700 focus:outline-none focus:border-secondary">
+            <select
+              value={form.session_timeout}
+              onChange={(e) => set("session_timeout")(e.target.value)}
+              className="bg-[#13131A] text-white text-sm px-3 py-1.5 rounded-lg border border-gray-700 focus:outline-none focus:border-secondary"
+            >
               <option>30 minutes</option>
               <option>1 hour</option>
               <option>4 hours</option>
@@ -128,7 +158,7 @@ export default function AdminSettings() {
         </div>
         <div className="space-y-1">
           <SettingRow label="Auto Backup" description="Daily database backup at midnight">
-            <Toggle on={backupAuto} onToggle={() => setBackupAuto((v) => !v)} />
+            <Toggle on={form.auto_backup} onToggle={toggle("auto_backup")} />
           </SettingRow>
           <SettingRow label="Export Data" description="Download full platform data as CSV">
             <button className="px-4 py-1.5 text-sm border border-gray-700 rounded-lg text-gray-400 hover:text-white hover:border-secondary transition-colors">
@@ -141,11 +171,12 @@ export default function AdminSettings() {
       {/* Save */}
       <div className="flex justify-center pt-2 pb-8">
         <button
-          onClick={handleSave}
-          className="flex items-center gap-2 px-10 py-[1px] bg-gradient-to-r from-primary to-secondary text-black rounded-sm font-semibold hover:opacity-90 transition-opacity text-sm border-2 border-white hover:border-secondary"
+          onClick={() => save.mutate()}
+          disabled={save.isPending}
+          className="flex items-center gap-2 px-10 py-[1px] bg-gradient-to-r from-primary to-secondary text-black rounded-sm font-semibold hover:opacity-90 transition-opacity text-sm border-2 border-white hover:border-secondary disabled:opacity-60"
         >
           <Save size={15} />
-          Save Changes
+          {save.isPending ? "Saving…" : "Save Changes"}
         </button>
       </div>
 

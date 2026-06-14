@@ -1,36 +1,29 @@
 import { Users, Megaphone, DollarSign, TrendingUp } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { formatCurrency } from "../../../Dashboard/utils/formatters";
+import { adminApi } from "../../../../services/api";
 
 const statsConfig = [
-  {
-    title:     "Total Users",
-    value:     "12,430",
-    iconColor: "bg-blue-500",
-    icon:      Users,
-  },
-  {
-    title:     "Total Donations",
-    value:     "$2.4M",
-    iconColor: "bg-cyan-500",
-    icon:      DollarSign,
-  },
-  {
-    title:     "Total Campaigns",
-    value:     "1,284",
-    iconColor: "bg-purple-500",
-    icon:      Megaphone,
-  },
-  {
-    title:     "Platform Fees",
-    value:     "$72.4K",
-    iconColor: "bg-pink-500",
-    icon:      TrendingUp,
-  },
+  { title: "Total Users",     key: "total_users",     iconColor: "bg-blue-500",   icon: Users,       money: false },
+  { title: "Total Donations", key: "total_donations", iconColor: "bg-cyan-500",   icon: DollarSign,  money: true  },
+  { title: "Total Campaigns", key: "total_campaigns", iconColor: "bg-purple-500", icon: Megaphone,   money: false },
+  { title: "Platform Fees",   key: "platform_fees",   iconColor: "bg-pink-500",   icon: TrendingUp,  money: true  },
 ];
 
 export default function AdminStatsCards() {
+  const { data } = useQuery({
+    queryKey: ["admin-stats"],
+    queryFn: () => adminApi.getStats().then((r) => r.data),
+  });
+
+  const statsList = statsConfig.map((stat) => {
+    const raw = data?.[stat.key] ?? 0;
+    return { ...stat, value: stat.money ? formatCurrency(raw) : raw.toLocaleString() };
+  });
+
   return (
     <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-4 lg:gap-6">
-      {statsConfig.map((stat) => {
+      {statsList.map((stat) => {
         const Icon = stat.icon;
         return (
           <div

@@ -1,14 +1,8 @@
 import { useState } from "react";
 import { ShieldAlert, Eye, Trash2, CheckCircle } from "lucide-react";
-
-const FLAGS = [
-  { id: 1, title: "Suspicious withdrawal request", user: "@unknown_user", type: "Financial", severity: "High",   date: "May 10, 2025", resolved: false },
-  { id: 2, title: "Duplicate campaign detected",   user: "@emeka2",       type: "Duplicate", severity: "Medium", date: "May 9, 2025",  resolved: false },
-  { id: 3, title: "Misleading campaign title",     user: "@xyz123",       type: "Content",   severity: "Low",    date: "May 8, 2025",  resolved: false },
-  { id: 4, title: "Unverified organizer",          user: "@newuser",      type: "Identity",  severity: "High",   date: "May 7, 2025",  resolved: false },
-  { id: 5, title: "Spam donation pattern",         user: "@bot_acc",      type: "Fraud",     severity: "High",   date: "May 6, 2025",  resolved: false },
-  { id: 6, title: "Inappropriate campaign image",  user: "@creative99",   type: "Content",   severity: "Medium", date: "May 5, 2025",  resolved: true  },
-];
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { adminApi } from "../../../services/api";
 
 const SEV_STYLES = {
   High:   "bg-red-500/10    text-red-400    border border-red-500/20",
@@ -20,18 +14,37 @@ const FILTERS = ["All", "High", "Medium", "Low", "Resolved"];
 
 export default function Moderation() {
   const [filter, setFilter] = useState("All");
-  const [items,  setItems]  = useState(FLAGS);
+  const queryClient = useQueryClient();
 
-  const filtered = items.filter((f) => {
-    if (filter === "Resolved") return f.resolved;
-    if (filter === "All")      return !f.resolved;
-    return !f.resolved && f.severity === filter;
+  // Backend maps: all -> unresolved, resolved -> resolved, else severity match.
+  const apiFilter = filter === "All" ? "all" : filter === "Resolved" ? "resolved" : filter;
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin-flags", apiFilter],
+    queryFn: () => adminApi.getFlags(apiFilter).then((r) => r.data),
   });
 
-  function resolve(id) { setItems((p) => p.map((f) => f.id === id ? { ...f, resolved: true  } : f)); }
-  function dismiss(id) { setItems((p) => p.filter((f) => f.id !== id)); }
+  const flags = data?.flags ?? [];
 
-  const highCount = items.filter((f) => !f.resolved && f.severity === "High").length;
+  const resolveFlag = useMutation({
+    mutationFn: (id) => adminApi.resolveFlag(id),
+    onSuccess: () => {
+      toast.success("Flag resolved");
+      queryClient.invalidateQueries({ queryKey: ["admin-flags"] });
+    },
+    onError: (err) => toast.error(err.message || "Action failed"),
+  });
+
+  const dismissFlag = useMutation({
+    mutationFn: (id) => adminApi.dismissFlag(id),
+    onSuccess: () => {
+      toast.success("Flag dismissed");
+      queryClient.invalidateQueries({ queryKey: ["admin-flags"] });
+    },
+    onError: (err) => toast.error(err.message || "Action failed"),
+  });
+
+  const highCount = flags.filter((f) => !f.resolved && f.severity === "High").length;
+  const activeCount = flags.filter((f) => !f.resolved).length;
 
   return (
     <div className="space-y-6">
@@ -43,7 +56,7 @@ export default function Moderation() {
             Moderation <span className="text-secondary">Queue</span>
           </h1>
           <p className="mt-1 text-sm text-gray-400">
-            {items.filter((f) => !f.resolved).length} active flags
+            {filter === "Resolved" ? `${flags.length} resolved flags` : `${activeCount} active flags`}
           </p>
         </div>
         {highCount > 0 && (
@@ -70,19 +83,19 @@ export default function Moderation() {
       </div>
 
       <div className="space-y-3">
-        {filtered.length === 0 ? (
+        {flags.length === 0 ? (
           <div className="bg-[#010410] border border-gray-800/50 rounded-xl p-16 text-center">
             <CheckCircle size={40} className="mx-auto mb-3 text-green-400" />
-            <p className="font-semibold text-white">All clear</p>
-            <p className="mt-1 text-sm text-gray-400">No flags in this category</p>
+            <p className="font-semibold text-white">{isLoading ? "Loading…" : "All clear"}</p>
+            {!isLoading && <p className="mt-1 text-sm text-gray-400">No flags in this category</p>}
           </div>
         ) : (
-          filtered.map((flag) => (
+          flags.map((flag) => (
             <div key={flag.id} className="bg-[#010410] border border-gray-800/50 rounded-xl p-5 flex items-start justify-between gap-4 flex-wrap hover:border-gray-700 transition-colors">
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-3 mb-2">
                   <h3 className="font-semibold text-white">{flag.title}</h3>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${SEV_STYLES[flag.severity]}`}>
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${SEV_STYLES[flag.severity] || SEV_STYLES.Low}`}>
                     {flag.severity}
                   </span>
                   {flag.resolved && (
@@ -102,10 +115,18 @@ export default function Moderation() {
                   <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/5 text-gray-400 hover:text-white text-xs transition-colors">
                     <Eye size={13} /> Review
                   </button>
-                  <button onClick={() => resolve(flag.id)} className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500/20 text-xs transition-colors">
+                  <button
+                    onClick={() => resolveFlag.mutate(flag.id)}
+                    disabled={resolveFlag.isPending}
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500/20 text-xs transition-colors disabled:opacity-50"
+                  >
                     <CheckCircle size={13} /> Resolve
                   </button>
-                  <button onClick={() => dismiss(flag.id)} className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 text-xs transition-colors">
+                  <button
+                    onClick={() => dismissFlag.mutate(flag.id)}
+                    disabled={dismissFlag.isPending}
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 text-xs transition-colors disabled:opacity-50"
+                  >
                     <Trash2 size={13} /> Dismiss
                   </button>
                 </div>
