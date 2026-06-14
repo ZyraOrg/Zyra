@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LogOut, LayoutDashboard, Users, Megaphone, BarChart3, ShieldCheck, Settings } from "lucide-react";
 import toast from "react-hot-toast";
 import Logo from "../../../../assets/logo.png";
-import api from "../../../../services/api";
 import useAdminStore from "../../../../store/useAdminStore";
 
 const navItems = [
@@ -21,23 +19,8 @@ const bottomItems = [
 export default function AdminSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { adminLogout } = useAdminStore();
-  const [username, setUsername] = useState("Admin");
-
-  useEffect(() => {
-    let cancelled = false;
-    async function loadUser() {
-      try {
-        const { data } = await api.getUser();
-        const name = data?.user?.name || data?.user?.email;
-        if (!cancelled && name) setUsername(name);
-      } catch {
-        // ignore
-      }
-    }
-    loadUser();
-    return () => { cancelled = true; };
-  }, []);
+  const { adminLogout, adminEmail } = useAdminStore();
+  const username = adminEmail || "Admin";
 
   const activeLabel = (() => {
     const path = location?.pathname || "";

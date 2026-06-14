@@ -8,6 +8,7 @@ const useAdminStore = create(
   persist(
     (set) => ({
       isAdmin: false,
+      adminEmail: null,
       adminLogin: async (email, password) => {
         const res = await fetch(`${API}/api/admin/login`, {
           method: 'POST',
@@ -18,11 +19,11 @@ const useAdminStore = create(
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data.error || 'Login failed');
         setAdminToken(data.access_token);
-        set({ isAdmin: true });
+        set({ isAdmin: true, adminEmail: email });
       },
       adminLogout: () => {
         clearAdminToken();
-        set({ isAdmin: false });
+        set({ isAdmin: false, adminEmail: null });
       },
     }),
     {
