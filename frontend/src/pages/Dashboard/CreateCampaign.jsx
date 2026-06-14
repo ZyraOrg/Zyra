@@ -13,7 +13,9 @@ import api from "../../services/api";
 export default function CreateCampaign() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const coverInputRef = useRef(null);
   const termsScrollRef = useRef(null);
+  const [cover, setCover] = useState(null);
   const [campaignForm, setCampaignForm] = useState({
     name: "",
     objective: "",
@@ -81,6 +83,37 @@ export default function CreateCampaign() {
       });
     };
   }, [files]);
+
+  useEffect(() => {
+    return () => {
+      if (cover?.previewUrl) URL.revokeObjectURL(cover.previewUrl);
+    };
+  }, [cover]);
+
+  const COVER_MAX_SIZE = 10 * 1024 * 1024;
+
+  const handleCoverSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Cover photo must be an image");
+      return;
+    }
+    if (file.size > COVER_MAX_SIZE) {
+      toast.error(`"${file.name}" exceeds the 10MB limit`);
+      return;
+    }
+    if (cover?.previewUrl) URL.revokeObjectURL(cover.previewUrl);
+    setCover({ file, previewUrl: URL.createObjectURL(file) });
+    if (coverInputRef.current) coverInputRef.current.value = "";
+  };
+
+  const removeCover = () => {
+    setCover((prev) => {
+      if (prev?.previewUrl) URL.revokeObjectURL(prev.previewUrl);
+      return null;
+    });
+  };
 
   const getFileType = (file) => {
     if (file.type.startsWith("image/")) return "image";
@@ -185,6 +218,14 @@ export default function CreateCampaign() {
       const filesToUpload = files.map((fileObj) => fileObj.file);
       await api.uploadCampaignDocuments(campaignId, filesToUpload);
 
+      if (cover) {
+        try {
+          await api.uploadCampaignCover(campaignId, cover.file);
+        } catch {
+          toast.error("Campaign created, but the cover photo failed to upload");
+        }
+      }
+
       toast.success("Campaign created successfully!");
       navigate("/dashboard/campaigns");
     } catch (error) {
@@ -253,6 +294,55 @@ export default function CreateCampaign() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Cover Photo */}
+          <div className="bg-[#13131A] rounded-xl p-6 sm:p-8 border border-[#1a2b6b]">
+            <label className="block text-sm font-semibold text-gray-200 mb-3">
+              Cover photo (optional)
+            </label>
+            <p className="text-xs text-gray-400 mb-4">
+              A banner image shown on your campaign · Images only · Max 10MB.
+            </p>
+
+            {cover ? (
+              <div className="relative rounded-xl overflow-hidden border border-[#1a2b6b]">
+                <img
+                  src={cover.previewUrl}
+                  alt="Cover preview"
+                  className="w-full h-40 sm:h-56 object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={removeCover}
+                  className="absolute top-2 right-2 p-1.5 rounded-full bg-red-500/90 hover:bg-red-600 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => coverInputRef.current?.click()}
+                className="w-full rounded-xl border-2 border-dashed border-[#1a2b6b] bg-[#010410] py-8 hover:border-[#0A36F7] transition-colors focus:outline-none"
+              >
+                <div className="flex flex-col items-center gap-2 text-gray-400">
+                  <ImageIcon className="w-10 h-10" />
+                  <span className="text-base font-medium">
+                    Click to upload cover photo
+                  </span>
+                  <span className="text-xs">PNG, JPG, WEBP · Max 10MB</span>
+                </div>
+              </button>
+            )}
+
+            <input
+              ref={coverInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleCoverSelect}
+            />
+          </div>
+
           {/* Documents Upload */}
           <div className="bg-[#13131A] rounded-xl p-6 sm:p-8 border border-[#1a2b6b]">
             <label className="block text-sm font-semibold text-gray-200 mb-3">
