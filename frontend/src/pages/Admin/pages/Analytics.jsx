@@ -23,6 +23,22 @@ function toSeries(monthly = {}) {
     });
 }
 
+function lastSixMonths() {
+  const out = [];
+  const now = new Date();
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    out.push({
+      key: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`,
+      label: d.toLocaleDateString("en-US", { month: "short" }),
+      year: String(d.getFullYear()),
+      donations: 0,
+      count: 0,
+    });
+  }
+  return out;
+}
+
 export default function Analytics() {
   const { data } = useQuery({
     queryKey: ["admin-analytics"],
@@ -35,10 +51,8 @@ export default function Analytics() {
   const totalCount     = series.reduce((sum, m) => sum + m.count, 0);
   const avgDonation    = totalCount ? totalDonations / totalCount : 0;
 
-  // Only "Avg donation" is derivable from the analytics endpoint. The rest have
-  // no backing data yet, so they render as "—" placeholders (delta = null).
   const METRICS = [
-    { label: "Avg donation",     value: totalCount ? formatCurrency(avgDonation) : "—", delta: null, up: true },
+    { label: "Avg donation",     value: formatCurrency(avgDonation), delta: null, up: true },
     { label: "Conversion rate",  value: "—", delta: null, up: true  },
     { label: "Crypto donations", value: "—", delta: null, up: true  },
     { label: "Fiat donations",   value: "—", delta: null, up: true  },
@@ -46,7 +60,8 @@ export default function Analytics() {
     { label: "Active wallets",   value: "—", delta: null, up: true  },
   ];
 
-  const maxD = Math.max(1, ...series.map((m) => m.donations));
+  const chartData = series.length ? series : lastSixMonths();
+  const maxD = Math.max(1, ...chartData.map((m) => m.donations));
 
   return (
     <div className="space-y-6">
@@ -85,7 +100,7 @@ export default function Analytics() {
             <h2 className="text-sm font-semibold text-white">Monthly Donations</h2>
           </div>
           <div className="flex items-end h-48 gap-2">
-            {series.map((m) => (
+            {chartData.map((m) => (
               <div key={m.key} className="flex flex-col items-center flex-1 gap-1">
                 <span className="text-gray-500 text-[10px]">${(m.donations / 1000).toFixed(0)}k</span>
                 <div
@@ -106,7 +121,7 @@ export default function Analytics() {
           </div>
           {/* No user-growth data from the backend yet — bars render empty with "—" labels. */}
           <div className="flex items-end h-48 gap-2">
-            {series.map((m) => (
+            {chartData.map((m) => (
               <div key={m.key} className="flex flex-col items-center flex-1 gap-1">
                 <span className="text-gray-500 text-[10px]">—</span>
                 <div
@@ -138,7 +153,13 @@ export default function Analytics() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800/30">
-              {series.map((m, i) => {
+              {series.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-5 py-10 text-center text-gray-500">
+                    No earnings yet
+                  </td>
+                </tr>
+              ) : series.map((m, i) => {
                 const prev   = series[i - 1];
                 const growth = prev && prev.donations
                   ? (((m.donations - prev.donations) / prev.donations) * 100).toFixed(1)
