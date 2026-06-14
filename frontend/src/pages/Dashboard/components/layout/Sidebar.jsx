@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
 import { LogOut } from "lucide-react";
 import toast from "react-hot-toast";
 import { navItems } from "../../constants/dashboardData";
 import Logo from "../../../../assets/logo.png";
 import api from "../../../../services/api";
-import useAuthStore from "../../../../store/useAuthStore";
 
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const [username, setUsername] = useState("User");
 
   useEffect(() => {
@@ -50,16 +47,15 @@ export default function Sidebar() {
     navigate("/settings");
   };
 
-  const handleLogout = async () => {
-    try {
-      await api.logout();
-    } catch {
-      // proceed even if backend call fails
-    }
-    useAuthStore.getState().logout();
-    queryClient.removeQueries({ queryKey: ['user'] });
-    toast.success("Logged out successfully");
-    navigate("/login", { replace: true });
+  const handleLogout = () => {
+    // try {
+    //   await api.logout();
+    //   toast.success("Logged out successfully");
+    //   navigate("/", { replace: true });
+    // } catch {
+    //   toast.error("Failed to log out");
+    // }
+    navigate("/", { replace: true });
   };
 
   return (

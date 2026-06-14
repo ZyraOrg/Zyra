@@ -65,6 +65,7 @@ const HeroSection = () => {
 
           <div className="flex flex-col items-center gap-4 mt-0 sm:flex-row md:items-start">
             <button
+              onClick={() => navigate("/campaigns")}
               className="px-10 py-5 min-w-[220px] rounded-full text-black font-roboto font-extrabold text-lg 
                          bg-gradient-to-r from-[#0A36F7] to-[#91F2F9]
                          shadow-[0_0_20px_rgba(145,242,249,0.5)]

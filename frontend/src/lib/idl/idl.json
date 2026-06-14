@@ -1,0 +1,455 @@
+{
+    "version": "0.1.0",
+    "name": "crowdfund_vault",
+    "address": "AzA9t242PAjxv4A8r3AqjxEavjEUZsqLXMF9N59aNocE",
+    "instructions": [
+        {
+            "name": "initialize",
+            "accounts": [
+                {
+                    "name": "platform",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "superAdmin",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "platformWallet",
+                    "type": "publicKey"
+                }
+            ]
+        },
+        {
+            "name": "addAdmin",
+            "accounts": [
+                {
+                    "name": "platform",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "adminRecord",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "superAdmin",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "adminWallet",
+                    "type": "publicKey"
+                }
+            ]
+        },
+        {
+            "name": "removeAdmin",
+            "accounts": [
+                {
+                    "name": "platform",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "adminRecord",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "superAdmin",
+                    "isMut": false,
+                    "isSigner": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "adminWallet",
+                    "type": "publicKey"
+                }
+            ]
+        },
+        {
+            "name": "createCampaign",
+            "accounts": [
+                {
+                    "name": "platform",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "campaign",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "payer",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "campaignId",
+                    "type": "u64"
+                },
+                {
+                    "name": "payoutAddress",
+                    "type": "publicKey"
+                },
+                {
+                    "name": "goal",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "approveCampaign",
+            "accounts": [
+                {
+                    "name": "platform",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "adminRecord",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "campaign",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "authority",
+                    "isMut": false,
+                    "isSigner": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "campaignId",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "contribute",
+            "accounts": [
+                {
+                    "name": "platform",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "campaign",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "contribution",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "contributorTokenAccount",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "campaignVaultTokenAccount",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "platformTokenAccount",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "contributor",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "tokenProgram",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "campaignId",
+                    "type": "u64"
+                },
+                {
+                    "name": "amount",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "releaseFunds",
+            "accounts": [
+                {
+                    "name": "platform",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "adminRecord",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "campaign",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "campaignVaultTokenAccount",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "payoutTokenAccount",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "authority",
+                    "isMut": false,
+                    "isSigner": true
+                },
+                {
+                    "name": "tokenProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "campaignId",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "endCampaign",
+            "accounts": [
+                {
+                    "name": "platform",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "adminRecord",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "campaign",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "authority",
+                    "isMut": false,
+                    "isSigner": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "campaignId",
+                    "type": "u64"
+                }
+            ]
+        }
+    ],
+    "accounts": [
+        {
+            "name": "Platform",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "superAdmin",
+                        "type": "publicKey"
+                    },
+                    {
+                        "name": "platformWallet",
+                        "type": "publicKey"
+                    },
+                    {
+                        "name": "campaignCount",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AdminRecord",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "wallet",
+                        "type": "publicKey"
+                    },
+                    {
+                        "name": "isActive",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Campaign",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "campaignId",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "payoutAddress",
+                        "type": "publicKey"
+                    },
+                    {
+                        "name": "goal",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "raised",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "status",
+                        "type": {
+                            "defined": "CampaignStatus"
+                        }
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ContributionRecord",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "contributor",
+                        "type": "publicKey"
+                    },
+                    {
+                        "name": "campaignId",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        }
+    ],
+    "types": [
+        {
+            "name": "CampaignStatus",
+            "type": {
+                "kind": "enum",
+                "variants": [
+                    {
+                        "name": "Pending"
+                    },
+                    {
+                        "name": "Active"
+                    },
+                    {
+                        "name": "Ended"
+                    },
+                    {
+                        "name": "Completed"
+                    }
+                ]
+            }
+        }
+    ],
+    "errors": [
+        {
+            "code": 6000,
+            "name": "Unauthorized",
+            "msg": "You are not authorized to perform this action"
+        },
+        {
+            "code": 6001,
+            "name": "WrongCampaign",
+            "msg": "Campaign ID does not match"
+        },
+        {
+            "code": 6002,
+            "name": "CampaignNotActive",
+            "msg": "Campaign is not active"
+        },
+        {
+            "code": 6003,
+            "name": "InvalidCampaignStatus",
+            "msg": "Campaign status does not allow this action"
+        },
+        {
+            "code": 6004,
+            "name": "AmountTooLow",
+            "msg": "Contribution amount is below the minimum of 1 USDT"
+        },
+        {
+            "code": 6005,
+            "name": "NoFundsToRelease",
+            "msg": "No funds available to release"
+        }
+    ]
+}

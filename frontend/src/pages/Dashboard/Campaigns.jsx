@@ -18,7 +18,7 @@ function truncateEnd(value, maxChars) {
 
 export default function Campaigns() {
 	const navigate = useNavigate();
-	const { user } = useAuthStore();
+	useAuthStore();
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const [activeItem, setActiveItem] = useState('Campaigns');
 	// const [isCheckingAuth, setIsCheckingAuth] = useState(!user);
@@ -61,7 +61,7 @@ export default function Campaigns() {
 				setCampaigns(Array.isArray(data?.campaigns) ? data.campaigns : []);
 				setOffset(0);
 				setHasMore(Boolean(data?.hasMore));
-			} catch (err) {
+			} catch {
 				if (cancelled) return;
 				setCampaigns([]);
 				setHasMore(false);
@@ -89,7 +89,7 @@ export default function Campaigns() {
 			setCampaigns((prev) => [...prev, ...nextCampaigns]);
 			setOffset(nextOffset);
 			setHasMore(Boolean(data?.hasMore));
-		} catch (err) {
+		} catch {
 			toast.error('Failed to load more campaigns');
 		} finally {
 			setIsLoadingMore(false);

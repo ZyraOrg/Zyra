@@ -1,5 +1,6 @@
 import { createAppKit } from "@reown/appkit/react";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
+import { SolanaAdapter } from "@reown/appkit-adapter-solana";
 import {
   mainnet,
   polygon,
@@ -16,7 +17,10 @@ import {
   celo,
   fantom,
   blast,
+  solana,
+  solanaDevnet,
 } from "@reown/appkit/networks";
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 
 const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
 
@@ -24,7 +28,8 @@ if (!projectId) {
   console.warn("[appkit] VITE_WALLETCONNECT_PROJECT_ID is not set");
 }
 
-const networks = [
+// ── EVM Networks (unchanged) ─────────────────────────────────────
+const evmNetworks = [
   mainnet,
   polygon,
   optimism,
@@ -42,16 +47,29 @@ const networks = [
   blast,
 ];
 
+// ── Solana Networks ──────────────────────────────────────────────
+const solanaNetworks = [solana, solanaDevnet];
+
+// ── All Networks Combined ────────────────────────────────────────
+const networks = [...evmNetworks, ...solanaNetworks];
+
+// ── EVM Adapter (unchanged) ──────────────────────────────────────
 export const wagmiAdapter = new WagmiAdapter({
-  networks,
+  networks: evmNetworks,
   projectId,
   ssr: false,
 });
 
 export const wagmiConfig = wagmiAdapter.wagmiConfig;
 
+// ── Solana Adapter ───────────────────────────────────────────────
+const solanaAdapter = new SolanaAdapter({
+  wallets: [new PhantomWalletAdapter()],
+});
+
+// ── AppKit Initialization ────────────────────────────────────────
 createAppKit({
-  adapters: [wagmiAdapter],
+  adapters: [wagmiAdapter, solanaAdapter],
   networks,
   projectId,
   metadata: {

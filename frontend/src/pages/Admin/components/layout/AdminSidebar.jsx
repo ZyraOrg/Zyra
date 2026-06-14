@@ -88,22 +88,21 @@ export default function AdminSidebar() {
 
       {/* Main nav */}
       <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto">
-        {navItems.map((item) => {
-          const NavIcon = item.icon;
-          const isActive = activeLabel === item.label;
+        {navItems.map(({ label, icon: Icon, path }) => {
+          const isActive = activeLabel === label;
           return (
             <button
-              key={item.label}
-              onClick={() => navigate(item.path)}
+              key={label}
+              onClick={() => navigate(path)}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors w-full ${
                 isActive
                   ? "bg-[#13131A] text-white"
                   : "text-gray-400 hover:bg-[#13131A] hover:text-white"
               }`}
             >
-              <NavIcon className="flex-shrink-0 w-5 h-5" />
-              <span className="text-sm font-medium">{item.label}</span>
-              {item.label === "Moderation" && (
+              <Icon className="flex-shrink-0 w-5 h-5" />
+              <span className="text-sm font-medium">{label}</span>
+              {label === "Moderation" && (
                 <span className="ml-auto text-[10px] font-bold bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded-full">
                   5
                 </span>
@@ -115,21 +114,20 @@ export default function AdminSidebar() {
 
       {/* Settings + Logout — same as Dashboard */}
       <div className="px-4 pb-4 space-y-2">
-        {bottomItems.map((item) => {
-          const NavIcon = item.icon;
-          const isActive = activeLabel === item.label;
+        {bottomItems.map(({ label, icon: Icon, path }) => {
+          const isActive = activeLabel === label;
           return (
             <button
-              key={item.label}
-              onClick={() => navigate(item.path)}
+              key={label}
+              onClick={() => navigate(path)}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors w-full ${
                 isActive
                   ? "bg-[#13131A] text-white"
                   : "text-gray-400 hover:bg-[#13131A] hover:text-white"
               }`}
             >
-              <NavIcon className="flex-shrink-0 w-5 h-5" />
-              <span className="text-sm font-medium">{item.label}</span>
+              <Icon className="flex-shrink-0 w-5 h-5" />
+              <span className="text-sm font-medium">{label}</span>
             </button>
           );
         })}

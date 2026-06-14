@@ -13,22 +13,26 @@ export default function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!email || !password) {
       toast.error("Please fill in all fields");
       return;
     }
     setIsSubmitting(true);
-    try {
-      await adminLogin(email, password);
-      toast.success("Welcome, Admin");
-      navigate("/admin", { replace: true });
-    } catch (err) {
-      toast.error(err.message || "Invalid admin credentials");
-    } finally {
+    setTimeout(() => {
+      if (
+        email === import.meta.env.VITE_ADMIN_EMAIL &&
+        password === import.meta.env.VITE_ADMIN_PASSWORD
+      ) {
+        adminLogin();
+        toast.success("Welcome, Admin");
+        navigate("/admin", { replace: true });
+      } else {
+        toast.error("Invalid admin credentials");
+      }
       setIsSubmitting(false);
-    }
+    }, 400);
   };
 
   return (

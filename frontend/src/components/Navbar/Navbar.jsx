@@ -6,10 +6,12 @@ import { IoClose } from "react-icons/io5";
 import { RiMenu3Fill } from "react-icons/ri";
 import { MdCampaign } from "react-icons/md";
 import { FaPlus, FaInfoCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import MulticulturalImg from "../../assets/logo.png";
 import AboutModal from "./AboutModal";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
@@ -44,13 +46,6 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const handleSmoothScroll = (e, targetId) => {
-    e.preventDefault();
-    const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
 
   const handleScrollToTop = (e) => {
     e.preventDefault();
@@ -78,14 +73,13 @@ const Navbar = () => {
       <ul className="items-center hidden gap-10 mx-auto md:flex">
         {[
           { name: "Home", id: "home" },
-          { name: "Campaigns", id: "explore" },
           { name: "Create", id: "create" },
         ].map((item, i) => (
           <li key={i} data-aos="fade-down" data-aos-delay={i * 200}>
             {item.name === "Home" ? (
               <a
-                href={`#${item.id}`}
-                onClick={handleScrollToTop}
+                href="/"
+                onClick={(e) => { e.preventDefault(); navigate("/"); }}
                 className="text-white font-roboto font-semibold relative py-3 px-1 hover:text-[#91F2F9] transition-colors duration-300 
                   after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#91F2F9] after:transition-all after:duration-300 hover:after:w-full"
               >
@@ -93,8 +87,8 @@ const Navbar = () => {
               </a>
             ) : (
               <a
-                href={`#${item.id}`}
-                onClick={(e) => handleSmoothScroll(e, item.id)}
+                href="/login"
+                onClick={(e) => { e.preventDefault(); navigate("/login"); }}
                 className="text-white font-roboto font-semibold relative py-3 px-1 hover:text-[#91F2F9] transition-colors duration-300 
                   after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#91F2F9] after:transition-all after:duration-300 hover:after:w-full"
               >
@@ -151,7 +145,6 @@ const Navbar = () => {
         >
           {[
             { name: "Home", icon: HiHome, id: "home" },
-            { name: "Campaigns", icon: MdCampaign, id: "explore" },
             { name: "Create", icon: FaPlus, id: "create" },
             { name: "About", icon: FaInfoCircle, id: "about" },
           ].map((item, i) => {
@@ -159,10 +152,10 @@ const Navbar = () => {
             return (
               <button
                 key={i}
-                onClick={(e) => {
-                  if (item.name === "Home") handleScrollToTop(e);
+                onClick={() => {
+                  if (item.name === "Home") { navigate("/"); }
                   else if (item.name === "About") setShowAbout(true);
-                  else handleSmoothScroll(e, item.id);
+                  else if (item.name === "Create") { navigate("/login"); }
                   toggleMobileMenu();
                 }}
                 className={`text-white font-roboto font-semibold text-base hover:text-[#91F2F9] transition-all duration-300 w-full text-left flex items-center gap-3 ${
