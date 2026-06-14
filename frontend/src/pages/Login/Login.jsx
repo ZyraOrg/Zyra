@@ -8,6 +8,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import toast from "react-hot-toast";
 import api from "../../services/api";
+import useAuthStore from "../../store/useAuthStore";
 import GoogleLoginButton from "../../components/GoogleLoginButton";
 
 export const Login = () => {
@@ -35,6 +36,10 @@ export const Login = () => {
     setIsSubmitting(true);
     try {
       const res = await api.login(data.email, data.password);
+      const u = res.data.user;
+      useAuthStore.getState().setUser(
+        u ? { id: u.id, email: u.email, name: u.user_metadata?.name ?? null, created_at: u.created_at } : u
+      );
       toast.success(res.data.message || "Login successful");
       navigate("/dashboard");
     } catch (error) {
