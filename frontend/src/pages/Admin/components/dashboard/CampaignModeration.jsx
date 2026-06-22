@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CheckCircle, XCircle, Clock } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -22,6 +23,7 @@ const STATUS_STYLES = {
 export default function CampaignModeration() {
   const [filter, setFilter] = useState("All");
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const apiFilter = filter === "All" ? "all" : filter.toLowerCase();
   const { data } = useQuery({
@@ -73,7 +75,11 @@ export default function CampaignModeration() {
           <p className="px-5 py-8 text-sm text-center text-gray-500">No campaigns found</p>
         )}
         {visible.map((c) => (
-          <div key={c.id} className="flex items-center justify-between px-5 py-4 hover:bg-white/[0.02] transition-colors">
+          <div
+            key={c.id}
+            onClick={() => navigate(`/admin/campaigns/${c.id}`)}
+            className="flex items-center justify-between px-5 py-4 hover:bg-white/[0.02] transition-colors cursor-pointer"
+          >
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-white truncate">{c.title}</p>
               <p className="text-gray-500 text-xs mt-0.5">{c.organizer} · {formatCurrency(c.amount)}</p>
@@ -86,14 +92,20 @@ export default function CampaignModeration() {
               {c.status === "Pending" && (
                 <div className="flex gap-1.5">
                   <button
-                    onClick={() => approve(c.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      approve(c.id);
+                    }}
                     disabled={moderate.isPending}
                     className="p-1.5 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500/20 transition-colors disabled:opacity-50"
                   >
                     <CheckCircle size={14} />
                   </button>
                   <button
-                    onClick={() => reject(c.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      reject(c.id);
+                    }}
                     disabled={moderate.isPending}
                     className="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors disabled:opacity-50"
                   >

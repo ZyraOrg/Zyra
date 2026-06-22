@@ -35,7 +35,8 @@ import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminHome from "./pages/Admin/AdminHome";
 import Users from "./pages/Admin/pages/Users";
 // Renamed this import to avoid the conflict with Dashboard's Campaigns
-import AdminCampaigns from "./pages/Admin/pages/Campaigns"; 
+import AdminCampaigns from "./pages/Admin/pages/Campaigns";
+import AdminCampaignDetail from "./pages/Admin/pages/CampaignDetail";
 import Analytics from "./pages/Admin/pages/Analytics";
 import Moderation from "./pages/Admin/pages/Moderation";
 import AdminSettings from "./pages/Admin/pages/AdminSettings";
@@ -61,6 +62,7 @@ function RouterContent() {
         <Route index                  element={<AdminHome />} />
         <Route path="users"           element={<Users />} />
         <Route path="campaigns"       element={<AdminCampaigns />} />
+        <Route path="campaigns/:id"   element={<AdminCampaignDetail />} />
         <Route path="analytics"       element={<Analytics />} />
         <Route path="moderation"      element={<Moderation />} />
         <Route path="settings"        element={<AdminSettings />} />

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CheckCircle, XCircle, Clock, Search } from "lucide-react";
 import {
   useQuery,
@@ -29,6 +30,7 @@ export default function Campaigns() {
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const apiFilter = filter === "All" ? "all" : filter.toLowerCase();
   const { data, isLoading } = useQuery({
@@ -124,7 +126,8 @@ export default function Campaigns() {
           return (
             <div
               key={c.id}
-              className="bg-[#010410] border border-gray-800/50 rounded-xl p-5 flex items-center justify-between flex-wrap gap-4 hover:border-gray-700 transition-colors"
+              onClick={() => navigate(`/admin/campaigns/${c.id}`)}
+              className="bg-[#010410] border border-gray-800/50 rounded-xl p-5 flex items-center justify-between flex-wrap gap-4 hover:border-gray-700 transition-colors cursor-pointer"
             >
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-3 mb-1">
@@ -162,14 +165,20 @@ export default function Campaigns() {
               {c.status === "Pending" && (
                 <div className="flex gap-2 shrink-0">
                   <button
-                    onClick={() => approve(c.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      approve(c.id);
+                    }}
                     disabled={moderate.isPending}
                     className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500/20 text-sm font-medium transition-colors disabled:opacity-50"
                   >
                     <CheckCircle size={15} /> Approve
                   </button>
                   <button
-                    onClick={() => reject(c.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      reject(c.id);
+                    }}
                     disabled={moderate.isPending}
                     className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-red-500/10  text-red-400  hover:bg-red-500/20  text-sm font-medium transition-colors disabled:opacity-50"
                   >

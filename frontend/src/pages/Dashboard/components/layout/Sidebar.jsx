@@ -70,9 +70,15 @@ export default function Sidebar() {
       {/* User Profile */}
       <div className="px-4 py-6">
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500">
+          <button
+            type="button"
+            onClick={() => navigate("/dashboard/profile")}
+            title="View profile"
+            aria-label="View profile"
+            className="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 cursor-pointer transition-transform hover:scale-105"
+          >
             <span className="text-sm font-semibold text-white">U</span>
-          </div>
+          </button>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold truncate">{username}</p>
             <p className="text-xs text-gray-400 truncate">My Account</p>
