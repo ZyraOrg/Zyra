@@ -2,6 +2,7 @@ import {
   LayoutDashboard,
   User,
   FolderKanban,
+  Megaphone,
   Settings,
   Wallet,
 } from "lucide-react";
@@ -20,6 +21,7 @@ export const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
   { icon: User, label: "Profile", href: "/profile" },
   { icon: FolderKanban, label: "Campaigns", href: "/campaigns" },
+  { icon: Megaphone, label: "Active Campaigns", href: "/dashboard/active-campaigns" },
   { icon: Settings, label: "Settings", href: "/settings" },
 ];
 

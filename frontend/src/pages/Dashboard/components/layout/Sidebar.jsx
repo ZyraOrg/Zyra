@@ -32,11 +32,13 @@ export default function Sidebar() {
     if (item.label === "Dashboard") navigate("/dashboard");
     if (item.label === "Profile") navigate("/dashboard/profile");
     if (item.label === "Campaigns") navigate("/dashboard/campaigns");
+    if (item.label === "Active Campaigns") navigate("/dashboard/active-campaigns");
     if (item.label === "Settings") navigate("/settings");
   };
 
   const activeItem = (() => {
     const path = location?.pathname || "";
+    if (path.startsWith("/dashboard/active-campaigns")) return "Active Campaigns";
     if (path.startsWith("/dashboard/campaigns")) return "Campaigns";
     if (path.startsWith("/dashboard/profile")) return "Profile";
     if (path.startsWith("/dashboard")) return "Dashboard";

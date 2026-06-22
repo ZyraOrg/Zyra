@@ -54,6 +54,7 @@ export default function MobileMenu({
     if (item.label === "Dashboard") navigate("/dashboard");
     if (item.label === "Profile") navigate("/dashboard/profile");
     if (item.label === "Campaigns") navigate("/dashboard/campaigns");
+    if (item.label === "Active Campaigns") navigate("/dashboard/active-campaigns");
     if (item.label === "Settings") navigate("/settings");
   };
 

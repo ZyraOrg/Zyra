@@ -11,6 +11,7 @@ import AuthCallback from "./pages/AuthCallback";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import CreateCampaign from "./pages/Dashboard/CreateCampaign";
 import Campaigns from "./pages/Dashboard/Campaigns";
+import ActiveCampaigns from "./pages/Dashboard/ActiveCampaigns";
 import CampaignDetails from "./pages/Dashboard/CampaignDetails";
 import Profile from "./pages/Dashboard/Profile";
 
@@ -69,11 +70,15 @@ function RouterContent() {
       <Route path="/login"         element={<Login />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
 
+      {/* Public — anyone can browse active campaigns without logging in */}
+      <Route path="/campaigns" element={<PublicCampaigns />} />
+
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard"                      element={<Dashboard />} />
         <Route path="/dashboard/create-campaign"      element={<CreateCampaign />} />
         <Route path="/dashboard/campaigns"            element={<Campaigns />} />
         <Route path="/dashboard/campaigns/:id"        element={<CampaignDetails />} />
+        <Route path="/dashboard/active-campaigns"     element={<ActiveCampaigns />} />
         <Route path="/dashboard/profile"              element={<Profile />} />
 
         <Route path="/settings" element={<SettingsLayout />}>
@@ -82,8 +87,6 @@ function RouterContent() {
           <Route path="privacy" element={<Privacy />} />
           <Route path="support" element={<Support />} />
         </Route>
-
-        <Route path="/campaigns" element={<PublicCampaigns />} />
       </Route>
 
       

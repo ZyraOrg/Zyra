@@ -3,8 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { useAppKit } from "@reown/appkit/react";
-import { useAccount, useDisconnect } from "wagmi";
+import { useAppKit, useAppKitAccount, useDisconnect } from "@reown/appkit/react";
 import MegaphoneIcon from "../../../../assets/Megaphone2.svg?react";
 import api from "../../../../services/api";
 
@@ -19,7 +18,7 @@ export default function Header({ setIsMobileMenuOpen }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { open } = useAppKit();
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useAppKitAccount();
   const { disconnect } = useDisconnect();
   const [username, setUsername] = useState("User");
   const savingRef = useRef(false);
