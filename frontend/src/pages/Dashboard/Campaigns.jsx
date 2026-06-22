@@ -157,14 +157,22 @@ export default function Campaigns() {
 													</button>
 												</td>
 												<td className="py-3 lg:py-4 text-xs lg:text-sm">
-													<span className="inline md:hidden" title={campaign.name || ''}>
-														{campaign.name ? truncateEnd(campaign.name, 16) : '-'}
-													</span>
-													<span className="hidden md:inline lg:hidden" title={campaign.name || ''}>
-														{campaign.name ? truncateEnd(campaign.name, 28) : '-'}
-													</span>
-													<span className="hidden lg:inline" title={campaign.name || ''}>
-														{campaign.name || '-'}
+													<span className="inline-flex items-center gap-2">
+														{campaign.moderation_status === 'pending' && (
+															<span
+																className="inline-block w-2 h-2 rounded-full bg-yellow-400 shrink-0"
+																title="Pending review"
+															/>
+														)}
+														<span className="inline md:hidden" title={campaign.name || ''}>
+															{campaign.name ? truncateEnd(campaign.name, 16) : '-'}
+														</span>
+														<span className="hidden md:inline lg:hidden" title={campaign.name || ''}>
+															{campaign.name ? truncateEnd(campaign.name, 28) : '-'}
+														</span>
+														<span className="hidden lg:inline" title={campaign.name || ''}>
+															{campaign.name || '-'}
+														</span>
 													</span>
 												</td>
 												<td className="py-3 lg:py-4 text-xs lg:text-sm">
