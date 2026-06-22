@@ -221,8 +221,14 @@ export default function CreateCampaign() {
       if (cover) {
         try {
           await api.uploadCampaignCover(campaignId, cover.file);
-        } catch {
-          toast.error("Campaign created, but the cover photo failed to upload");
+        } catch (coverErr) {
+          const reason =
+            coverErr?.response?.data?.error || coverErr?.message || "";
+          toast.error(
+            reason
+              ? `Campaign created, but the cover photo failed to upload: ${reason}`
+              : "Campaign created, but the cover photo failed to upload",
+          );
         }
       }
 
