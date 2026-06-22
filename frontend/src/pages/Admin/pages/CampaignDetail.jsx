@@ -32,12 +32,22 @@ export default function CampaignDetail() {
       action === "approve"
         ? adminApi.approveCampaign(campaignId)
         : adminApi.rejectCampaign(campaignId),
-    onSuccess: (_res, { action }) => {
-      toast.success(action === "approve" ? "Campaign approved" : "Campaign rejected");
+    onMutate: ({ action }) => {
+      const toastId = toast.loading(
+        action === "approve" ? "Approving…" : "Rejecting…",
+      );
+      return { toastId };
+    },
+    onSuccess: (_res, { action }, ctx) => {
+      toast.success(
+        action === "approve" ? "Campaign approved" : "Campaign rejected",
+        { id: ctx?.toastId },
+      );
       queryClient.invalidateQueries({ queryKey: ["admin-campaigns"] });
       queryClient.invalidateQueries({ queryKey: ["admin-campaign", campaignId] });
     },
-    onError: (err) => toast.error(err.message || "Action failed"),
+    onError: (err, _vars, ctx) =>
+      toast.error(err.message || "Action failed", { id: ctx?.toastId }),
   });
 
   const status = cap(campaign?.moderation_status || "pending");

@@ -1,8 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { LogOut, LayoutDashboard, Users, Megaphone, BarChart3, ShieldCheck, Settings } from "lucide-react";
 import toast from "react-hot-toast";
 import Logo from "../../../../assets/logo.png";
 import useAdminStore from "../../../../store/useAdminStore";
+import { adminApi } from "../../../../services/api";
 
 const navItems = [
   { label: "Overview",   icon: LayoutDashboard, path: "/admin"            },
@@ -21,6 +23,13 @@ export default function AdminSidebar() {
   const navigate = useNavigate();
   const { adminLogout, adminEmail } = useAdminStore();
   const username = adminEmail || "Admin";
+
+  const { data: pendingData } = useQuery({
+    queryKey: ["admin-campaigns", "pending-count"],
+    queryFn: () =>
+      adminApi.getCampaigns({ filter: "pending", limit: 1 }).then((r) => r.data),
+  });
+  const pendingCount = pendingData?.total ?? 0;
 
   const activeLabel = (() => {
     const path = location?.pathname || "";
@@ -85,9 +94,9 @@ export default function AdminSidebar() {
             >
               <Icon className="flex-shrink-0 w-5 h-5" />
               <span className="text-sm font-medium">{label}</span>
-              {label === "Moderation" && (
+              {label === "Moderation" && pendingCount > 0 && (
                 <span className="ml-auto text-[10px] font-bold bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded-full">
-                  5
+                  {pendingCount}
                 </span>
               )}
             </button>
