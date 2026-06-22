@@ -14,6 +14,7 @@
         margin: 0;
         padding: 0;
       }
+<<<<<<< Updated upstream
     </style>
 
     <script>
@@ -44,7 +45,7 @@
         } catch (e) {}
       })();
     </script>
-    <script type="module" crossorigin src="/assets/index-CMfo86Ym.js"></script>
+    <script type="module" crossorigin src="/assets/index-Cw96MhAi.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-C5VC3Rjj.css">
   </head>
 
@@ -53,3 +54,44 @@
 
   </body>
 </html>
+=======
+    </style>
+
+    <script>
+      (function () {
+        try {
+          var redirect = sessionStorage.getItem("spa_redirect");
+          if (redirect) {
+            sessionStorage.removeItem("spa_redirect");
+            window.history.replaceState(null, "", redirect);
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <script>
+      (function () {
+        try {
+          var hash = window.location.hash || "";
+          if (
+            hash.indexOf("access_token=") !== -1 ||
+            hash.indexOf("refresh_token=") !== -1
+          ) {
+            var path = window.location.pathname || "/";
+            if (!/\/auth\/callback\/?$/.test(path)) {
+              window.location.replace("/auth/callback" + hash);
+            }
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-oG7cbwd3.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CHrUSd8x.css">
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+  </body>
+</html>
+>>>>>>> Stashed changes
