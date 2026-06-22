@@ -145,18 +145,6 @@ export default function Campaigns() {
 										campaigns.map((campaign) => (
 											<tr key={campaign.id} className="border-b border-[#1E1E2D] last:border-0">
 												<td className="py-3 lg:py-4 text-xs lg:text-sm">
-													<button
-														type="button"
-														onClick={() => navigate(`/dashboard/campaigns/${campaign.id}`)}
-														className="text-cyan-400 hover:text-cyan-300 transition-colors"
-														title="View campaign"
-													>
-														<span className="inline md:hidden">{truncateEnd(campaign.id, 8)}</span>
-														<span className="hidden md:inline lg:hidden">{truncateEnd(campaign.id, 12)}</span>
-														<span className="hidden lg:inline">{truncateEnd(campaign.id, 16)}</span>
-													</button>
-												</td>
-												<td className="py-3 lg:py-4 text-xs lg:text-sm">
 													<span className="inline-flex items-center gap-2">
 														{campaign.moderation_status === 'pending' && (
 															<span
@@ -164,15 +152,27 @@ export default function Campaigns() {
 																title="Pending review"
 															/>
 														)}
-														<span className="inline md:hidden" title={campaign.name || ''}>
-															{campaign.name ? truncateEnd(campaign.name, 16) : '-'}
-														</span>
-														<span className="hidden md:inline lg:hidden" title={campaign.name || ''}>
-															{campaign.name ? truncateEnd(campaign.name, 28) : '-'}
-														</span>
-														<span className="hidden lg:inline" title={campaign.name || ''}>
-															{campaign.name || '-'}
-														</span>
+														<button
+															type="button"
+															onClick={() => navigate(`/dashboard/campaigns/${campaign.id}`)}
+															className="text-cyan-400 hover:text-cyan-300 transition-colors"
+															title="View campaign"
+														>
+															<span className="inline md:hidden">{truncateEnd(campaign.id, 8)}</span>
+															<span className="hidden md:inline lg:hidden">{truncateEnd(campaign.id, 12)}</span>
+															<span className="hidden lg:inline">{truncateEnd(campaign.id, 16)}</span>
+														</button>
+													</span>
+												</td>
+												<td className="py-3 lg:py-4 text-xs lg:text-sm">
+													<span className="inline md:hidden" title={campaign.name || ''}>
+														{campaign.name ? truncateEnd(campaign.name, 16) : '-'}
+													</span>
+													<span className="hidden md:inline lg:hidden" title={campaign.name || ''}>
+														{campaign.name ? truncateEnd(campaign.name, 28) : '-'}
+													</span>
+													<span className="hidden lg:inline" title={campaign.name || ''}>
+														{campaign.name || '-'}
 													</span>
 												</td>
 												<td className="py-3 lg:py-4 text-xs lg:text-sm">
