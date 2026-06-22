@@ -26,13 +26,6 @@ export const Login = () => {
   }, []);
 
   const onSubmit = async (data) => {
-    if (
-      data.email !== import.meta.env.VITE_DEMO_EMAIL ||
-      data.password !== import.meta.env.VITE_DEMO_PASSWORD
-    ) {
-      toast.error("Still in development");
-      return;
-    }
     setIsSubmitting(true);
     try {
       const res = await api.login(data.email, data.password);
@@ -43,11 +36,17 @@ export const Login = () => {
       toast.success(res.data.message || "Login successful");
       navigate("/dashboard");
     } catch (error) {
-      const err =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        "Login failed";
-      toast.error(err);
+      // Credentials rejected by the backend (not a valid user in the database)
+      const status = error.response?.status;
+      if (status === 400 || status === 401) {
+        toast.error("Still in development");
+      } else {
+        toast.error(
+          error.response?.data?.error ||
+            error.response?.data?.message ||
+            "Login failed"
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
