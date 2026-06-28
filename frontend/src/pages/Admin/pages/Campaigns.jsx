@@ -89,7 +89,7 @@ export default function Campaigns() {
               onClick={() => setFilter(f)}
               className={`px-4 py-2 rounded-full text-xs font-medium transition-all ${
                 filter === f
-                  ? "bg-gradient-to-r from-primary to-secondary text-black"
+                  ? "bg-linear-to-r from-primary to-secondary text-black"
                   : "bg-[#010410] border border-gray-800 text-gray-400 hover:text-white"
               }`}
             >
