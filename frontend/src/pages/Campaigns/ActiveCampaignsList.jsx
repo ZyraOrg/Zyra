@@ -121,7 +121,7 @@ function DonateModal({ campaign, onClose, onSuccess }) {
       return;
     }
 
-    const result = await donate(campaign.id, finalAmount);
+    const result = await donate(campaign.Chain_id, finalAmount);
 
     if (result.success) {
       toast.success(

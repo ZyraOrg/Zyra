@@ -30,6 +30,7 @@ import Support from "./pages/Settings/pages/Support";
 import { useUser } from "./hooks/useUser";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+
 import Admin from "./pages/Admin/Admin";
 import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminHome from "./pages/Admin/AdminHome";
@@ -74,6 +75,7 @@ function RouterContent() {
 
       {/* Public — anyone can browse active campaigns without logging in */}
       <Route path="/campaigns" element={<PublicCampaigns />} />
+      
 
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard"                      element={<Dashboard />} />

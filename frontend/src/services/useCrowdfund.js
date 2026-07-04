@@ -29,8 +29,11 @@ export function useCrowdfund() {
   const [txSignature, setTxSignature] = useState(null);
 
   // Get the connected Solana wallet from Reown AppKit
-  const { walletProvider } = useAppKitProvider("solana");
-  const { address, isConnected } = useAppKitAccount();
+ const { walletProvider } = useAppKitProvider("solana");
+const { address, isConnected } = useAppKitAccount();
+
+console.log("walletProvider:", walletProvider);
+console.log("isConnected:", isConnected);
 
   // ── Helper ───────────────────────────────────────────────────
   // Wraps any contract call with loading/error state management
@@ -153,27 +156,21 @@ export function useCrowdfund() {
   }, []);
 
   return {
-    // State
-    loading,
-    error,
-    txSignature,
-    isConnected,
-    connectedAddress: address,
-
-    // User actions
-    donate,
-    submitCampaign,
-
-    // Admin actions
-    approve,
-    release,
-    end,
-    addNewAdmin,
-    removeExistingAdmin,
-    initialize,
-
-    // Read actions
-    getCampaign,
-    getAllCampaigns,
-  };
+  loading,
+  error,
+  txSignature,
+  isConnected,
+  connectedAddress: address,
+  walletProvider, // add this
+  donate,
+  submitCampaign,
+  approve,
+  release,
+  end,
+  addNewAdmin,
+  removeExistingAdmin,
+  initialize,
+  getCampaign,
+  getAllCampaigns,
+};
 }

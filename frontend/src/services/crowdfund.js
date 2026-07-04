@@ -29,12 +29,31 @@ function getUsdtMint() {
   return new PublicKey(mint);
 }
 
-// ── Helper: Get Program ──────────────────────────────────────────
 function getProgram(wallet) {
-  const provider = new AnchorProvider(CONNECTION, wallet, {
+  let publicKey;
+  if (wallet.publicKey) {
+    publicKey = wallet.publicKey instanceof PublicKey
+      ? wallet.publicKey
+      : new PublicKey(wallet.publicKey.toString());
+  } else {
+    throw new Error("No public key found in wallet");
+  }
+
+  const anchorWallet = {
+    publicKey,
+    signTransaction: (tx) => wallet.signTransaction(tx),
+    signAllTransactions: (txs) =>
+      Promise.all(txs.map((tx) => wallet.signTransaction(tx))),
+  };
+
+  const provider = new AnchorProvider(CONNECTION, anchorWallet, {
     commitment: "confirmed",
+    preflightCommitment: "confirmed",
   });
-  return new Program(idl, getProgramId(), provider);
+
+
+
+  return new Program(idl, new PublicKey("AzA9t242PAjxv4A8r3AqjxEavjEUZsqLXMF9N59aNocE"), provider);
 }
 
 // ── Helper: Derive PDAs ──────────────────────────────────────────
@@ -325,7 +344,7 @@ export async function endCampaign(wallet, campaignId) {
 export async function fetchCampaign(campaignId) {
   try {
     const provider = { connection: CONNECTION };
-    const program = new Program(idl, getProgramId(), provider);
+    const program = new Program(idl, provider);
     const [campaignPDA] = getCampaignPDA(campaignId);
 
     const campaignAccount = await program.account.campaign.fetch(campaignPDA);
@@ -354,7 +373,7 @@ export async function fetchCampaign(campaignId) {
 export async function fetchAllCampaigns() {
   try {
     const provider = { connection: CONNECTION };
-    const program = new Program(idl, getProgramId(), provider);
+    const program = new Program(idl, provider);
 
     const campaigns = await program.account.campaign.all();
 
