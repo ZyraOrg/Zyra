@@ -112,8 +112,14 @@ function DonateModal({ campaign, onClose, onSuccess }) {
   const finalAmount = customAmount ? parseFloat(customAmount) : selectedAmount;
 
   async function handleConfirm() {
+    const chainId = campaign.chain_id ?? campaign.Chain_id;
+
     if (!finalAmount || finalAmount <= 0) {
       toast.error("Please select or enter a valid amount");
+      return;
+    }
+    if (chainId === null || chainId === undefined || chainId === "") {
+      toast.error("This campaign is not ready for on-chain donations yet");
       return;
     }
     if (!isConnected) {
@@ -121,7 +127,7 @@ function DonateModal({ campaign, onClose, onSuccess }) {
       return;
     }
 
-    const result = await donate(campaign.Chain_id, finalAmount);
+    const result = await donate(chainId, finalAmount);
 
     if (result.success) {
       toast.success(
@@ -260,16 +266,24 @@ export default function ActiveCampaignsList() {
 
   const [campaigns, setCampaigns] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
   const [selectedCampaign, setSelectedCampaign] = useState(null);
 
   const loadCampaigns = useCallback(async () => {
     try {
       setIsLoading(true);
+      setLoadError("");
 
       const { data } = await api.getPublicCampaigns({ limit: 20, offset: 0 });
       setCampaigns(Array.isArray(data?.campaigns) ? data.campaigns : []);
     } catch (error) {
       console.error("Failed to load campaigns:", error);
+      setLoadError(
+        error?.response?.data?.error ||
+          error?.response?.data?.message ||
+          error?.message ||
+          "Failed to load active campaigns"
+      );
       setCampaigns([]);
     } finally {
       setIsLoading(false);
@@ -315,6 +329,15 @@ export default function ActiveCampaignsList() {
               className="bg-[#010410] border border-gray-800/40 rounded-2xl h-80 animate-pulse"
             />
           ))}
+        </div>
+      ) : loadError ? (
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <h3 className="font-roboto font-semibold text-white text-lg mb-2">
+            Could not load campaigns
+          </h3>
+          <p className="font-sora text-red-400 text-sm max-w-md">
+            {loadError}
+          </p>
         </div>
       ) : campaigns.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">

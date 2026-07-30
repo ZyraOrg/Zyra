@@ -2,25 +2,19 @@ import { useState, useCallback } from "react";
 import { useAppKitProvider, useAppKitAccount } from "@reown/appkit/react";
 import {
   contribute,
-  createCampaign,
-  approveCampaign,
-  releaseFunds,
-  endCampaign,
   fetchCampaign,
   fetchAllCampaigns,
-  addAdmin,
-  removeAdmin,
   initializePlatform,
+  updateAuthority,
 } from "../services/crowdfund";
 
 // ================================================================
 // useCrowdfund Hook
-// Drop this into any component that needs to interact with
-// the crowdfunding smart contract.
+// Connects any component to the Zyra crowdfunding smart contract.
 //
-// Usage example:
+// Usage:
 //   const { donate, loading, error } = useCrowdfund();
-//   await donate(campaignId, amount);
+//   await donate(chainId, amount);
 // ================================================================
 
 export function useCrowdfund() {
@@ -28,12 +22,9 @@ export function useCrowdfund() {
   const [error, setError] = useState(null);
   const [txSignature, setTxSignature] = useState(null);
 
-  // Get the connected Solana wallet from Reown AppKit
- const { walletProvider } = useAppKitProvider("solana");
-const { address, isConnected } = useAppKitAccount();
-
-console.log("walletProvider:", walletProvider);
-console.log("isConnected:", isConnected);
+  // Get connected Solana wallet from Reown AppKit
+  const { walletProvider } = useAppKitProvider("solana");
+  const { address, isConnected } = useAppKitAccount();
 
   // ── Helper ───────────────────────────────────────────────────
   // Wraps any contract call with loading/error state management
@@ -66,69 +57,36 @@ console.log("isConnected:", isConnected);
     [isConnected, walletProvider]
   );
 
-  // ── Public Functions ─────────────────────────────────────────
-
-  // Donate to a campaign
-  // Usage: await donate(42, 50) → donates $50 USDT to campaign #42
+  // ── Donate ───────────────────────────────────────────────────
+  // Main user action — donate USDT to a campaign
+  // chainId: campaign.chain_id from Supabase
+  // amountInUsdt: e.g. 50 for $50
   const donate = useCallback(
-    (campaignId, amountInUsdt) =>
-      execute(contribute, campaignId, amountInUsdt),
+    (chainId, amountInUsdt) => execute(contribute, chainId, amountInUsdt),
     [execute]
   );
 
-  // Create a new campaign (goes to Pending status)
-  // Usage: await submitCampaign(42, "wallet_address", 10000)
-  const submitCampaign = useCallback(
-    (campaignId, payoutAddress, goalInUsdt) =>
-      execute(createCampaign, campaignId, payoutAddress, goalInUsdt),
-    [execute]
-  );
-
-  // Admin: approve a pending campaign
-  const approve = useCallback(
-    (campaignId) => execute(approveCampaign, campaignId),
-    [execute]
-  );
-
-  // Admin: release funds to creator
-  const release = useCallback(
-    (campaignId) => execute(releaseFunds, campaignId),
-    [execute]
-  );
-
-  // Admin: end a campaign early
-  const end = useCallback(
-    (campaignId) => execute(endCampaign, campaignId),
-    [execute]
-  );
-
-  // Admin: add a new admin wallet
-  const addNewAdmin = useCallback(
-    (adminWalletAddress) => execute(addAdmin, adminWalletAddress),
-    [execute]
-  );
-
-  // Admin: remove an admin wallet
-  const removeExistingAdmin = useCallback(
-    (adminWalletAddress) => execute(removeAdmin, adminWalletAddress),
-    [execute]
-  );
-
-  // Super admin: initialize the platform (called once after deployment)
+  // ── One-time setup (deployer only) ───────────────────────────
   const initialize = useCallback(
-    (platformWalletAddress) =>
-      execute(initializePlatform, platformWalletAddress),
+    (authorityAddress, platformWalletAddress) =>
+      execute(initializePlatform, authorityAddress, platformWalletAddress),
     [execute]
   );
 
-  // ── Read Functions (no wallet needed) ───────────────────────
+  // ── Update authority (current authority only) ────────────────
+  const changeAuthority = useCallback(
+    (newAuthorityAddress) => execute(updateAuthority, newAuthorityAddress),
+    [execute]
+  );
 
-  // Fetch a single campaign's on-chain data (for progress bar etc)
-  const getCampaign = useCallback(async (campaignId) => {
+  // ── Read functions (no wallet needed) ────────────────────────
+
+  // Get live raised amount and status for a single campaign
+  const getCampaign = useCallback(async (chainId) => {
     setLoading(true);
     setError(null);
     try {
-      const result = await fetchCampaign(campaignId);
+      const result = await fetchCampaign(chainId);
       if (!result.success) setError(result.error);
       return result;
     } catch (err) {
@@ -139,7 +97,7 @@ console.log("isConnected:", isConnected);
     }
   }, []);
 
-  // Fetch all campaigns (for the campaigns list page)
+  // Get all campaigns from the contract
   const getAllCampaigns = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -156,21 +114,23 @@ console.log("isConnected:", isConnected);
   }, []);
 
   return {
-  loading,
-  error,
-  txSignature,
-  isConnected,
-  connectedAddress: address,
-  walletProvider, // add this
-  donate,
-  submitCampaign,
-  approve,
-  release,
-  end,
-  addNewAdmin,
-  removeExistingAdmin,
-  initialize,
-  getCampaign,
-  getAllCampaigns,
-};
+    // State
+    loading,
+    error,
+    txSignature,
+    isConnected,
+    connectedAddress: address,
+    walletProvider,
+
+    // User actions
+    donate,
+
+    // Setup actions
+    initialize,
+    changeAuthority,
+
+    // Read actions
+    getCampaign,
+    getAllCampaigns,
+  };
 }
