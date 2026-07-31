@@ -88,9 +88,7 @@ const FooterSection = () => {
             <h1 className="text-lg font-semibold">Legal</h1>
             <div className="flex flex-col gap-2 font-semibold text-gray-400 text-md">
               <a
-                href="/Terms.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/terms"
                 className="hover:text-gray-300"
                 data-aos="slide-left"
                 data-aos-delay="800"
@@ -98,9 +96,7 @@ const FooterSection = () => {
                 Terms of Service
               </a>
               <a
-                href="/privacy.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/privacy"
                 className="hover:text-gray-300"
                 data-aos="slide-left"
                 data-aos-delay="900"
@@ -108,9 +104,7 @@ const FooterSection = () => {
                 Privacy Policy
               </a>
               <a
-                href="/security.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/security"
                 className="hover:text-gray-300"
                 data-aos="slide-left"
                 data-aos-delay="1000"
