@@ -58,11 +58,11 @@ export function useCrowdfund() {
   );
 
   // ── Donate ───────────────────────────────────────────────────
-  // Main user action — donate USDT to a campaign
+  // Main user action — donate USDC to a campaign
   // chainId: campaign.chain_id from Supabase
-  // amountInUsdt: e.g. 50 for $50
+  // amountInUsdc: e.g. 50 for $50
   const donate = useCallback(
-    (chainId, amountInUsdt) => execute(contribute, chainId, amountInUsdt),
+    (chainId, amountInUsdc) => execute(contribute, chainId, amountInUsdc),
     [execute]
   );
 

@@ -13,11 +13,11 @@ const PROGRAM_ID = new PublicKey("DDHnP6bWygPFJZiumq3EUZmVNSrVeFwtd8w8WeAtLEfR")
 const NETWORK = import.meta.env.VITE_SOLANA_NETWORK || "devnet";
 const CONNECTION = new Connection(clusterApiUrl(NETWORK), "confirmed");
 
-function getUsdtMint() {
+function getUsdcMint() {
   const mint =
     NETWORK === "mainnet-beta"
-      ? "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"
-      : import.meta.env.VITE_USDT_MINT_DEVNET;
+      ? "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+      : import.meta.env.VITE_USDC_MINT_DEVNET;
   return new PublicKey(mint);
 }
 
@@ -121,11 +121,11 @@ export async function updateAuthority(wallet, newAuthorityAddress) {
 }
 
 // ── 3. CONTRIBUTE ────────────────────────────────────────────────
-// Any user can call this. Sends USDT to campaign vault.
+// Any user can call this. Sends USDC to campaign vault.
 // 2% goes to platform wallet. 98% stays in campaign vault.
 // campaignId: the chain_id from Supabase (bigint/number)
-// amountInUsdt: human readable e.g. 50 for $50 USDT
-export async function contribute(wallet, campaignId, amountInUsdt) {
+// amountInUsdC: human readable e.g. 50 for $50 USDC
+export async function contribute(wallet, campaignId, amountInUsdc) {
   try {
     if (campaignId === null || campaignId === undefined || campaignId === "") {
       throw new Error("Campaign is missing its on-chain id");
@@ -138,7 +138,7 @@ export async function contribute(wallet, campaignId, amountInUsdt) {
     // Fetch platform account to get platform wallet for fee
     const platformAccount = await program.account.platform.fetch(platformPDA);
     const platformWallet = platformAccount.platformWallet;
-    const usdtMint = getUsdtMint();
+    const usdcMint = getUsdcMint();
 
     try {
       await program.account.campaign.fetch(campaignPDA);
@@ -148,24 +148,24 @@ export async function contribute(wallet, campaignId, amountInUsdt) {
       );
     }
 
-    // Derive all USDT token accounts
+    // Derive all USDC token accounts
     const contributorTokenAccount = await getAssociatedTokenAddress(
-      usdtMint,
+      usdcMint,
       wallet.publicKey
     );
     const campaignVaultTokenAccount = await getAssociatedTokenAddress(
-      usdtMint,
+      usdcMint,
       campaignPDA,
       true // allowOwnerOffCurve — needed because campaign is a PDA
     );
     const platformTokenAccount = await getAssociatedTokenAddress(
-      usdtMint,
+      usdcMint,
       platformWallet
     );
 
     if (!(await accountExists(contributorTokenAccount))) {
       throw new Error(
-        "Your wallet does not have a USDT token account for this network. Please fund this wallet with the configured USDT token, then try again."
+        "Your wallet does not have a USDC token account for this network. Please fund this wallet with the configured USDC token, then try again."
       );
     }
 
@@ -176,7 +176,7 @@ export async function contribute(wallet, campaignId, amountInUsdt) {
           wallet.publicKey,
           campaignVaultTokenAccount,
           campaignPDA,
-          usdtMint
+          usdcMint
         )
       );
     }
@@ -186,13 +186,13 @@ export async function contribute(wallet, campaignId, amountInUsdt) {
           wallet.publicKey,
           platformTokenAccount,
           platformWallet,
-          usdtMint
+          usdcMint
         )
       );
     }
 
-    // Convert amount to on-chain units (6 decimals: 1 USDT = 1_000_000)
-    const amountOnChain = new BN(Math.round(amountInUsdt * 1_000_000));
+    // Convert amount to on-chain units (6 decimals: 1 USDC = 1_000_000)
+    const amountOnChain = new BN(Math.round(amountInUsdc * 1_000_000));
 
     const tx = await program.methods
       .contribute(new BN(campaignId), amountOnChain)
