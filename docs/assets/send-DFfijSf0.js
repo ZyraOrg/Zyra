@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:docs/assets/send-DFfijSf0.js
 import{cG as x,cJ as d,dn as u,cK as b,cL as v,cN as H,d1 as O,c$ as g,cW as V,ei as a,cM as c,cP as L,cU as h,cS as E,cQ as I,d$ as K,cV as y,d5 as Q,d4 as X,dk as G,cH as Y,cI as J,dm as Z,ep as M,eq as q,cY as ee}from"./index-AR2iM5MW.js";import"./index-DIUV_P0u.js";import"./index-DPVTevEz.js";import{S as P}from"./SwapController-jA3znELN.js";const te=x`
+========
+import{cE as x,cH as d,dl as u,cI as b,cJ as v,cL as H,c$ as O,cZ as g,cU as V,d_ as a,cK as c,cN as L,cS as h,cQ as E,cO as I,dH as K,cT as y,d3 as Q,d2 as Z,di as G,cF as Y,cG as J,dk as X,e5 as M,e6 as q,cW as ee}from"./index-DFJFoxns.js";import"./index-DYCfs98S.js";import"./index-CfeIMxzV.js";import{S as P}from"./SwapController-BgJ5_a8W.js";const te=x`
+>>>>>>>> f110949 (Update):docs/assets/send-CLDNFAQm.js
   :host {
     width: 100%;
     height: 100px;
@@ -262,7 +266,7 @@ import{cG as x,cJ as d,dn as u,cK as b,cL as v,cN as H,d1 as O,c$ as g,cW as V,e
       >
         ${t}
       </wui-button>
-    </wui-flex>`}async handleSendParameters(){if(this.loading=!0,!this.params){this.loading=!1;return}const t=Number(this.params.amount);if(isNaN(t)){y.showError("Invalid amount"),this.loading=!1;return}const{namespace:i,chainId:o,assetAddress:r}=this.params;if(!Q.SEND_PARAMS_SUPPORTED_CHAINS.includes(i)){y.showError(`Chain "${i}" is not supported for send parameters`),this.loading=!1;return}const n=g.getCaipNetworkById(o,i);if(!n){y.showError(`Network with id "${o}" not found`),this.loading=!1;return}try{const{balance:s,name:l,symbol:U,decimals:z}=await X.fetchERC20Balance({caipAddress:this.caipAddress,assetAddress:r,caipNetwork:n});if(!l||!U||!z||!s){y.showError("Token not found");return}a.setToken({name:l,symbol:U,chainId:n.id.toString(),address:`${n.chainNamespace}:${n.id}:${r}`,value:0,price:0,quantity:{decimals:z.toString(),numeric:s.toString()},iconUrl:G.getTokenImage(U)??""}),a.setTokenAmount(String(t)),a.setReceiverAddress(this.params.to)}catch(s){console.error("Failed to load token information:",s),y.showError("Failed to load token information")}finally{this.loading=!1}}};f.styles=ne;w([u()],f.prototype,"token",void 0);w([u()],f.prototype,"sendTokenAmount",void 0);w([u()],f.prototype,"receiverAddress",void 0);w([u()],f.prototype,"receiverProfileName",void 0);w([u()],f.prototype,"loading",void 0);w([u()],f.prototype,"params",void 0);w([u()],f.prototype,"caipAddress",void 0);w([u()],f.prototype,"disconnecting",void 0);w([u()],f.prototype,"gasFee",void 0);f=w([b("w3m-wallet-send-view")],f);const re=x`
+    </wui-flex>`}async handleSendParameters(){if(this.loading=!0,!this.params){this.loading=!1;return}const t=Number(this.params.amount);if(isNaN(t)){y.showError("Invalid amount"),this.loading=!1;return}const{namespace:i,chainId:o,assetAddress:r}=this.params;if(!Q.SEND_PARAMS_SUPPORTED_CHAINS.includes(i)){y.showError(`Chain "${i}" is not supported for send parameters`),this.loading=!1;return}const n=g.getCaipNetworkById(o,i);if(!n){y.showError(`Network with id "${o}" not found`),this.loading=!1;return}try{const{balance:s,name:l,symbol:U,decimals:z}=await Z.fetchERC20Balance({caipAddress:this.caipAddress,assetAddress:r,caipNetwork:n});if(!l||!U||!z||!s){y.showError("Token not found");return}a.setToken({name:l,symbol:U,chainId:n.id.toString(),address:`${n.chainNamespace}:${n.id}:${r}`,value:0,price:0,quantity:{decimals:z.toString(),numeric:s.toString()},iconUrl:G.getTokenImage(U)??""}),a.setTokenAmount(String(t)),a.setReceiverAddress(this.params.to)}catch(s){console.error("Failed to load token information:",s),y.showError("Failed to load token information")}finally{this.loading=!1}}};f.styles=ne;w([u()],f.prototype,"token",void 0);w([u()],f.prototype,"sendTokenAmount",void 0);w([u()],f.prototype,"receiverAddress",void 0);w([u()],f.prototype,"receiverProfileName",void 0);w([u()],f.prototype,"loading",void 0);w([u()],f.prototype,"params",void 0);w([u()],f.prototype,"caipAddress",void 0);w([u()],f.prototype,"disconnecting",void 0);w([u()],f.prototype,"gasFee",void 0);f=w([b("w3m-wallet-send-view")],f);const re=x`
   .contentContainer {
     height: 440px;
     overflow: scroll;
@@ -278,7 +282,7 @@ import{cG as x,cJ as d,dn as u,cK as b,cL as v,cN as H,d1 as O,c$ as g,cW as V,e
     height: 40px;
     border-radius: ${({borderRadius:e})=>e[3]};
   }
-`;var _=function(e,t,i,o){var r=arguments.length,n=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,i):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")n=Reflect.decorate(e,t,i,o);else for(var l=e.length-1;l>=0;l--)(s=e[l])&&(n=(r<3?s(n):r>3?s(t,i,n):s(t,i))||n);return r>3&&n&&Object.defineProperty(t,i,n),n};let C=class extends v{constructor(){super(),this.unsubscribe=[],this.tokenBalances=a.state.tokenBalances,this.search="",this.onDebouncedSearch=O.debounce(t=>{this.search=t}),this.fetchBalancesAndNetworkPrice(),this.unsubscribe.push(a.subscribe(t=>{this.tokenBalances=t.tokenBalances}))}disconnectedCallback(){this.unsubscribe.forEach(t=>t())}render(){return c`
+`;var _=function(e,t,i,o){var r=arguments.length,n=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,i):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")n=Reflect.decorate(e,t,i,o);else for(var l=e.length-1;l>=0;l--)(s=e[l])&&(n=(r<3?s(n):r>3?s(t,i,n):s(t,i))||n);return r>3&&n&&Object.defineProperty(t,i,n),n};let T=class extends v{constructor(){super(),this.unsubscribe=[],this.tokenBalances=a.state.tokenBalances,this.search="",this.onDebouncedSearch=O.debounce(t=>{this.search=t}),this.fetchBalancesAndNetworkPrice(),this.unsubscribe.push(a.subscribe(t=>{this.tokenBalances=t.tokenBalances}))}disconnectedCallback(){this.unsubscribe.forEach(t=>t())}render(){return c`
       <wui-flex flexDirection="column">
         ${this.templateSearchInput()} <wui-separator></wui-separator> ${this.templateTokens()}
       </wui-flex>
@@ -335,7 +339,7 @@ import{cG as x,cJ as d,dn as u,cK as b,cL as v,cN as H,d1 as O,c$ as g,cW as V,e
               </wui-flex>`}
         </wui-flex>
       </wui-flex>
-    `}onBuyClick(){h.push("OnRampProviders")}onInputChange(t){this.onDebouncedSearch(t.detail)}handleTokenClick(t){a.setToken(t),a.setTokenAmount(void 0),h.goBack()}};C.styles=re;_([u()],C.prototype,"tokenBalances",void 0);_([u()],C.prototype,"tokens",void 0);_([u()],C.prototype,"filteredTokens",void 0);_([u()],C.prototype,"search",void 0);C=_([b("w3m-wallet-send-select-token-view")],C);const oe=x`
+    `}onBuyClick(){h.push("OnRampProviders")}onInputChange(t){this.onDebouncedSearch(t.detail)}handleTokenClick(t){a.setToken(t),a.setTokenAmount(void 0),h.goBack()}};T.styles=re;_([u()],T.prototype,"tokenBalances",void 0);_([u()],T.prototype,"tokens",void 0);_([u()],T.prototype,"filteredTokens",void 0);_([u()],T.prototype,"search",void 0);T=_([b("w3m-wallet-send-select-token-view")],T);const oe=x`
   :host {
     height: 32px;
     display: flex;
@@ -357,8 +361,8 @@ import{cG as x,cJ as d,dn as u,cK as b,cL as v,cN as H,d1 as O,c$ as g,cW as V,e
   wui-icon {
     border-radius: ${({borderRadius:e})=>e[16]};
   }
-`;var B=function(e,t,i,o){var r=arguments.length,n=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,i):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")n=Reflect.decorate(e,t,i,o);else for(var l=e.length-1;l>=0;l--)(s=e[l])&&(n=(r<3?s(n):r>3?s(t,i,n):s(t,i))||n);return r>3&&n&&Object.defineProperty(t,i,n),n};let S=class extends v{constructor(){super(...arguments),this.text=""}render(){return c`<wui-text variant="lg-regular" color="primary">${this.text}</wui-text>
-      ${this.imageTemplate()}`}imageTemplate(){return this.address?c`<wui-avatar address=${this.address} .imageSrc=${this.imageSrc}></wui-avatar>`:this.imageSrc?c`<wui-image src=${this.imageSrc}></wui-image>`:c`<wui-icon size="lg" color="inverse" name="networkPlaceholder"></wui-icon>`}};S.styles=[Y,J,oe];B([d({type:String})],S.prototype,"text",void 0);B([d({type:String})],S.prototype,"address",void 0);B([d({type:String})],S.prototype,"imageSrc",void 0);S=B([b("wui-preview-item")],S);const se=x`
+`;var B=function(e,t,i,o){var r=arguments.length,n=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,i):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")n=Reflect.decorate(e,t,i,o);else for(var l=e.length-1;l>=0;l--)(s=e[l])&&(n=(r<3?s(n):r>3?s(t,i,n):s(t,i))||n);return r>3&&n&&Object.defineProperty(t,i,n),n};let C=class extends v{constructor(){super(...arguments),this.text=""}render(){return c`<wui-text variant="lg-regular" color="primary">${this.text}</wui-text>
+      ${this.imageTemplate()}`}imageTemplate(){return this.address?c`<wui-avatar address=${this.address} .imageSrc=${this.imageSrc}></wui-avatar>`:this.imageSrc?c`<wui-image src=${this.imageSrc}></wui-image>`:c`<wui-icon size="lg" color="inverse" name="networkPlaceholder"></wui-icon>`}};C.styles=[Y,J,oe];B([d({type:String})],C.prototype,"text",void 0);B([d({type:String})],C.prototype,"address",void 0);B([d({type:String})],C.prototype,"imageSrc",void 0);C=B([b("wui-preview-item")],C);const se=x`
   :host {
     display: flex;
     padding: ${({spacing:e})=>e[4]} ${({spacing:e})=>e[3]};
@@ -377,12 +381,12 @@ import{cG as x,cJ as d,dn as u,cK as b,cL as v,cN as H,d1 as O,c$ as g,cW as V,e
     width: 20px;
     height: 20px;
   }
-`;var W=function(e,t,i,o){var r=arguments.length,n=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,i):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")n=Reflect.decorate(e,t,i,o);else for(var l=e.length-1;l>=0;l--)(s=e[l])&&(n=(r<3?s(n):r>3?s(t,i,n):s(t,i))||n);return r>3&&n&&Object.defineProperty(t,i,n),n};let T=class extends v{constructor(){super(...arguments),this.imageSrc=void 0,this.textTitle="",this.textValue=void 0}render(){return c`
+`;var W=function(e,t,i,o){var r=arguments.length,n=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,i):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")n=Reflect.decorate(e,t,i,o);else for(var l=e.length-1;l>=0;l--)(s=e[l])&&(n=(r<3?s(n):r>3?s(t,i,n):s(t,i))||n);return r>3&&n&&Object.defineProperty(t,i,n),n};let S=class extends v{constructor(){super(...arguments),this.imageSrc=void 0,this.textTitle="",this.textValue=void 0}render(){return c`
       <wui-flex justifyContent="space-between" alignItems="center">
         <wui-text variant="lg-regular" color="primary"> ${this.textTitle} </wui-text>
         ${this.templateContent()}
       </wui-flex>
-    `}templateContent(){return this.imageSrc?c`<wui-image src=${this.imageSrc} alt=${this.textTitle}></wui-image>`:this.textValue?c` <wui-text variant="md-regular" color="secondary"> ${this.textValue} </wui-text>`:c`<wui-icon size="inherit" color="default" name="networkPlaceholder"></wui-icon>`}};T.styles=[Y,J,se];W([d()],T.prototype,"imageSrc",void 0);W([d()],T.prototype,"textTitle",void 0);W([d()],T.prototype,"textValue",void 0);T=W([b("wui-list-content")],T);const ae=x`
+    `}templateContent(){return this.imageSrc?c`<wui-image src=${this.imageSrc} alt=${this.textTitle}></wui-image>`:this.textValue?c` <wui-text variant="md-regular" color="secondary"> ${this.textValue} </wui-text>`:c`<wui-icon size="inherit" color="default" name="networkPlaceholder"></wui-icon>`}};S.styles=[Y,J,se];W([d()],S.prototype,"imageSrc",void 0);W([d()],S.prototype,"textTitle",void 0);W([d()],S.prototype,"textValue",void 0);S=W([b("wui-list-content")],S);const ae=x`
   :host {
     display: flex;
     width: auto;
@@ -440,7 +444,7 @@ import{cG as x,cJ as d,dn as u,cK as b,cL as v,cN as H,d1 as O,c$ as g,cW as V,e
         @click=${()=>this.onNetworkClick(this.caipNetwork)}
         class="network"
         textTitle="Network"
-        imageSrc=${Z(G.getNetworkImage(this.caipNetwork))}
+        imageSrc=${X(G.getNetworkImage(this.caipNetwork))}
       ></wui-list-content>`:null}onNetworkClick(t){t&&!this.params&&h.push("Networks",{network:t})}};N.styles=ae;j([d()],N.prototype,"receiverAddress",void 0);j([d({type:Object})],N.prototype,"caipNetwork",void 0);j([u()],N.prototype,"params",void 0);N=j([b("w3m-wallet-send-details")],N);const le=x`
   wui-avatar,
   wui-image {
@@ -548,4 +552,4 @@ import{cG as x,cJ as d,dn as u,cK as b,cL as v,cN as H,d1 as O,c$ as g,cW as V,e
           Close
         </wui-button>
       </wui-flex>
-    `}onCloseClick(){K.close()}};F.styles=ce;F=ue([b("w3m-send-confirmed-view")],F);export{F as W3mSendConfirmedView,C as W3mSendSelectTokenView,p as W3mWalletSendPreviewView,f as W3mWalletSendView};
+    `}onCloseClick(){K.close()}};F.styles=ce;F=ue([b("w3m-send-confirmed-view")],F);export{F as W3mSendConfirmedView,T as W3mSendSelectTokenView,p as W3mWalletSendPreviewView,f as W3mWalletSendView};

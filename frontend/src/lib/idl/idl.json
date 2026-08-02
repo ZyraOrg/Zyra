@@ -318,7 +318,7 @@
     {
       "code": 6004,
       "name": "AmountTooLow",
-      "msg": "Contribution amount is below the minimum of 1 USDT"
+      "msg": "Contribution amount is below the minimum of 1 USDC"
     },
     {
       "code": 6005,

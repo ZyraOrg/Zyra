@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:docs/assets/receive-CqEk7yux.js
 import{cG as g,cH as $,cI as v,cJ as k,cK as y,cL as x,cM as l,c$ as c,cV as p,dk as m,dl as h,cQ as C,dm as N,cZ as R,c_ as A,cU as I,d1 as S,dn as f}from"./index-AR2iM5MW.js";const T=g`
+========
+import{cE as g,cF as $,cG as v,cH as k,cI as y,cJ as x,cK as l,cZ as c,cT as p,di as m,dj as h,cO as C,dk as N,cX as R,cY as A,cS as S,c$ as I,dl as f}from"./index-DFJFoxns.js";const T=g`
+>>>>>>>> f110949 (Update):docs/assets/receive-C1lzzcs0.js
   button {
     width: 100%;
     display: flex;
@@ -69,7 +73,7 @@ import{cG as g,cH as $,cI as v,cJ as k,cK as y,cL as x,cM as l,c$ as c,cV as p,d
       </button>
     `}networksTemplate(){const t=this.networkImages.slice(0,5);return l` <wui-flex class="networks">
       ${t?.map(o=>l` <wui-flex class="network-icon"> <wui-image src=${o}></wui-image> </wui-flex>`)}
-    </wui-flex>`}};d.styles=[$,v,T];b([k({type:Array})],d.prototype,"networkImages",void 0);b([k()],d.prototype,"text",void 0);d=b([y("wui-compatible-network")],d);const _=g`
+    </wui-flex>`}};d.styles=[$,v,T];b([k({type:Array})],d.prototype,"networkImages",void 0);b([k()],d.prototype,"text",void 0);d=b([y("wui-compatible-network")],d);const O=g`
   wui-compatible-network {
     margin-top: ${({spacing:e})=>e[4]};
     width: 100%;
@@ -128,4 +132,4 @@ import{cG as g,cH as $,cI as v,cJ as k,cK as y,cL as x,cM as l,c$ as c,cV as p,d
       @click=${this.onReceiveClick.bind(this)}
       text="Only receive assets on these networks"
       .networkImages=${n}
-    ></wui-compatible-network>`}onReceiveClick(){I.push("WalletCompatibleNetworks")}onCopyClick(){try{this.address&&(S.copyToClopboard(this.address),p.showSuccess("Address copied"))}catch{p.showError("Failed to copy")}}};u.styles=_;w([f()],u.prototype,"address",void 0);w([f()],u.prototype,"profileName",void 0);w([f()],u.prototype,"network",void 0);u=w([y("w3m-wallet-receive-view")],u);export{u as W3mWalletReceiveView};
+    ></wui-compatible-network>`}onReceiveClick(){S.push("WalletCompatibleNetworks")}onCopyClick(){try{this.address&&(I.copyToClopboard(this.address),p.showSuccess("Address copied"))}catch{p.showError("Failed to copy")}}};u.styles=O;w([f()],u.prototype,"address",void 0);w([f()],u.prototype,"profileName",void 0);w([f()],u.prototype,"network",void 0);u=w([y("w3m-wallet-receive-view")],u);export{u as W3mWalletReceiveView};
