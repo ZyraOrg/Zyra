@@ -8,6 +8,51 @@ import useAuthStore from "../../store/useAuthStore";
 // ── Suggested donation amounts ───────────────────────────────────
 const SUGGESTED_AMOUNTS = [10, 50, 100, 250, 500];
 
+const toNumber = (value) => {
+  const next = Number(value);
+  return Number.isFinite(next) ? next : 0;
+};
+
+const normalizeCampaignRecord = (campaign = {}) => ({
+  ...campaign,
+  id: campaign.id ?? campaign.campaign_id ?? campaign.campaignId ?? null,
+  user_id: campaign.user_id ?? campaign.userId ?? null,
+  raised: toNumber(campaign.raised ?? campaign.raised_amount ?? campaign.total_raised ?? campaign.current_raised ?? 0),
+  goal_amount: toNumber(campaign.goal_amount ?? campaign.goalAmount ?? campaign.goal ?? 0),
+  chain_id: campaign.chain_id ?? campaign.chainId ?? campaign.Chain_id ?? campaign.on_chain_id ?? null,
+  cover_url: campaign.cover_url ?? campaign.coverUrl ?? "",
+  objective: campaign.objective ?? campaign.description ?? "",
+});
+
+const normalizeCampaignsResponse = (payload) => {
+  if (Array.isArray(payload)) {
+    return payload.map(normalizeCampaignRecord);
+  }
+
+  if (!payload || typeof payload !== 'object') {
+    return [];
+  }
+
+  const candidateCollections = [
+    payload.campaigns,
+    payload.data,
+    payload.results,
+    payload.items,
+  ];
+
+  const list = candidateCollections.find(Array.isArray);
+  if (list) {
+    return list.map(normalizeCampaignRecord);
+  }
+
+  const singleCampaign = payload.campaign ?? payload.record ?? payload.result ?? null;
+  if (singleCampaign && typeof singleCampaign === 'object') {
+    return [normalizeCampaignRecord(singleCampaign)];
+  }
+
+  return [];
+};
+
 // ── Progress Bar ─────────────────────────────────────────────────
 function ProgressBar({ percent }) {
   const clamped = Math.min(Math.max(percent || 0), 100);
@@ -112,8 +157,14 @@ function DonateModal({ campaign, onClose, onSuccess }) {
   const finalAmount = customAmount ? parseFloat(customAmount) : selectedAmount;
 
   async function handleConfirm() {
+    const chainId = campaign.chain_id ?? campaign.Chain_id;
+
     if (!finalAmount || finalAmount <= 0) {
       toast.error("Please select or enter a valid amount");
+      return;
+    }
+    if (chainId === null || chainId === undefined || chainId === "") {
+      toast.error("This campaign is not ready for on-chain donations yet");
       return;
     }
     if (!isConnected) {
@@ -121,13 +172,13 @@ function DonateModal({ campaign, onClose, onSuccess }) {
       return;
     }
 
-    const result = await donate(campaign.id, finalAmount);
+    const result = await donate(chainId, finalAmount);
 
     if (result.success) {
       toast.success(
-        `You successfully donated $${finalAmount} USDT to "${campaign.name}"!`
+        `You successfully donated $${finalAmount} USDC to "${campaign.name}"!`
       );
-      onSuccess(campaign.id);
+      await onSuccess(campaign.id, chainId);
       onClose();
     } else {
       toast.error(result.error || "Transaction failed. Please try again.");
@@ -161,7 +212,7 @@ function DonateModal({ campaign, onClose, onSuccess }) {
 
         {/* Suggested amounts */}
         <div className="mb-4">
-          <p className="text-gray-400 text-xs font-sora mb-3">Select amount (USDT)</p>
+          <p className="text-gray-400 text-xs font-sora mb-3">Select amount  (USDC)</p>
           <div className="grid grid-cols-5 gap-2">
             {SUGGESTED_AMOUNTS.map((amount) => (
               <button
@@ -211,16 +262,16 @@ function DonateModal({ campaign, onClose, onSuccess }) {
           <div className="mb-4 p-3 bg-[#0a0a1a] rounded-xl border border-gray-800/30">
             <div className="flex justify-between text-xs font-sora text-gray-400 mb-1">
               <span>Donation amount</span>
-              <span className="text-white">${finalAmount} USDT</span>
+              <span className="text-white">${finalAmount} USDC</span>
             </div>
             <div className="flex justify-between text-xs font-sora text-gray-400 mb-1">
               <span>Platform fee (2%)</span>
-              <span className="text-gray-500">-${(finalAmount * 0.02).toFixed(2)} USDT</span>
+              <span className="text-gray-500">-${(finalAmount * 0.02).toFixed(2)} USDC</span>
             </div>
             <div className="h-px bg-gray-800/50 my-2" />
             <div className="flex justify-between text-xs font-sora">
               <span className="text-gray-400">Campaign receives</span>
-              <span className="text-[#91F2F9] font-medium">${(finalAmount * 0.98).toFixed(2)} USDT</span>
+              <span className="text-[#91F2F9] font-medium">${(finalAmount * 0.98).toFixed(2)} USDC</span>
             </div>
           </div>
         )}
@@ -257,20 +308,32 @@ export default function ActiveCampaignsList() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuthStore();
+  const { getCampaign } = useCrowdfund();
 
   const [campaigns, setCampaigns] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
   const [selectedCampaign, setSelectedCampaign] = useState(null);
 
   const loadCampaigns = useCallback(async () => {
     try {
       setIsLoading(true);
+      setLoadError("");
 
       const { data } = await api.getPublicCampaigns({ limit: 20, offset: 0 });
-      setCampaigns(Array.isArray(data?.campaigns) ? data.campaigns : []);
+      const nextCampaigns = normalizeCampaignsResponse(data);
+      setCampaigns(nextCampaigns);
+      return nextCampaigns;
     } catch (error) {
       console.error("Failed to load campaigns:", error);
+      setLoadError(
+        error?.response?.data?.error ||
+          error?.response?.data?.message ||
+          error?.message ||
+          "Failed to load active campaigns"
+      );
       setCampaigns([]);
+      return [];
     } finally {
       setIsLoading(false);
     }
@@ -300,9 +363,38 @@ export default function ActiveCampaignsList() {
     setSelectedCampaign(campaign);
   }
 
-  // After a successful donation refresh campaigns from Supabase
-  async function handleDonationSuccess() {
-    await loadCampaigns();
+  // After a successful donation, refresh the public list and merge the
+  // live on-chain raised amount back into the campaign card state.
+  async function handleDonationSuccess(campaignId, chainId) {
+    const refreshedCampaigns = await loadCampaigns();
+
+    if (
+      chainId === null ||
+      chainId === undefined ||
+      chainId === ""
+    ) {
+      return;
+    }
+
+    const liveCampaign = await getCampaign(chainId);
+    if (!liveCampaign?.success || !liveCampaign?.data) {
+      return;
+    }
+
+    const nextRaised = toNumber(liveCampaign.data.raised ?? liveCampaign.data.total_raised ?? 0);
+    const nextGoal = toNumber(liveCampaign.data.goal ?? liveCampaign.data.goal_amount ?? 0);
+
+    const mergedCampaigns = refreshedCampaigns.map((campaign) =>
+      campaign.id === campaignId
+        ? {
+            ...campaign,
+            raised: nextRaised,
+            goal_amount: nextGoal,
+          }
+        : campaign
+    );
+
+    setCampaigns(mergedCampaigns);
   }
 
   return (
@@ -315,6 +407,15 @@ export default function ActiveCampaignsList() {
               className="bg-[#010410] border border-gray-800/40 rounded-2xl h-80 animate-pulse"
             />
           ))}
+        </div>
+      ) : loadError ? (
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <h3 className="font-roboto font-semibold text-white text-lg mb-2">
+            Could not load campaigns
+          </h3>
+          <p className="font-sora text-red-400 text-sm max-w-md">
+            {loadError}
+          </p>
         </div>
       ) : campaigns.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">

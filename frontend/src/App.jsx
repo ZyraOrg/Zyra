@@ -30,6 +30,7 @@ import Support from "./pages/Settings/pages/Support";
 import { useUser } from "./hooks/useUser";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+
 import Admin from "./pages/Admin/Admin";
 import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminHome from "./pages/Admin/AdminHome";
@@ -42,6 +43,11 @@ import Moderation from "./pages/Admin/pages/Moderation";
 import AdminSettings from "./pages/Admin/pages/AdminSettings";
 
 import PublicCampaigns from "./pages/Campaigns/PublicCampaigns";
+import LegalPage, {
+  termsOfServiceContent,
+  privacyPolicyContent,
+  securityContent,
+} from "./pages/Legal/LegalPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -74,6 +80,9 @@ function RouterContent() {
 
       {/* Public — anyone can browse active campaigns without logging in */}
       <Route path="/campaigns" element={<PublicCampaigns />} />
+      <Route path="/terms" element={<LegalPage title="Terms of Service" content={termsOfServiceContent} />} />
+      <Route path="/privacy" element={<LegalPage title="Privacy Policy" content={privacyPolicyContent} />} />
+      <Route path="/security" element={<LegalPage title="Zyra Security" content={securityContent} />} />
 
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard"                      element={<Dashboard />} />
