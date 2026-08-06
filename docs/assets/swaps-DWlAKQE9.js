@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:docs/assets/swaps-DWlAKQE9.js
 import{cE as I,dl as l,cH as m,cI as P,cJ as A,cZ as v,cQ as d,cK as u,d3 as z,cW as B,cS as $,c$ as F,dH as M,cX as K,cY as Q,cF as W,cG as q,e4 as U}from"./index-xMCHaLIO.js";import{S as s}from"./SwapController-D5qSpDIW.js";import"./index-Pb562VIV.js";const H={numericInputKeyDown(e,t,o){const n=["Backspace","Meta","Ctrl","a","A","c","C","x","X","v","V","ArrowLeft","ArrowRight","Tab"],r=e.metaKey||e.ctrlKey,i=e.key,a=i.toLocaleLowerCase(),c=a==="a",D=a==="c",_=a==="v",j=a==="x",L=i===",",N=i===".",O=i>="0"&&i<="9";!r&&(c||D||_||j)&&e.preventDefault(),t==="0"&&!L&&!N&&i==="0"&&e.preventDefault(),t==="0"&&O&&(o(i),e.preventDefault()),(L||N)&&(t||(o("0."),e.preventDefault()),(t?.includes(".")||t?.includes(","))&&e.preventDefault()),!O&&!n.includes(i)&&!N&&!L&&e.preventDefault()}},G=I`
+========
+import{cG as I,dn as l,cJ as m,cK as P,cL as A,c$ as v,cS as d,cM as u,d5 as z,cY as B,cU as $,d1 as F,d$ as M,cZ as K,c_ as Q,cH as W,cI as q,eo as U}from"./index-Cv_rvX_c.js";import{S as s}from"./SwapController-DTQnRikF.js";import"./index-Dm5ZVVVG.js";const H={numericInputKeyDown(e,t,o){const n=["Backspace","Meta","Ctrl","a","A","c","C","x","X","v","V","ArrowLeft","ArrowRight","Tab"],r=e.metaKey||e.ctrlKey,i=e.key,a=i.toLocaleLowerCase(),c=a==="a",D=a==="c",_=a==="v",j=a==="x",L=i===",",N=i===".",O=i>="0"&&i<="9";!r&&(c||D||_||j)&&e.preventDefault(),t==="0"&&!L&&!N&&i==="0"&&e.preventDefault(),t==="0"&&O&&(o(i),e.preventDefault()),(L||N)&&(t||(o("0."),e.preventDefault()),(t?.includes(".")||t?.includes(","))&&e.preventDefault()),!O&&!n.includes(i)&&!N&&!L&&e.preventDefault()}},G=I`
+>>>>>>>> origin/main:docs/assets/swaps-DVazOiK6.js
   :host {
     width: 100%;
   }

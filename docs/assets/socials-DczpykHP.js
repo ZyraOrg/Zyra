@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:docs/assets/socials-DczpykHP.js
 import{cE as L,cH as k,dl as l,cI as O,cJ as I,d5 as E,dE as h,dJ as W,cS as f,d3 as T,cK as c,dK as F,c$ as v,dL as D,d1 as N,dM as R,dk as $,cZ as d,cU as S,dN as j,cW as u,dO as U,cT as C,dP as M,dH as _,dj as x}from"./index-xMCHaLIO.js";const q=L`
+========
+import{cG as L,cJ as k,dn as l,cK as O,cL as _,d7 as E,dY as h,e1 as W,cU as f,d5 as T,cM as c,e2 as F,d1 as v,e3 as D,d3 as N,e4 as R,dm as $,c$ as d,cW as S,e5 as M,cY as u,e6 as U,cV as C,e7 as j,d$ as I,dl as x}from"./index-Cv_rvX_c.js";const q=L`
+>>>>>>>> origin/main:docs/assets/socials-BxJlVdh6.js
   :host {
     margin-top: ${({spacing:t})=>t[1]};
   }

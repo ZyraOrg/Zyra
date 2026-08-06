@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:docs/assets/send-BZLPgQcm.js
 import{cE as x,cH as d,dl as u,cI as b,cJ as v,cL as H,c$ as O,cZ as g,cU as V,d_ as a,cK as c,cN as L,cS as h,cQ as E,cO as I,dH as K,cT as y,d3 as Q,d2 as Z,di as G,cF as Y,cG as J,dk as X,e5 as M,e6 as q,cW as ee}from"./index-xMCHaLIO.js";import"./index-B0TwrS3p.js";import"./index-Pb562VIV.js";import{S as P}from"./SwapController-D5qSpDIW.js";const te=x`
+========
+import{cG as x,cJ as d,dn as u,cK as b,cL as v,cN as H,d1 as O,c$ as g,cW as V,ei as a,cM as c,cP as L,cU as h,cS as E,cQ as I,d$ as K,cV as y,d5 as Q,d4 as X,dk as G,cH as Y,cI as J,dm as Z,ep as M,eq as q,cY as ee}from"./index-Cv_rvX_c.js";import"./index-BnsJ1CQB.js";import"./index-Dm5ZVVVG.js";import{S as P}from"./SwapController-DTQnRikF.js";const te=x`
+>>>>>>>> origin/main:docs/assets/send-CdiKMPGB.js
   :host {
     width: 100%;
     height: 100px;

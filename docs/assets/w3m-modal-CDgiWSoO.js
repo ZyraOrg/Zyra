@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:docs/assets/w3m-modal-CDgiWSoO.js
 import{dH as x,e7 as te,cS as c,cU as ne,cE as g,cF as j,cI as m,cJ as b,cK as d,cH as l,dk as k,d1 as z,dl as u,cG as se,cZ as f,cM as D,di as L,e3 as le,dN as V,cW as U,dE as R,d5 as F,cP as ce,cT as E,dJ as T,e0 as q,dj as de,cO as ie,e8 as ue,e9 as he}from"./index-xMCHaLIO.js";import{P as _}from"./index-D9NhR1na.js";import{S as pe}from"./SwapController-D5qSpDIW.js";const oe={isUnsupportedChainView(){return c.state.view==="UnsupportedChain"||c.state.view==="SwitchNetwork"&&c.state.history.includes("UnsupportedChain")},async safeClose(){if(this.isUnsupportedChainView()){x.shake();return}if(await te.isSIWXCloseDisabled()){x.shake();return}(c.state.view==="DataCapture"||c.state.view==="DataCaptureOtpConfirm")&&ne.disconnect(),x.close()}},me=g`
+========
+import{d$ as x,er as te,cU as c,cW as ne,cG as g,cH as j,cK as m,cL as b,cM as d,cJ as l,dm as k,d3 as z,dn as u,cI as se,c$ as f,cO as D,dk as L,en as le,e5 as V,cY as U,dY as R,d7 as F,cR as ce,cV as A,e1 as T,ek as q,dl as de,cQ as ie,es as ue,et as he}from"./index-Cv_rvX_c.js";import{P as _}from"./index-Db6rgfbZ.js";import{S as pe}from"./SwapController-DTQnRikF.js";const oe={isUnsupportedChainView(){return c.state.view==="UnsupportedChain"||c.state.view==="SwitchNetwork"&&c.state.history.includes("UnsupportedChain")},async safeClose(){if(this.isUnsupportedChainView()){x.shake();return}if(await te.isSIWXCloseDisabled()){x.shake();return}(c.state.view==="DataCapture"||c.state.view==="DataCaptureOtpConfirm")&&ne.disconnect(),x.close()}},me=g`
+>>>>>>>> origin/main:docs/assets/w3m-modal-E9-4ICX4.js
   :host {
     display: block;
     border-radius: clamp(0px, ${({borderRadius:e})=>e[8]}, 44px);

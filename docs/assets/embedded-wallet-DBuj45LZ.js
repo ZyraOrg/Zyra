@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:docs/assets/embedded-wallet-DBuj45LZ.js
 import{cP as Y,cJ as g,dH as W,dE as K,cK as c,d5 as _,dj as j,dY as G,dl as d,cI as w,cE as R,cF as D,cG as H,cH as l,d3 as N,cZ as h,dZ as V,cV as k,cX as C,cY as m,cU as L,d_ as X,dk as q,cL as Z,d$ as v,c$ as z,e0 as O,cN as J,cW as I,cT as Q,e1 as ee,cS as te}from"./index-xMCHaLIO.js";const ie=Y`
+========
+import{cR as Y,cL as g,d$ as W,dY as K,cM as c,d7 as _,dl as j,eg as G,dn as d,cK as w,cG as E,cH as D,cI as H,cJ as l,d5 as N,c$ as h,eh as V,cX as k,cZ as C,c_ as m,cW as L,ei as X,dm as q,cN as Z,ej as v,d1 as z,ek as O,cP as J,cY as I,cV as Q,el as ee,cU as te}from"./index-Cv_rvX_c.js";const ie=Y`
+>>>>>>>> origin/main:docs/assets/embedded-wallet-DHb-Cs22.js
   div {
     width: 100%;
   }

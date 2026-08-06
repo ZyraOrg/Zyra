@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:docs/assets/index-Pb562VIV.js
 import{cE as u,cF as g,cG as m,cH as r,cI as p,cJ as x,cK as n}from"./index-xMCHaLIO.js";const b=u`
+========
+import{cG as u,cH as g,cI as m,cJ as r,cK as p,cL as x,cM as n}from"./index-Cv_rvX_c.js";const b=u`
+>>>>>>>> origin/main:docs/assets/index-Dm5ZVVVG.js
   button {
     display: block;
     display: flex;

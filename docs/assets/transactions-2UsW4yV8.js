@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:docs/assets/transactions-2UsW4yV8.js
 import{cP as f,cJ as a,cK as d,cI as u}from"./index-xMCHaLIO.js";const w=f`
+========
+import{cR as f,cL as a,cM as d,cK as u}from"./index-Cv_rvX_c.js";const w=f`
+>>>>>>>> origin/main:docs/assets/transactions-BHWa8Rk5.js
   :host > wui-flex:first-child {
     height: 500px;
     overflow-y: auto;

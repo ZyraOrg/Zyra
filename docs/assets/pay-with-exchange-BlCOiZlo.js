@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:docs/assets/pay-with-exchange-BlCOiZlo.js
 import{cE as A,cF as D,cG as E,cH as p,cI as $,cJ as v,cK as u,dk as P,cZ as y,dD as o,cS as f,di as z,cT as b,cU as S,dl as d,c$ as _}from"./index-xMCHaLIO.js";import"./index-B0TwrS3p.js";const T=A`
+========
+import{cG as A,cH as D,cI as z,cJ as p,cK as $,cL as v,cM as u,dm as P,c$ as y,dX as o,cU as f,dk as E,cV as b,cW as _,dn as d,d1 as S}from"./index-Cv_rvX_c.js";import"./index-BnsJ1CQB.js";const L=A`
+>>>>>>>> origin/main:docs/assets/pay-with-exchange-C6NPyzC6.js
   button {
     border: none;
     border-radius: ${({borderRadius:t})=>t[20]};

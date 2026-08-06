@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:docs/assets/receive-CJHiQu5O.js
 import{cE as g,cF as $,cG as v,cH as k,cI as y,cJ as x,cK as l,cZ as c,cT as p,di as m,dj as h,cO as C,dk as N,cX as R,cY as A,cS as S,c$ as I,dl as f}from"./index-xMCHaLIO.js";const T=g`
+========
+import{cG as g,cH as $,cI as v,cJ as k,cK as y,cL as x,cM as l,c$ as c,cV as p,dk as m,dl as h,cQ as C,dm as N,cZ as R,c_ as A,cU as I,d1 as S,dn as f}from"./index-Cv_rvX_c.js";const T=g`
+>>>>>>>> origin/main:docs/assets/receive-DtcnbVGa.js
   button {
     width: 100%;
     display: flex;

@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:docs/assets/data-capture-prwoOHJk.js
 import{cP as y,cJ as $,cK as l,cH as S,cI as x,dE as m,cS as p,cZ as f,cT as h,dl as u,cO as _,dF as E,dG as C}from"./index-xMCHaLIO.js";import{W as R}from"./index-Dgucejwr.js";import{ReownAuthentication as v}from"./features-BU-lt74E.js";const D=y`
+========
+import{cR as $,cL as y,cM as l,cJ as S,cK as x,dY as m,cU as p,c$ as f,cV as h,dn as u,cQ as _,dZ as E,d_ as R}from"./index-Cv_rvX_c.js";import{W as C}from"./index-C62eBrlj.js";import{ReownAuthentication as v}from"./features-BqQFDS6Z.js";const D=$`
+>>>>>>>> origin/main:docs/assets/data-capture-aH-IZk2H.js
   .email-sufixes {
     display: flex;
     flex-direction: row;
