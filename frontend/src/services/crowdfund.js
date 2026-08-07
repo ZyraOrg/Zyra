@@ -18,7 +18,40 @@ function getUsdcMint() {
     NETWORK === "mainnet-beta"
       ? "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
       : import.meta.env.VITE_USDC_MINT_DEVNET;
+  if (!mint) {
+    throw new Error(`USDC mint address is not configured for network "${NETWORK}"`);
+  }
   return new PublicKey(mint);
+}
+
+// Turns a raw/technical error into a message safe to show a user, while
+// always logging the original error so it's visible in the console/logs.
+function toFriendlyError(context, error) {
+  console.error(`${context} error:`, error);
+
+  const message = error?.message || String(error);
+
+  if (message.includes("_bn") || message.includes("Invalid public key")) {
+    return "This action is misconfigured on our end. Please contact support.";
+  }
+  if (message.includes("not configured")) {
+    return "This network isn't fully set up yet. Please contact support.";
+  }
+  if (message.includes("User rejected") || message.includes("rejected the request")) {
+    return "Transaction was cancelled.";
+  }
+  if (message.includes("insufficient")) {
+    return "Insufficient balance to complete this transaction.";
+  }
+  if (message.includes("has not been initialized on-chain") ||
+      message.includes("USDC token account") ||
+      message.includes("missing its on-chain id") ||
+      message.includes("No public key found")) {
+    // Already a clear, user-facing message written by our own code.
+    return message;
+  }
+
+  return "Something went wrong while processing your request. Please try again.";
 }
 
 // ── Helper: Get Program ──────────────────────────────────────────
@@ -90,8 +123,7 @@ export async function initializePlatform(wallet, authorityAddress, platformWalle
     console.log("Platform initialized. Tx:", tx);
     return { success: true, tx };
   } catch (error) {
-    console.error("initializePlatform error:", error);
-    return { success: false, error: error.message };
+    return { success: false, error: toFriendlyError("initializePlatform", error) };
   }
 }
 
@@ -115,8 +147,7 @@ export async function updateAuthority(wallet, newAuthorityAddress) {
     console.log("Authority updated. Tx:", tx);
     return { success: true, tx };
   } catch (error) {
-    console.error("updateAuthority error:", error);
-    return { success: false, error: error.message };
+    return { success: false, error: toFriendlyError("updateAuthority", error) };
   }
 }
 
@@ -212,8 +243,7 @@ export async function contribute(wallet, campaignId, amountInUsdc) {
     console.log("Contribution successful. Tx:", tx);
     return { success: true, tx };
   } catch (error) {
-    console.error("contribute error:", error);
-    return { success: false, error: error.message };
+    return { success: false, error: toFriendlyError("contribute", error) };
   }
 }
 
@@ -245,8 +275,7 @@ export async function fetchCampaign(campaignId) {
       },
     };
   } catch (error) {
-    console.error("fetchCampaign error:", error);
-    return { success: false, error: error.message };
+    return { success: false, error: toFriendlyError("fetchCampaign", error) };
   }
 }
 
@@ -275,7 +304,6 @@ export async function fetchAllCampaigns() {
       })),
     };
   } catch (error) {
-    console.error("fetchAllCampaigns error:", error);
-    return { success: false, error: error.message };
+    return { success: false, error: toFriendlyError("fetchAllCampaigns", error) };
   }
 }

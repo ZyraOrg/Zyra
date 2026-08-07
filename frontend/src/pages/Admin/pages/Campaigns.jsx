@@ -103,7 +103,7 @@ export default function Campaigns() {
             className="absolute text-gray-500 -translate-y-1/2 left-3 top-1/2"
           />
           <input
-            placeholder="Search."
+            placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="bg-[#010410] text-white text-sm pl-9 pr-4 py-2 rounded-lg border border-gray-800 focus:outline-none focus:border-secondary placeholder:text-gray-600 w-48"

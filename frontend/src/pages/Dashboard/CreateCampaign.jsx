@@ -224,10 +224,10 @@ export default function CreateCampaign() {
         } catch (coverErr) {
           const reason =
             coverErr?.response?.data?.error || coverErr?.message || "";
-          toast.error(
+          throw new Error(
             reason
-              ? `Campaign created, but the cover photo failed to upload: ${reason}`
-              : "Campaign created, but the cover photo failed to upload",
+              ? `Cover photo failed to upload: ${reason}`
+              : "Cover photo failed to upload",
           );
         }
       }
