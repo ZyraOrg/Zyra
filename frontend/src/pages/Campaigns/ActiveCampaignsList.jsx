@@ -53,6 +53,36 @@ const normalizeCampaignsResponse = (payload) => {
   return [];
 };
 
+// The `raised` column in Supabase is only ever set once, at creation (to 0) —
+// donations go straight from the browser wallet to the Solana program and
+// never touch the backend. So the on-chain totals are the source of truth;
+// merge them in on every load rather than trusting the DB value.
+const mergeOnChainRaised = (campaigns, onChainResult) => {
+  if (!onChainResult?.success || !Array.isArray(onChainResult.data)) {
+    return campaigns;
+  }
+
+  const byChainId = new Map(
+    onChainResult.data.map((c) => [String(c.campaignId), c])
+  );
+
+  return campaigns.map((campaign) => {
+    const chainId = campaign.chain_id;
+    if (chainId === null || chainId === undefined || chainId === "") {
+      return campaign;
+    }
+
+    const onChainCampaign = byChainId.get(String(chainId));
+    if (!onChainCampaign) return campaign;
+
+    return {
+      ...campaign,
+      raised: toNumber(onChainCampaign.raised),
+      goal_amount: toNumber(onChainCampaign.goal) || campaign.goal_amount,
+    };
+  });
+};
+
 // ── Progress Bar ─────────────────────────────────────────────────
 function ProgressBar({ percent }) {
   const clamped = Math.min(Math.max(percent || 0), 100);
@@ -152,7 +182,7 @@ function CampaignCard({ campaign, onDonate, isOwn }) {
 function DonateModal({ campaign, onClose, onSuccess }) {
   const [selectedAmount, setSelectedAmount] = useState(null);
   const [customAmount, setCustomAmount] = useState("");
-  const { donate, loading, error, isConnected } = useCrowdfund();
+  const { donate, loading, isConnected } = useCrowdfund();
 
   const finalAmount = customAmount ? parseFloat(customAmount) : selectedAmount;
 
@@ -178,7 +208,7 @@ function DonateModal({ campaign, onClose, onSuccess }) {
       toast.success(
         `You successfully donated $${finalAmount} USDC to "${campaign.name}"!`
       );
-      await onSuccess(campaign.id, chainId, finalAmount);
+      await onSuccess(campaign.id, finalAmount);
       onClose();
     } else {
       toast.error(result.error || "Transaction failed. Please try again.");
@@ -276,11 +306,6 @@ function DonateModal({ campaign, onClose, onSuccess }) {
           </div>
         )}
 
-        {/* Error */}
-        {error && (
-          <p className="text-red-400 text-xs font-sora mb-4">{error}</p>
-        )}
-
         {/* Confirm button */}
         <button
           onClick={handleConfirm}
@@ -308,7 +333,7 @@ export default function ActiveCampaignsList() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuthStore();
-  const { getCampaign } = useCrowdfund();
+  const { getAllCampaigns } = useCrowdfund();
 
   const [campaigns, setCampaigns] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -321,7 +346,13 @@ export default function ActiveCampaignsList() {
       setLoadError("");
 
       const { data } = await api.getPublicCampaigns({ limit: 20, offset: 0 });
-      const nextCampaigns = normalizeCampaignsResponse(data);
+      const dbCampaigns = normalizeCampaignsResponse(data);
+
+      // Best-effort: if the RPC read fails, fall back to the (possibly
+      // stale) DB values instead of failing the whole list.
+      const onChainResult = await getAllCampaigns().catch(() => null);
+      const nextCampaigns = mergeOnChainRaised(dbCampaigns, onChainResult);
+
       setCampaigns(nextCampaigns);
       return nextCampaigns;
     } catch (error) {
@@ -337,7 +368,7 @@ export default function ActiveCampaignsList() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [getAllCampaigns]);
 
   useEffect(() => {
     loadCampaigns();
@@ -363,53 +394,25 @@ export default function ActiveCampaignsList() {
     setSelectedCampaign(campaign);
   }
 
-  // After a successful donation, refresh the public list and merge the
-  // live on-chain raised amount back into the campaign card state.
-  async function handleDonationSuccess(campaignId, chainId, donatedAmount) {
+  // After a successful donation, refresh the list (loadCampaigns already
+  // merges live on-chain totals). Floor the result at what the donor just
+  // confirmed, in case the RPC read briefly lags behind the transaction.
+  async function handleDonationSuccess(campaignId, donatedAmount) {
+    const campaignKey = String(campaignId);
+    const previousCampaign = campaigns.find(
+      (campaign) => String(campaign.id) === campaignKey
+    );
+    const floorRaised = toNumber(previousCampaign?.raised) + toNumber(donatedAmount);
+
     const refreshedCampaigns = await loadCampaigns();
 
-    // Update immediately so the donor sees the confirmed donation even if the
-    // public API is eventually consistent with the blockchain.
-    const campaignKey = String(campaignId);
-    const optimisticCampaigns = refreshedCampaigns.map((campaign) =>
-      String(campaign.id) === campaignKey
-        ? {
-            ...campaign,
-            raised: campaign.raised + toNumber(donatedAmount),
-          }
-        : campaign
+    setCampaigns(
+      refreshedCampaigns.map((campaign) =>
+        String(campaign.id) === campaignKey
+          ? { ...campaign, raised: Math.max(campaign.raised, floorRaised) }
+          : campaign
+      )
     );
-    setCampaigns(optimisticCampaigns);
-
-    if (
-      chainId === null ||
-      chainId === undefined ||
-      chainId === ""
-    ) {
-      return;
-    }
-
-    const liveCampaign = await getCampaign(chainId);
-    if (!liveCampaign?.success || !liveCampaign?.data) {
-      return;
-    }
-
-    const nextRaised = toNumber(liveCampaign.data.raised ?? liveCampaign.data.total_raised ?? 0);
-    const nextGoal = toNumber(liveCampaign.data.goal ?? liveCampaign.data.goal_amount ?? 0);
-
-    const mergedCampaigns = optimisticCampaigns.map((campaign) =>
-      String(campaign.id) === campaignKey
-        ? {
-            ...campaign,
-            // Keep the confirmed donation visible if the RPC read briefly
-            // lags behind the transaction confirmation.
-            raised: Math.max(campaign.raised, nextRaised),
-            goal_amount: nextGoal,
-          }
-        : campaign
-    );
-
-    setCampaigns(mergedCampaigns);
   }
 
   return (
