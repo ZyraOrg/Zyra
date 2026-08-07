@@ -178,7 +178,7 @@ function DonateModal({ campaign, onClose, onSuccess }) {
       toast.success(
         `You successfully donated $${finalAmount} USDC to "${campaign.name}"!`
       );
-      await onSuccess(campaign.id, chainId);
+      await onSuccess(campaign.id, chainId, finalAmount);
       onClose();
     } else {
       toast.error(result.error || "Transaction failed. Please try again.");
@@ -365,8 +365,21 @@ export default function ActiveCampaignsList() {
 
   // After a successful donation, refresh the public list and merge the
   // live on-chain raised amount back into the campaign card state.
-  async function handleDonationSuccess(campaignId, chainId) {
+  async function handleDonationSuccess(campaignId, chainId, donatedAmount) {
     const refreshedCampaigns = await loadCampaigns();
+
+    // Update immediately so the donor sees the confirmed donation even if the
+    // public API is eventually consistent with the blockchain.
+    const campaignKey = String(campaignId);
+    const optimisticCampaigns = refreshedCampaigns.map((campaign) =>
+      String(campaign.id) === campaignKey
+        ? {
+            ...campaign,
+            raised: campaign.raised + toNumber(donatedAmount),
+          }
+        : campaign
+    );
+    setCampaigns(optimisticCampaigns);
 
     if (
       chainId === null ||
@@ -384,11 +397,13 @@ export default function ActiveCampaignsList() {
     const nextRaised = toNumber(liveCampaign.data.raised ?? liveCampaign.data.total_raised ?? 0);
     const nextGoal = toNumber(liveCampaign.data.goal ?? liveCampaign.data.goal_amount ?? 0);
 
-    const mergedCampaigns = refreshedCampaigns.map((campaign) =>
-      campaign.id === campaignId
+    const mergedCampaigns = optimisticCampaigns.map((campaign) =>
+      String(campaign.id) === campaignKey
         ? {
             ...campaign,
-            raised: nextRaised,
+            // Keep the confirmed donation visible if the RPC read briefly
+            // lags behind the transaction confirmation.
+            raised: Math.max(campaign.raised, nextRaised),
             goal_amount: nextGoal,
           }
         : campaign

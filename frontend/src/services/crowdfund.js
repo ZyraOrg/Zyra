@@ -13,6 +13,31 @@ const PROGRAM_ID = new PublicKey("DDHnP6bWygPFJZiumq3EUZmVNSrVeFwtd8w8WeAtLEfR")
 const NETWORK = import.meta.env.VITE_SOLANA_NETWORK || "devnet";
 const CONNECTION = new Connection(clusterApiUrl(NETWORK), "confirmed");
 
+function normalizeWalletPublicKey(wallet) {
+  const candidate =
+    wallet?.publicKey ??
+    wallet?.adapter?.publicKey ??
+    wallet?.session?.publicKey ??
+    wallet?.wallet?.adapter?.publicKey;
+
+  if (!candidate) {
+    throw new Error("No public key found in wallet provider. Please reconnect your wallet and try again.");
+  }
+
+  if (candidate instanceof PublicKey) return candidate;
+
+  if (typeof candidate === "string") return new PublicKey(candidate);
+
+  if (typeof candidate.toString === "function") {
+    const maybeAddress = candidate.toString();
+    if (maybeAddress && maybeAddress !== "[object Object]") {
+      return new PublicKey(maybeAddress);
+    }
+  }
+
+  throw new Error("Wallet public key is in an unsupported format.");
+}
+
 function getUsdcMint() {
   const mint =
     NETWORK === "mainnet-beta"
@@ -56,15 +81,7 @@ function toFriendlyError(context, error) {
 
 // ── Helper: Get Program ──────────────────────────────────────────
 function getProgram(wallet) {
-  let publicKey;
-  if (wallet.publicKey) {
-    publicKey =
-      wallet.publicKey instanceof PublicKey
-        ? wallet.publicKey
-        : new PublicKey(wallet.publicKey.toString());
-  } else {
-    throw new Error("No public key found in wallet");
-  }
+  const publicKey = normalizeWalletPublicKey(wallet);
 
   const anchorWallet = {
     publicKey,
@@ -106,6 +123,7 @@ async function accountExists(publicKey) {
 // Sets the authority (backend keypair) and platform fee wallet.
 export async function initializePlatform(wallet, authorityAddress, platformWalletAddress) {
   try {
+    const publicKey = normalizeWalletPublicKey(wallet);
     const program = getProgram(wallet);
     const [platformPDA] = getPlatformPDA();
     const authority = new PublicKey(authorityAddress);
@@ -115,7 +133,7 @@ export async function initializePlatform(wallet, authorityAddress, platformWalle
       .initialize(authority, platformWallet)
       .accounts({
         platform: platformPDA,
-        payer: wallet.publicKey,
+        payer: publicKey,
         systemProgram: web3.SystemProgram.programId,
       })
       .rpc();
@@ -132,6 +150,7 @@ export async function initializePlatform(wallet, authorityAddress, platformWalle
 // Allows changing backend keypair without redeployment.
 export async function updateAuthority(wallet, newAuthorityAddress) {
   try {
+    const publicKey = normalizeWalletPublicKey(wallet);
     const program = getProgram(wallet);
     const [platformPDA] = getPlatformPDA();
     const newAuthority = new PublicKey(newAuthorityAddress);
@@ -140,7 +159,7 @@ export async function updateAuthority(wallet, newAuthorityAddress) {
       .updateAuthority(newAuthority)
       .accounts({
         platform: platformPDA,
-        authority: wallet.publicKey,
+        authority: publicKey,
       })
       .rpc();
 
@@ -162,13 +181,19 @@ export async function contribute(wallet, campaignId, amountInUsdc) {
       throw new Error("Campaign is missing its on-chain id");
     }
 
+    const publicKey = normalizeWalletPublicKey(wallet);
     const program = getProgram(wallet);
     const [platformPDA] = getPlatformPDA();
     const [campaignPDA] = getCampaignPDA(campaignId);
 
     // Fetch platform account to get platform wallet for fee
     const platformAccount = await program.account.platform.fetch(platformPDA);
-    const platformWallet = platformAccount.platformWallet;
+    const platformWallet = platformAccount?.platformWallet;
+
+    if (!platformWallet) {
+      throw new Error("Platform wallet is not initialized on-chain yet.");
+    }
+
     const usdcMint = getUsdcMint();
 
     try {
@@ -182,7 +207,7 @@ export async function contribute(wallet, campaignId, amountInUsdc) {
     // Derive all USDC token accounts
     const contributorTokenAccount = await getAssociatedTokenAddress(
       usdcMint,
-      wallet.publicKey
+      publicKey
     );
     const campaignVaultTokenAccount = await getAssociatedTokenAddress(
       usdcMint,
@@ -204,7 +229,7 @@ export async function contribute(wallet, campaignId, amountInUsdc) {
     if (!(await accountExists(campaignVaultTokenAccount))) {
       preInstructions.push(
         createAssociatedTokenAccountInstruction(
-          wallet.publicKey,
+          publicKey,
           campaignVaultTokenAccount,
           campaignPDA,
           usdcMint
@@ -214,7 +239,7 @@ export async function contribute(wallet, campaignId, amountInUsdc) {
     if (!(await accountExists(platformTokenAccount))) {
       preInstructions.push(
         createAssociatedTokenAccountInstruction(
-          wallet.publicKey,
+          publicKey,
           platformTokenAccount,
           platformWallet,
           usdcMint
@@ -233,7 +258,7 @@ export async function contribute(wallet, campaignId, amountInUsdc) {
         contributorTokenAccount,
         campaignVaultTokenAccount,
         platformTokenAccount,
-        contributor: wallet.publicKey,
+        contributor: publicKey,
         tokenProgram: TOKEN_PROGRAM_ID,
         systemProgram: web3.SystemProgram.programId,
       })
